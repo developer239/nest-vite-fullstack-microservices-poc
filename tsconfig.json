@@ -18,10 +18,24 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/reservations": ["apps/reservations/src"],
-      "@app/reservations/*": ["apps/reservations/src/*"],
-      "@shared/common": ["libs/common/src"],
-      "@shared/common/*": ["libs/common/src/*"]
+      "@app/auth": [
+        "apps/auth/src"
+      ],
+      "@app/auth/*": [
+        "apps/auth/src/*"
+      ],
+      "@app/reservations": [
+        "apps/reservations/src"
+      ],
+      "@app/reservations/*": [
+        "apps/reservations/src/*"
+      ],
+      "@shared/common": [
+        "libs/common/src"
+      ],
+      "@shared/common/*": [
+        "libs/common/src/*"
+      ]
     }
   }
 }
