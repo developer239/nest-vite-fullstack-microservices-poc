@@ -8,7 +8,7 @@
     "tsConfigPath": "apps/reservations/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/root",
+  "root": "apps/reservations",
   "projects": {
     "reservations": {
       "type": "application",
@@ -17,6 +17,15 @@
       "sourceRoot": "apps/reservations/src",
       "compilerOptions": {
         "tsConfigPath": "apps/reservations/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     }
   }

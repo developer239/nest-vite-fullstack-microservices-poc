@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ReservationsService } from './reservations.service';
+import { CommonService } from '@shared/common';
 
 @Controller()
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) {}
+  constructor(private readonly service: CommonService) {}
 
   @Get()
   getHello(): string {
-    return this.reservationsService.getHello();
+    return this.service.getHello();
   }
 }
