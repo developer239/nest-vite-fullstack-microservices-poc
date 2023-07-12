@@ -5,11 +5,6 @@ import { TypeOrmConfigService } from '@shared/common/modules/database/typeorm-co
 export interface IDatabaseModuleOptions {
   entities: string[]
   migrations: string[]
-  cli: {
-    entitiesDir: string
-    migrationsDir: string
-    subscribersDir: string
-  }
 }
 
 @Module({})
@@ -27,7 +22,6 @@ export class DatabaseModule {
               ...baseConfig,
               entities: moduleOptions.entities,
               migrations: moduleOptions.migrations,
-              cli: moduleOptions.cli,
             }
           },
           extraProviders: [TypeOrmConfigService],
