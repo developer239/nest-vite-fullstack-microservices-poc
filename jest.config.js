@@ -14,8 +14,8 @@ module.exports = {
     "<rootDir>/libs/"
   ],
   moduleNameMapper: {
-    '^@app/reservations/(.*)$': '<rootDir>/apps/reservations/src/$1',
-    '^@app/reservations$': '<rootDir>/apps/reservations/src',
+    '^@app/events/(.*)$': '<rootDir>/apps/events/src/$1',
+    '^@app/events': '<rootDir>/apps/events/src',
     '^@shared/common/(.*)$': '<rootDir>/libs/common/src/$1',
     '^@shared/common$': '<rootDir>/libs/common/src',
   },
