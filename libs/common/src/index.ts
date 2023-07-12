@@ -1,2 +1,2 @@
-export * from './common.module'
-export * from './common.service'
+export * from '@shared/common/common.module'
+export * from '@shared/common/common.service'

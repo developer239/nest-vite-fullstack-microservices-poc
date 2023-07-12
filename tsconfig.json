@@ -18,12 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@shared/common": [
-        "libs/common/src"
-      ],
-      "@shared/common/*": [
-        "libs/common/src/*"
-      ]
+      "@app/reservations": ["apps/reservations/src"],
+      "@app/reservations/*": ["apps/reservations/src/*"],
+      "@shared/common": ["libs/common/src"],
+      "@shared/common/*": ["libs/common/src/*"]
     }
   }
 }
