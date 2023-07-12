@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { User } from '@app/auth/modules/auth/entities/user.entity'
-import { EntityHelper } from '@shared/common'
+import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
 @Entity()
 export class RefreshToken extends EntityHelper {

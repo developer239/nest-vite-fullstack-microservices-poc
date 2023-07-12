@@ -13,7 +13,7 @@ import {
   OneToMany,
 } from 'typeorm'
 import { RefreshToken } from '@app/auth/modules/auth/entities/refresh-token.entity'
-import { EntityHelper } from '@shared/common'
+import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
 @Entity()
 export class User extends EntityHelper {

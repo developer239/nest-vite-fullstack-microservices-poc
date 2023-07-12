@@ -18,11 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/auth": ["apps/auth/src"],
       "@app/auth/*": ["apps/auth/src/*"],
-      "@app/events": ["apps/events/src"],
       "@app/events/*": ["apps/events/src/*"],
-      "@shared/common": ["libs/common/src"],
       "@shared/common/*": ["libs/common/src/*"]
     }
   }

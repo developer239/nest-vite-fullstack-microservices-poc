@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsEmail, IsNotEmpty, MinLength, Validate } from 'class-validator'
-import { DoesNotExist, lowerCaseTransformer } from '@shared/common'
+import { lowerCaseTransformer } from '@shared/common/utils/transformers/lower-case.transformer'
+import { DoesNotExist } from '@shared/common/utils/validators/does-not-exist.validator'
 
 export class RegisterRequestDTO {
   @ApiProperty({ example: 'test1@example.com' })
