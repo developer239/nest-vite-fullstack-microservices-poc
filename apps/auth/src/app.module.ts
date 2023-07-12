@@ -11,7 +11,7 @@ import { HttpExceptionFilter } from '@shared/common/utils/filters/http-exception
 import { validationOptions } from '@shared/common/utils/validation-options'
 
 @Module({
-  imports: [WrappedConfigModule.forRoot(), WrappedDatabaseModule, HomeModule],
+  imports: [WrappedConfigModule, WrappedDatabaseModule, HomeModule],
   providers: [
     {
       provide: APP_PIPE,

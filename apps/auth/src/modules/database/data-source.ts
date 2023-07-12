@@ -7,7 +7,7 @@ import { WrappedConfigModule } from '@app/auth/modules/config/config.module'
 import { WrappedDatabaseModule } from '@app/auth/modules/database/database.module'
 
 @Module({
-  imports: [WrappedConfigModule.forRoot(), WrappedDatabaseModule],
+  imports: [WrappedConfigModule, WrappedDatabaseModule],
 })
 class ModuleWithDataSource {}
 

@@ -8,23 +8,18 @@ import {
   databaseConfigSchema,
 } from '@shared/common/config/database.config'
 
-@Module({})
-export class WrappedConfigModule {
-  static forRoot() {
-    return {
-      module: WrappedConfigModule,
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [appConfig, authConfig, databaseConfig],
-          envFilePath: ['apps/auth/.env'],
-          validationSchema: Joi.object({
-            ...appConfigSchema,
-            ...authConfigSchema,
-            ...databaseConfigSchema,
-          }),
-        }),
-      ],
-    }
-  }
-}
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, authConfig, databaseConfig],
+      envFilePath: ['apps/auth/.env'],
+      validationSchema: Joi.object({
+        ...appConfigSchema,
+        ...authConfigSchema,
+        ...databaseConfigSchema,
+      }),
+    }),
+  ],
+})
+export class WrappedConfigModule {}

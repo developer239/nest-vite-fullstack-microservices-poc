@@ -7,22 +7,17 @@ import {
   databaseConfigSchema,
 } from '@shared/common/config/database.config'
 
-@Module({})
-export class WrappedConfigModule {
-  static forRoot() {
-    return {
-      module: WrappedConfigModule,
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [appConfig, databaseConfig],
-          envFilePath: ['apps/events/.env'],
-          validationSchema: Joi.object({
-            ...appConfigSchema,
-            ...databaseConfigSchema,
-          }),
-        }),
-      ],
-    }
-  }
-}
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, databaseConfig],
+      envFilePath: ['apps/events/.env'],
+      validationSchema: Joi.object({
+        ...appConfigSchema,
+        ...databaseConfigSchema,
+      }),
+    }),
+  ],
+})
+export class WrappedConfigModule {}

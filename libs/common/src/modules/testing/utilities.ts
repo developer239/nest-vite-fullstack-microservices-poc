@@ -6,8 +6,8 @@ import {
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { Test } from '@nestjs/testing'
-import { validationOptions } from '@shared/common'
 import { TestingModule } from '@shared/common/modules/testing/testing.module'
+import { validationOptions } from '@shared/common/utils/validation-options'
 
 export const bootstrap = async (metadata: ModuleMetadata) => {
   const app = (

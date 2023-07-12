@@ -7,7 +7,7 @@ import { WrappedConfigModule } from '@app/events/modules/config/config.module'
 import { WrappedDatabaseModule } from '@app/events/modules/database/database.module'
 
 @Module({
-  imports: [WrappedConfigModule.forRoot(), WrappedDatabaseModule],
+  imports: [WrappedConfigModule, WrappedDatabaseModule],
 })
 class ModuleWithDataSource {}
 
