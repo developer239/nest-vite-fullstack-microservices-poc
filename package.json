@@ -6,7 +6,8 @@
   "scripts": {
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev:auth": "nest start auth --watch",
+    "start:dev:events": "nest start events --watch",
     "test": "jest",
     "format": "prettier --write '*/**/*.{ts,md,json}'",
     "lint:ts": "eslint --ext .ts {apps,libs}",
