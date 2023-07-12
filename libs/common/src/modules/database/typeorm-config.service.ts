@@ -3,7 +3,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm'
 import {
   databaseConfig,
   DatabaseConfigType,
-} from '@app/auth/config/database.config'
+} from '@shared/common/config/database.config'
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -24,13 +24,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       dropSchema: false,
       keepConnectionAlive: true,
       logging: false,
-      entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
-      migrations: [`${__dirname}/migrations/**/*{.ts,.js}`],
-      cli: {
-        entitiesDir: 'src',
-        migrationsDir: 'src/modules/database/migrations',
-        subscribersDir: 'subscriber',
-      },
+      // entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
+      // migrations: [`${__dirname}/migrations/**/*{.ts,.js}`],
+      // cli: {
+      //   entitiesDir: 'src',
+      //   migrationsDir: 'src/modules/database/migrations',
+      //   subscribersDir: 'subscriber',
+      // },
       extra: {
         // based on https://node-postgres.com/apis/pool
         // max connection pool size

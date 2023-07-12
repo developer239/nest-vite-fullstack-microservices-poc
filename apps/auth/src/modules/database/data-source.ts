@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises, no-async-promise-executor */
 import 'reflect-metadata'
+import { Module } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DataSource } from 'typeorm'
-import { SeedModule as ModuleWithDataSource } from '@app/auth/modules/database/seeds/seeed.module'
+import { WrappedConfigModule } from '@app/auth/modules/config/config.module'
+import { WrappedDatabaseModule } from '@app/auth/modules/database/database.module'
+
+@Module({
+  imports: [WrappedConfigModule.forRoot(), WrappedDatabaseModule],
+})
+class ModuleWithDataSource {}
 
 export const AppDataSource: Promise<DataSource> = new Promise(
   async (resolve) => {

@@ -1,21 +1,17 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { DataSource } from 'typeorm'
-import { TypeOrmConfigService } from '@app/auth/modules/database/typeorm-config.service'
+import { DatabaseModule } from '@shared/common/modules/database/database.module'
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
-      dataSourceFactory: async (options) => {
-        if (!options) {
-          throw new Error('No options provided to TypeOrmModule.forRootAsync')
-        }
-
-        const dataSource = await new DataSource(options).initialize()
-        return dataSource
+    DatabaseModule.forRoot({
+      entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
+      migrations: [`${__dirname}/migrations/**/*{.ts,.js}`],
+      cli: {
+        entitiesDir: 'apps/auth/src',
+        migrationsDir: 'apps/auth/src/modules/database/migrations',
+        subscribersDir: 'apps/auth/subscriber',
       },
     }),
   ],
 })
-export class DatabaseModule {}
+export class WrappedDatabaseModule {}
