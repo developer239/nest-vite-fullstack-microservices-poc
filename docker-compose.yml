@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:15.2-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: api_db
