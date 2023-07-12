@@ -15,7 +15,11 @@
     "auth:migration:run": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:run",
     "auth:migration:revert": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:revert",
     "auth:schema:drop": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts schema:drop",
-    "events:dev": "nest start events --watch"
+    "events:dev": "nest start events --watch",
+    "events:migration:generate": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:generate",
+    "events:migration:run": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:run",
+    "events:migration:revert": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:revert",
+    "events:schema:drop": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts schema:drop"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
