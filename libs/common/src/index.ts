@@ -1,3 +1,4 @@
+export * from '@shared/common/modules/home/home.module'
 export * from '@shared/common/modules/testing/testing.module'
 export * from '@shared/common/modules/testing/testing-entity.service'
 export * from '@shared/common/modules/testing/testing-database.service'

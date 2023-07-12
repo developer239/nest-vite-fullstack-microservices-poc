@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { useContainer } from 'class-validator'
 import { AppModule } from '@app/auth/app.module'
-import { appConfig, AppConfigType } from '@app/auth/config/app.config'
+import { appConfig, AppConfigType } from '@shared/common/config/app.config'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true })
