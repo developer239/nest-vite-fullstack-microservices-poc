@@ -11,6 +11,7 @@
     "husky:prepare": "husky install",
     "type-check": "tsc --noEmit",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "all:migration:run": "npm run auth:migration:run && npm run events:migration:run",
     "auth:dev": "nest start auth --watch",
     "auth:migration:generate": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:generate",
     "auth:migration:run": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:run",
