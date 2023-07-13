@@ -37,7 +37,6 @@ export class UsersController {
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
   @ApiOkResponse({
-    status: HttpStatus.OK,
     type: MeDTO,
   })
   public me(@GetUserPayload() user: User) {
