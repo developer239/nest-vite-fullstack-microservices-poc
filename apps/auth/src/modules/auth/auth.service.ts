@@ -47,7 +47,7 @@ export class AuthService {
     return user
   }
 
-  async login(user: User, ipAddress?: string) {
+  async login(user: User, ipAddress: string) {
     const token = this.jwtService.sign({
       id: user.id,
     })

@@ -42,7 +42,7 @@ export class SessionController {
   public login(
     @Body() loginDto: EmailLoginRequestDTO,
     @GetUserPayload() user: User,
-    @IpAddress() ipAddress
+    @IpAddress() ipAddress: string
   ) {
     return this.service.login(user, ipAddress)
   }

@@ -20,6 +20,7 @@ export class TestingEntityService {
     if (data) {
       const keys = Object.keys(data)
       for (const key of keys) {
+        // @ts-ignore
         instance[key] = data[key]
       }
     }
