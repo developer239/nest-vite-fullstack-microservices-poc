@@ -16,7 +16,9 @@ import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 export class Event extends EntityHelper {
   @PrimaryGeneratedColumn() id: number
 
-  @Column() ownerUserId: number
+  @Exclude()
+  @Column()
+  ownerUserId: number
 
   @ManyToMany(() => Attendee, {
     eager: true,

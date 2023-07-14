@@ -2,13 +2,22 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
 import { Event } from '@app/events/modules/events/entities/event.entity'
 import { EventsRepository } from '@app/events/modules/events/entities/events.repository'
+import { UsersService } from '@app/events/modules/events/users.service'
 
 @Injectable()
 export class EventsService {
-  constructor(private readonly eventsRepository: EventsRepository) {}
+  constructor(
+    private readonly eventsRepository: EventsRepository,
+    private readonly usersService: UsersService
+  ) {}
 
-  listEvents(): Promise<Event[]> {
-    return this.eventsRepository.findAll()
+  async listEvents(): Promise<Event[]> {
+    const events = await this.eventsRepository.findAll()
+
+    // TODO: implement mapUsersToEvents for more efficiency
+    return Promise.all(
+      events.map((event) => this.usersService.mapUsersToEvent(event))
+    )
   }
 
   async detail(id: number): Promise<Event> {
@@ -24,11 +33,12 @@ export class EventsService {
       )
     }
 
-    return event
+    return this.usersService.mapUsersToEvent(event)
   }
 
-  createEvent(ownerId: number, data: UpsertEventDto): Promise<Event> {
-    return this.eventsRepository.create(ownerId, data)
+  async createEvent(ownerId: number, data: UpsertEventDto): Promise<Event> {
+    const event = await this.eventsRepository.create(ownerId, data)
+    return this.usersService.mapUsersToEvent(event)
   }
 
   async updateEvent(
@@ -48,7 +58,7 @@ export class EventsService {
       )
     }
 
-    return event
+    return this.usersService.mapUsersToEvent(event)
   }
 
   async deleteEvent(ownerId: number, eventId: number): Promise<void> {
@@ -65,11 +75,13 @@ export class EventsService {
     }
   }
 
-  attendEvent(userId: number, eventId: number): Promise<Event> {
-    return this.eventsRepository.attend(userId, eventId)
+  async attendEvent(userId: number, eventId: number): Promise<Event> {
+    const event = await this.eventsRepository.attend(userId, eventId)
+    return this.usersService.mapUsersToEvent(event)
   }
 
-  leaveEvent(userId: number, eventId: number): Promise<Event> {
-    return this.eventsRepository.leave(userId, eventId)
+  async leaveEvent(userId: number, eventId: number): Promise<Event> {
+    const event = await this.eventsRepository.leave(userId, eventId)
+    return this.usersService.mapUsersToEvent(event)
   }
 }

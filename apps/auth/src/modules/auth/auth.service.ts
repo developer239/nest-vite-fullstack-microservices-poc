@@ -118,4 +118,8 @@ export class AuthService {
       )
     }
   }
+
+  listUsers(ids: number[]) {
+    return this.usersRepository.list(ids)
+  }
 }

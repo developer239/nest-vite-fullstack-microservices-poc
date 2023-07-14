@@ -11,6 +11,7 @@ import { Event } from '@app/events/modules/events/entities/event.entity'
 import { EventsRepository } from '@app/events/modules/events/entities/events.repository'
 import { EventsController } from '@app/events/modules/events/events.controller'
 import { EventsService } from '@app/events/modules/events/events.service'
+import { UsersService } from '@app/events/modules/events/users.service'
 import { AuthServiceJwtStrategy } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy'
 import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
 
@@ -33,7 +34,12 @@ import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
     TypeOrmModule.forFeature([Event, Attendee]),
   ],
   controllers: [EventsController],
-  providers: [EventsRepository, EventsService, AuthServiceJwtStrategy],
+  providers: [
+    EventsRepository,
+    EventsService,
+    UsersService,
+    AuthServiceJwtStrategy,
+  ],
   exports: [],
 })
 export class EventsModule {}

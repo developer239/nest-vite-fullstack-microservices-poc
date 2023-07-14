@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm'
+import { DeepPartial, FindOptionsWhere, In, Repository } from 'typeorm'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
 import { User } from '@app/auth/modules/auth/entities/user.entity'
 
@@ -9,6 +9,12 @@ export class UsersRepository {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>
   ) {}
+
+  list(userIds: number[]) {
+    return this.usersRepository.findBy({
+      id: In(userIds),
+    })
+  }
 
   create(createProfileDto: RegisterRequestDTO) {
     return this.usersRepository.save(
