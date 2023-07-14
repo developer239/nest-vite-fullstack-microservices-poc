@@ -13,13 +13,16 @@ import { EventsController } from '@app/events/modules/events/events.controller'
 import { EventsService } from '@app/events/modules/events/events.service'
 import { UsersService } from '@app/events/modules/events/users.service'
 import { AuthServiceJwtStrategy } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy'
-import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
+import {
+  AUTH_SERVICE_TOKEN,
+  PAYMENTS_SERVICE_TOKEN,
+} from '@shared/common/tokens'
 
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: AUTH_MICRO_SERVICE_TOKEN,
+        name: AUTH_SERVICE_TOKEN,
         imports: [ConfigModule],
         inject: [eventsConfig.KEY],
         useFactory: (config: EventsConfigType) => ({
@@ -27,6 +30,18 @@ import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
           options: {
             host: config.authServiceHost,
             port: config.authServiceTcpPort,
+          },
+        }),
+      },
+      {
+        name: PAYMENTS_SERVICE_TOKEN,
+        imports: [ConfigModule],
+        inject: [eventsConfig.KEY],
+        useFactory: (config: EventsConfigType) => ({
+          transport: Transport.TCP,
+          options: {
+            host: config.paymentsServiceHost,
+            port: config.paymentsServiceTcpPort,
           },
         }),
       },

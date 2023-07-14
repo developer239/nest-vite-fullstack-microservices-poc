@@ -5,12 +5,12 @@ import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 import { AttendeeModel } from '@app/events/modules/events/models/attendee.model'
 import { EventModel } from '@app/events/modules/events/models/event.model'
 import { IUser } from '@shared/common/interfaces'
-import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
+import { AUTH_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(AUTH_MICRO_SERVICE_TOKEN)
+    @Inject(AUTH_SERVICE_TOKEN)
     private readonly client: ClientProxy
   ) {}
 

@@ -8,12 +8,12 @@ import {
 import { ClientProxy } from '@nestjs/microservices'
 import { catchError, map, Observable, tap } from 'rxjs'
 import { IAuthServiceJwtStrategyPayload } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
-import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
+import { AUTH_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
 export class AuthServiceJwtStrategy implements CanActivate {
   constructor(
-    @Inject(AUTH_MICRO_SERVICE_TOKEN) private readonly authClient: ClientProxy
+    @Inject(AUTH_SERVICE_TOKEN) private readonly authClient: ClientProxy
   ) {}
 
   canActivate(
