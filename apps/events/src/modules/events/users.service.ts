@@ -25,7 +25,7 @@ export class UsersService {
   async mapUsersToEvent(event: EventEntity): Promise<EventModel> {
     const users = await this.getUserData([
       event.ownerUserId,
-      ...event.attendees.map((attendee) => attendee.userId),
+      ...(event.attendees?.map((attendee) => attendee.userId) || []),
     ])
 
     const eventModel = new EventModel()
@@ -44,18 +44,19 @@ export class UsersService {
       eventModel.owner.lastName = owner.lastName
     }
 
-    eventModel.attendees = event.attendees.map((attendee) => {
-      const targetUser = users.find((user) => user.id === attendee.userId)
-      const attendeeModel = new AttendeeModel()
+    eventModel.attendees =
+      event.attendees?.map((attendee) => {
+        const targetUser = users.find((user) => user.id === attendee.userId)
+        const attendeeModel = new AttendeeModel()
 
-      if (targetUser) {
-        attendeeModel.id = attendee.id
-        attendeeModel.firstName = targetUser.firstName
-        attendeeModel.lastName = targetUser.lastName
-      }
+        if (targetUser) {
+          attendeeModel.id = attendee.id
+          attendeeModel.firstName = targetUser.firstName
+          attendeeModel.lastName = targetUser.lastName
+        }
 
-      return attendeeModel
-    })
+        return attendeeModel
+      }) || []
 
     return eventModel
   }

@@ -8,6 +8,7 @@ import { WrappedConfigModule } from '@app/events/modules/config/config.module'
 import { WrappedDatabaseModule } from '@app/events/modules/database/database.module'
 import { EventsModule } from '@app/events/modules/events/events.module'
 import { HomeModule } from '@shared/common/modules/home/home.module'
+import { LoggerModule } from '@shared/common/modules/logger/logger.module'
 import { HttpExceptionFilter } from '@shared/common/utils/filters/http-exception.filter'
 import { validationOptions } from '@shared/common/utils/validation-options'
 
@@ -16,6 +17,7 @@ import { validationOptions } from '@shared/common/utils/validation-options'
     WrappedConfigModule,
     WrappedDatabaseModule,
     HomeModule,
+    LoggerModule,
     EventsModule,
   ],
   providers: [

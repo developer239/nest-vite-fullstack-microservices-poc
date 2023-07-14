@@ -7,15 +7,15 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
+import { User } from '@app/auth/modules/auth/entities/user.entity'
 import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
-@Entity('refresh_token')
-export class RefreshTokenEntity extends EntityHelper {
+@Entity()
+export class RefreshToken extends EntityHelper {
   @PrimaryGeneratedColumn() id: number
 
-  @ManyToOne(() => UserEntity, (user) => user.refreshTokens, { eager: true })
-  user: UserEntity
+  @ManyToOne(() => User, (user) => user.refreshTokens, { eager: true })
+  user: User
 
   @Index() @Column() value: string
 

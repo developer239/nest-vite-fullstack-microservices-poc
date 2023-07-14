@@ -8,8 +8,8 @@ import { AuthService } from '@app/auth/modules/auth/auth.service'
 import { SessionController } from '@app/auth/modules/auth/controllers/session.controller'
 import { UsersController } from '@app/auth/modules/auth/controllers/users.controller'
 import { RefreshTokenRepository } from '@app/auth/modules/auth/entities/refresh-token-repository'
-import { RefreshTokenEntity } from '@app/auth/modules/auth/entities/refresh-token.entity'
-import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
+import { RefreshToken } from '@app/auth/modules/auth/entities/refresh-token.entity'
+import { User } from '@app/auth/modules/auth/entities/user.entity'
 import { UsersRepository } from '@app/auth/modules/auth/entities/users.repository'
 import { JwtRefreshTokenStrategy } from '@app/auth/modules/auth/strategies/jwt-refresh.strategy'
 import { JwtStrategy } from '@app/auth/modules/auth/strategies/jwt.strategy'
@@ -29,7 +29,7 @@ import { DoesNotExist } from '@shared/common/utils/validators/does-not-exist.val
         },
       }),
     }),
-    TypeOrmModule.forFeature([UserEntity, RefreshTokenEntity]),
+    TypeOrmModule.forFeature([User, RefreshToken]),
   ],
   controllers: [UsersController, SessionController],
   providers: [

@@ -14,7 +14,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@app/auth/modules/auth/auth.service'
 import { MeDTO } from '@app/auth/modules/auth/dto/me.dto'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
-import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
+import { User } from '@app/auth/modules/auth/entities/user.entity'
 import { GetUserPayload } from '@app/auth/modules/auth/strategies/user.decorator'
 import { IUser } from '@shared/common/interfaces'
 
@@ -41,7 +41,7 @@ export class UsersController {
   @ApiOkResponse({
     type: MeDTO,
   })
-  public me(@GetUserPayload() user: UserEntity) {
+  public me(@GetUserPayload() user: User) {
     return user
   }
 

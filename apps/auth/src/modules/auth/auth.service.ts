@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt'
 import { DeepPartial } from 'typeorm'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
 import { RefreshTokenRepository } from '@app/auth/modules/auth/entities/refresh-token-repository'
-import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
+import { User } from '@app/auth/modules/auth/entities/user.entity'
 import { UsersRepository } from '@app/auth/modules/auth/entities/users.repository'
 
 @Injectable()
@@ -18,7 +18,7 @@ export class AuthService {
   async validateUserByEmailPassword(
     email: string,
     password: string
-  ): Promise<UserEntity | null> {
+  ): Promise<User | null> {
     const user = await this.usersRepository.findOne({ email })
 
     if (user) {
@@ -47,7 +47,7 @@ export class AuthService {
     return user
   }
 
-  async login(user: UserEntity, ipAddress: string) {
+  async login(user: User, ipAddress: string) {
     const token = this.jwtService.sign({
       id: user.id,
     })
@@ -78,7 +78,7 @@ export class AuthService {
     })
   }
 
-  refreshAccessToken(user: UserEntity) {
+  refreshAccessToken(user: User) {
     const accessToken = this.jwtService.sign({
       id: user.id,
     })
@@ -90,7 +90,7 @@ export class AuthService {
     return this.usersRepository.findManyWithPagination(paginationOptions)
   }
 
-  async updateUser(id: number, payload: DeepPartial<UserEntity>) {
+  async updateUser(id: number, payload: DeepPartial<User>) {
     const result = await this.usersRepository.update(id, payload)
     if (!result) {
       throw new HttpException(
