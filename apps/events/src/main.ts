@@ -29,9 +29,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('docs', app, document)
 
-  await app.listen(appConfigValues.port)
-  Logger.log(`[NestApplication] Running on port: ${appConfigValues.port}`)
-  Logger.log(`[NestApplication] Docs running on: ${appConfigValues.port}/docs`)
+  await app.listen(appConfigValues.httPort)
+  Logger.log(`[NestApplication] Running on port: ${appConfigValues.httPort}`)
+  Logger.log(
+    `[NestApplication] Docs running on: ${appConfigValues.httPort}/docs`
+  )
 }
 
 void bootstrap()

@@ -20,6 +20,7 @@
     "paths": {
       "@app/auth/*": ["apps/auth/src/*"],
       "@app/events/*": ["apps/events/src/*"],
+      "@app/payments/*": ["apps/payments/src/*"],
       "@shared/common/*": ["libs/common/src/*"]
     }
   }

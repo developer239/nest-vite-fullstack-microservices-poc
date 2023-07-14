@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core'
 import { Transport } from '@nestjs/microservices'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { useContainer } from 'class-validator'
-import { AppModule } from '@app/auth/app.module'
+import { AppModule } from '@app/payments/app.module'
 import { appConfig, AppConfigType } from '@shared/common/config/app.config'
 
 async function bootstrap() {

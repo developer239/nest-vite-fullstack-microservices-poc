@@ -21,7 +21,8 @@
     "events:migration:generate": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:generate",
     "events:migration:run": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:run",
     "events:migration:revert": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:revert",
-    "events:schema:drop": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts schema:drop"
+    "events:schema:drop": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts schema:drop",
+    "payments:dev": "nest start payments --watch"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

@@ -5,14 +5,16 @@ export const appConfigSchema = {
   NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
   APP_NAME: Joi.string().required(),
   API_PREFIX: Joi.string().default('api'),
-  PORT: Joi.number().port().required(),
+  HTTP_PORT: Joi.number().port().required(),
+  TCP_PORT: Joi.number(),
 }
 
 export const appConfig = registerAs('app', () => ({
   nodeEnv: process.env.NODE_ENV,
   name: process.env.APP_NAME,
   workingDirectory: process.env.PWD || process.cwd(),
-  port: parseInt((process.env.PORT || process.env.PORT)!, 10) || 8080,
+  httPort: parseInt(process.env.HTTP_PORT!, 10) || 8080,
+  tcpPort: parseInt(process.env.TCP_PORT!, 10),
   apiPrefix: process.env.API_PREFIX || 'api',
 }))
 
