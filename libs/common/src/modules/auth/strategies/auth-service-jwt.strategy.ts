@@ -3,9 +3,10 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
-import { map, Observable, tap } from 'rxjs'
+import { catchError, map, Observable, tap } from 'rxjs'
 import { IAuthServiceJwtStrategyPayload } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
 import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
 
@@ -18,20 +19,28 @@ export class AuthServiceJwtStrategy implements CanActivate {
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const jwt = context.switchToHttp().getRequest().cookies?.Authentication
-    if (!jwt) {
+    const bearerToken = context
+      .switchToHttp()
+      .getRequest()
+      .headers.authorization?.split(' ')[1]
+
+    if (!bearerToken) {
       return false
     }
 
     return this.authClient
       .send<IAuthServiceJwtStrategyPayload>('authenticate', {
-        Authentication: jwt,
+        token: bearerToken,
       })
       .pipe(
         tap((user) => {
           context.switchToHttp().getRequest().user = user
         }),
-        map(() => true)
+        map(() => true),
+        catchError((error) => {
+          Logger.error('[auth-service-jwt.strategy] An error occurred:', error)
+          throw error
+        })
       )
   }
 }

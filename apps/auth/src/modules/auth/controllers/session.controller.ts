@@ -5,6 +5,7 @@ import {
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common'
+import { MessagePattern, Payload } from '@nestjs/microservices'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@app/auth/modules/auth/auth.service'
@@ -54,5 +55,12 @@ export class SessionController {
     @GetUserPayload() user: User
   ): { accessToken: string } {
     return this.service.refreshAccessToken(user)
+  }
+
+  // TODO: fix types
+  @UseGuards(AuthGuard('jwt'))
+  @MessagePattern('authenticate')
+  authenticate(@Payload() data: any) {
+    return data.user
   }
 }
