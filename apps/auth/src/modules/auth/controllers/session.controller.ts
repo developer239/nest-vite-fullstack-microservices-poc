@@ -17,7 +17,7 @@ import {
   RefreshTokenRequestDTO,
   RefreshTokenResponseDTO,
 } from '@app/auth/modules/auth/dto/refresh-token.dto'
-import { User } from '@app/auth/modules/auth/entities/user.entity'
+import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
 import { GetUserPayload } from '@app/auth/modules/auth/strategies/user.decorator'
 import { IpAddress } from '@shared/common/utils/decorators/ip-address.decorator'
 
@@ -39,7 +39,7 @@ export class SessionController {
   })
   public login(
     @Body() loginDto: EmailLoginRequestDTO,
-    @GetUserPayload() user: User,
+    @GetUserPayload() user: UserEntity,
     @IpAddress() ipAddress: string
   ) {
     return this.service.login(user, ipAddress)
@@ -52,14 +52,14 @@ export class SessionController {
   })
   public refreshToken(
     @Body() refreshTokenDto: RefreshTokenRequestDTO,
-    @GetUserPayload() user: User
+    @GetUserPayload() user: UserEntity
   ): { accessToken: string } {
     return this.service.refreshAccessToken(user)
   }
 
   @UseGuards(AuthGuard('jwt'))
   @MessagePattern('AUTH_SESSION_AUTHENTICATE')
-  authenticate(@GetUserPayload() user: User) {
+  authenticate(@GetUserPayload() user: UserEntity) {
     return user
   }
 }

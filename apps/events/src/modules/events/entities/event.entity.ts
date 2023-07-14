@@ -9,23 +9,22 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm'
-import { Attendee } from '@app/events/modules/events/entities/attendee.entity'
+import { AttendeeEntity } from '@app/events/modules/events/entities/attendee.entity'
 import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
-@Entity()
-export class Event extends EntityHelper {
+@Entity('event')
+export class EventEntity extends EntityHelper {
   @PrimaryGeneratedColumn() id: number
 
-  @Exclude()
   @Column()
   ownerUserId: number
 
-  @ManyToMany(() => Attendee, {
+  @ManyToMany(() => AttendeeEntity, {
     eager: true,
     cascade: true,
   })
   @JoinTable()
-  attendees: Attendee[]
+  attendees: AttendeeEntity[]
 
   @Column() title: string
 

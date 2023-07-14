@@ -12,11 +12,11 @@ import {
   BeforeUpdate,
   OneToMany,
 } from 'typeorm'
-import { RefreshToken } from '@app/auth/modules/auth/entities/refresh-token.entity'
+import { RefreshTokenEntity } from '@app/auth/modules/auth/entities/refresh-token.entity'
 import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
-@Entity()
-export class User extends EntityHelper {
+@Entity('user')
+export class UserEntity extends EntityHelper {
   @PrimaryGeneratedColumn() id: number
 
   @Expose({ groups: ['me', 'admin'] })
@@ -45,8 +45,8 @@ export class User extends EntityHelper {
     }
   }
 
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
-  refreshTokens: RefreshToken[]
+  @OneToMany(() => RefreshTokenEntity, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshTokenEntity[]
 
   @Exclude({ toPlainOnly: true }) @CreateDateColumn() createdAt: Date
 

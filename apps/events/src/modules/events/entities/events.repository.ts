@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
-import { Attendee } from '@app/events/modules/events/entities/attendee.entity'
-import { Event } from '@app/events/modules/events/entities/event.entity'
+import { AttendeeEntity } from '@app/events/modules/events/entities/attendee.entity'
+import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 
 @Injectable()
 export class EventsRepository {
   constructor(
-    @InjectRepository(Event)
-    private readonly eventsRepository: Repository<Event>,
-    @InjectRepository(Attendee)
-    private readonly attendeesRepository: Repository<Attendee>
+    @InjectRepository(EventEntity)
+    private readonly eventsRepository: Repository<EventEntity>,
+    @InjectRepository(AttendeeEntity)
+    private readonly attendeesRepository: Repository<AttendeeEntity>
   ) {}
 
   findAll() {
@@ -26,7 +26,7 @@ export class EventsRepository {
     })
   }
 
-  async create(ownerId: number, data: UpsertEventDto): Promise<Event> {
+  async create(ownerId: number, data: UpsertEventDto): Promise<EventEntity> {
     const event = this.eventsRepository.create({
       ...data,
       ownerUserId: ownerId,
@@ -41,10 +41,10 @@ export class EventsRepository {
     ownerId: number,
     data: UpsertEventDto,
     eventId: number
-  ): Promise<Event | undefined> {
+  ): Promise<EventEntity | undefined> {
     const qb = this.eventsRepository
       .createQueryBuilder('event')
-      .update(Event)
+      .update(EventEntity)
       .set(data)
       .where('event.id = :id', { id: eventId })
       .andWhere('event."ownerUserId" = :ownerId', { ownerId })
@@ -69,7 +69,7 @@ export class EventsRepository {
     return Boolean(result.affected)
   }
 
-  async attend(userId: number, eventId: number): Promise<Event> {
+  async attend(userId: number, eventId: number): Promise<EventEntity> {
     const event = await this.findById(eventId)
 
     if (!event) {
@@ -105,7 +105,7 @@ export class EventsRepository {
     return event
   }
 
-  async leave(userId: number, eventId: number): Promise<Event> {
+  async leave(userId: number, eventId: number): Promise<EventEntity> {
     const event = await this.findById(eventId)
 
     if (!event) {

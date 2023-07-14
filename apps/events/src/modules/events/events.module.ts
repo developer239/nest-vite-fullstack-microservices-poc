@@ -6,8 +6,8 @@ import {
   eventsConfig,
   EventsConfigType,
 } from '@app/events/config/events.config'
-import { Attendee } from '@app/events/modules/events/entities/attendee.entity'
-import { Event } from '@app/events/modules/events/entities/event.entity'
+import { AttendeeEntity } from '@app/events/modules/events/entities/attendee.entity'
+import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 import { EventsRepository } from '@app/events/modules/events/entities/events.repository'
 import { EventsController } from '@app/events/modules/events/events.controller'
 import { EventsService } from '@app/events/modules/events/events.service'
@@ -31,7 +31,7 @@ import { AUTH_MICRO_SERVICE_TOKEN } from '@shared/common/modules/auth/tokens'
         }),
       },
     ]),
-    TypeOrmModule.forFeature([Event, Attendee]),
+    TypeOrmModule.forFeature([EventEntity, AttendeeEntity]),
   ],
   controllers: [EventsController],
   providers: [

@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, FindOptionsWhere, In, Repository } from 'typeorm'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
-import { User } from '@app/auth/modules/auth/entities/user.entity'
+import { UserEntity } from '@app/auth/modules/auth/entities/user.entity'
 
 @Injectable()
 export class UsersRepository {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>
   ) {}
 
   list(userIds: number[]) {
@@ -24,7 +25,7 @@ export class UsersRepository {
     )
   }
 
-  findOne(fields: FindOptionsWhere<User>, relations?: string[]) {
+  findOne(fields: FindOptionsWhere<UserEntity>, relations?: string[]) {
     return this.usersRepository.findOne({
       where: fields,
       relations,
@@ -38,7 +39,7 @@ export class UsersRepository {
     })
   }
 
-  async update(id: number, payload: DeepPartial<User>) {
+  async update(id: number, payload: DeepPartial<UserEntity>) {
     const userToUpdate = await this.usersRepository.preload({
       id,
       ...payload,

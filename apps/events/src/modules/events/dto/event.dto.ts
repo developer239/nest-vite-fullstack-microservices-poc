@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty } from 'class-validator'
+import { UserDTO } from '@app/events/modules/events/dto/user.dto'
 
-// TODO: update DTO and include owner and attendees (first name, last name) information
 export class EventDTO {
   @ApiProperty() @IsNotEmpty() id: number
 
@@ -13,7 +13,7 @@ export class EventDTO {
 
   @ApiProperty() @IsNotEmpty() startsAt: Date
 
-  @ApiProperty() @IsNotEmpty() ownerUserId: number
+  @ApiProperty() @IsNotEmpty() owner: UserDTO
 
-  @ApiProperty({ isArray: true }) @IsNotEmpty() attendeeUserIds: number
+  @ApiProperty({ isArray: true }) @IsNotEmpty() attendees: UserDTO
 }
