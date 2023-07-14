@@ -29,7 +29,7 @@ export class AuthServiceJwtStrategy implements CanActivate {
     }
 
     return this.authClient
-      .send<IAuthServiceJwtStrategyPayload>('authenticate', {
+      .send<IAuthServiceJwtStrategyPayload>('AUTH_SESSION_AUTHENTICATE', {
         token: bearerToken,
       })
       .pipe(
