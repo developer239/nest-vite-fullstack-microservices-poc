@@ -47,7 +47,7 @@ export class EventsRepository {
       .update(Event)
       .set(data)
       .where('event.id = :id', { id: eventId })
-      .andWhere('event."ownerId" = :ownerId', { ownerId })
+      .andWhere('event."ownerUserId" = :ownerId', { ownerId })
 
     const result = await qb.execute()
 
@@ -62,7 +62,7 @@ export class EventsRepository {
       .createQueryBuilder('event')
       .softDelete()
       .where('event.id = :id', { id: eventId })
-      .andWhere('event."ownerId" = :ownerId', { ownerId })
+      .andWhere('event."ownerUserId" = :ownerId', { ownerId })
 
     const result = await qb.execute()
 
@@ -77,9 +77,7 @@ export class EventsRepository {
     }
 
     if (event.attendees.length >= event.capacity) {
-      throw new Error(
-        `User with id ${userId} is not attending event with id ${eventId}`
-      )
+      return event
     }
 
     let user = await this.attendeesRepository.findOne({
@@ -99,7 +97,7 @@ export class EventsRepository {
     const userIndex = event.attendees.findIndex(
       (attendee) => attendee.userId === userId
     )
-    if (userIndex !== -1) {
+    if (userIndex === -1) {
       event.attendees.push(user)
     }
     await this.eventsRepository.save(event)
@@ -119,9 +117,7 @@ export class EventsRepository {
     )
 
     if (userIndex === -1) {
-      throw new Error(
-        `User with id ${userId} is not attending event with id ${eventId}`
-      )
+      return event
     }
 
     event.attendees.splice(userIndex, 1)

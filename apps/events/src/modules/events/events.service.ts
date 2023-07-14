@@ -42,7 +42,7 @@ export class EventsService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          message: 'notFound',
+          message: 'event notFound',
         },
         HttpStatus.NOT_FOUND
       )
@@ -58,7 +58,7 @@ export class EventsService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          message: 'notFound',
+          message: 'event notFound',
         },
         HttpStatus.NOT_FOUND
       )
