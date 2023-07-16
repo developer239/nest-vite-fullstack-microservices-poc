@@ -6,15 +6,20 @@ import {
   paymentsConfigSchema,
 } from '@app/payments/config/payments.config'
 import { appConfig, appConfigSchema } from '@shared/common/config/app.config'
+import {
+  databaseConfig,
+  databaseConfigSchema,
+} from '@shared/common/config/database.config'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, paymentsConfig],
+      load: [appConfig, databaseConfig, paymentsConfig],
       envFilePath: ['apps/payments/.env'],
       validationSchema: Joi.object({
         ...appConfigSchema,
+        ...databaseConfigSchema,
         ...paymentsConfigSchema,
       }),
     }),

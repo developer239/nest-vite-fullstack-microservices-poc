@@ -28,19 +28,25 @@ export class AuthServiceJwtStrategy implements CanActivate {
       return false
     }
 
-    return this.authClient
-      .send<IAuthServiceJwtStrategyPayload>('AUTH_SESSION_AUTHENTICATE', {
-        token: bearerToken,
-      })
-      .pipe(
-        tap((user) => {
-          context.switchToHttp().getRequest().user = user
-        }),
-        map(() => true),
-        catchError((error) => {
-          Logger.error('[auth-service-jwt.strategy] An error occurred:', error)
-          throw error
+    return (
+      this.authClient
+        // TODO: use constant and type data
+        .send<IAuthServiceJwtStrategyPayload>('AUTH_SESSION_AUTHENTICATE', {
+          token: bearerToken,
         })
-      )
+        .pipe(
+          tap((user) => {
+            context.switchToHttp().getRequest().user = user
+          }),
+          map(() => true),
+          catchError((error) => {
+            Logger.error(
+              '[auth-service-jwt.strategy] An error occurred:',
+              error
+            )
+            throw error
+          })
+        )
+    )
   }
 }

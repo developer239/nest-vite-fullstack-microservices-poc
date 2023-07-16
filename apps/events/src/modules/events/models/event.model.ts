@@ -11,6 +11,8 @@ export class EventModel {
 
   public capacity: number
 
+  public cost: number
+
   public owner: AttendeeModel
 
   public attendees: AttendeeModel[]

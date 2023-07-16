@@ -1,10 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common'
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common'
 import Stripe from 'stripe'
 import {
   paymentsConfig,
   PaymentsConfigType,
 } from '@app/payments/config/payments.config'
 import { CreateChargeDto } from '@app/payments/modules/payments/dto/create-charge.dto'
+import { RefundChargeDto } from '@app/payments/modules/payments/dto/refund-charge.dto'
+import { PaymentEntity } from '@app/payments/modules/payments/entities/payment.entity'
+import { PaymentRepository } from '@app/payments/modules/payments/entities/payment.repository'
 
 @Injectable()
 export class PaymentsService {
@@ -17,28 +26,48 @@ export class PaymentsService {
 
   constructor(
     @Inject(paymentsConfig.KEY)
-    private readonly paymentsConfigValues: PaymentsConfigType
+    private readonly paymentsConfigValues: PaymentsConfigType,
+    private readonly paymentRepository: PaymentRepository
   ) {}
 
-  async createCharge({ card, amount }: CreateChargeDto) {
-    const paymentMethod = await this.stripe.paymentMethods.create({
-      type: 'card',
-      card: {
-        number: card.number,
-        exp_month: card.expMonth,
-        exp_year: card.expYear,
-        cvc: card.cvc,
-      },
-    })
+  async createCharge(createChargeDto: CreateChargeDto): Promise<PaymentEntity> {
+    const { entityId, entityType, userId, amount, stripeToken } =
+      createChargeDto
+    try {
+      const charge = await this.stripe.charges.create({
+        amount: Math.round(amount * 100),
+        currency: 'usd',
+        source: stripeToken,
+        description: `Charge for ${entityType} with id ${entityId}`,
+      })
 
-    const paymentIntent = await this.stripe.paymentIntents.create({
-      payment_method: paymentMethod.id,
-      amount: amount * 100,
-      confirm: true,
-      payment_method_types: ['card'],
-      currency: 'usd',
-    })
+      const payment = new PaymentEntity()
+      payment.entityId = entityId
+      payment.entityType = entityType
+      payment.userId = userId
+      payment.amount = amount
+      payment.stripeId = charge.id
+      payment.transactionStatus = 'Completed'
 
-    return paymentIntent
+      return await payment.save()
+    } catch (error) {
+      Logger.error(error)
+      throw new HttpException('Payment failed', HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  async refundCharge(
+    data: RefundChargeDto
+  ): Promise<Stripe.Response<Stripe.Refund>> {
+    const payment = await this.paymentRepository.findOne(
+      data.userId,
+      data.entityId,
+      data.entityType
+    )
+
+    return this.stripe.refunds.create({
+      charge: payment.stripeId,
+      amount: Math.round(payment.amount * 100),
+    })
   }
 }

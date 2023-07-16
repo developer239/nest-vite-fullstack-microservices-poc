@@ -1,19 +1,20 @@
-import { Type } from 'class-transformer'
-import {
-  IsDefined,
-  IsNotEmptyObject,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator'
-import { CardDto } from '@app/payments/modules/payments/dto/card.dto'
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateChargeDto {
-  @IsDefined()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => CardDto)
-  card: CardDto
+  @IsNumber()
+  entityId: number
+
+  @IsString()
+  @IsNotEmpty()
+  entityType: string
+
+  @IsNumber()
+  userId: number
 
   @IsNumber()
   amount: number
+
+  @IsString()
+  @IsNotEmpty()
+  stripeToken: string
 }

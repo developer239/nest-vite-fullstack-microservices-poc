@@ -1,13 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
+import { ClientProxy } from '@nestjs/microservices'
+import { firstValueFrom } from 'rxjs'
 import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
 import { EventsRepository } from '@app/events/modules/events/entities/events.repository'
 import { UsersService } from '@app/events/modules/events/users.service'
+import { PAYMENTS_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
 export class EventsService {
   constructor(
     private readonly eventsRepository: EventsRepository,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    @Inject(PAYMENTS_SERVICE_TOKEN) private readonly client: ClientProxy
   ) {}
 
   async listEvents() {
@@ -70,13 +74,64 @@ export class EventsService {
     }
   }
 
-  async attendEvent(userId: number, eventId: number) {
-    const event = await this.eventsRepository.attend(userId, eventId)
+  async attendEvent(userId: number, eventId: number, stripeToken: string) {
+    const event = (await this.eventsRepository.findById(eventId))!
+
+    if (event.cost > 0) {
+      try {
+        await firstValueFrom(
+          // TODO: use constant and type data
+          this.client.send('create_charge', {
+            entityId: eventId,
+            // eslint-disable-next-line no-underscore-dangle
+            entityType: event.__entity,
+            userId,
+            amount: event.cost,
+            stripeToken,
+          })
+        )
+      } catch (error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.SERVICE_UNAVAILABLE,
+            message: 'Charge creation failed',
+          },
+          HttpStatus.SERVICE_UNAVAILABLE
+        )
+      }
+    }
+    await this.eventsRepository.attend(userId, eventId)
+
     return this.usersService.mapUsersToEvent(event)
   }
 
   async leaveEvent(userId: number, eventId: number) {
-    const event = await this.eventsRepository.leave(userId, eventId)
+    const event = (await this.eventsRepository.findById(eventId))!
+
+    if (event.cost > 0) {
+      try {
+        await firstValueFrom(
+          // TODO: use constant and type data
+          this.client.send('refund_charge', {
+            entityId: eventId,
+            // eslint-disable-next-line no-underscore-dangle
+            entityType: event.__entity,
+            userId,
+            amount: event.cost,
+          })
+        )
+      } catch (error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.SERVICE_UNAVAILABLE,
+            message: 'Charge creation failed',
+          },
+          HttpStatus.SERVICE_UNAVAILABLE
+        )
+      }
+    }
+    await this.eventsRepository.leave(userId, eventId)
+
     return this.usersService.mapUsersToEvent(event)
   }
 }

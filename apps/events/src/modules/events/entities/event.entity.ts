@@ -32,6 +32,9 @@ export class EventEntity extends EntityHelper {
 
   @Column() capacity: number
 
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  cost: number
+
   @Column() startsAt: Date
 
   @Exclude({ toPlainOnly: true }) @CreateDateColumn() createdAt: Date

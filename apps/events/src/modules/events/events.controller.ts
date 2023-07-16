@@ -12,6 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { AttendEventDto } from '@app/events/modules/events/dto/attend-event.dto'
 import { EventDTO } from '@app/events/modules/events/dto/event.dto'
 import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
 import { EventsService } from '@app/events/modules/events/events.service'
@@ -92,9 +93,10 @@ export class EventsController {
   })
   public attend(
     @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
-    @Param('id', ParseIntPipe) eventId: number
+    @Param('id', ParseIntPipe) eventId: number,
+    @Body() data: AttendEventDto
   ) {
-    return this.service.attendEvent(user.id, eventId)
+    return this.service.attendEvent(user.id, eventId, data.stripeToken)
   }
 
   @ApiBearerAuth()
