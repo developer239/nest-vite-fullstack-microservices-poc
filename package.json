@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nest build",
-    "test": "jest",
+    "test": "jest -i",
     "format": "prettier --write '*/**/*.{ts,md,json}'",
     "lint:ts": "eslint --ext .ts {apps,libs}",
     "husky:prepare": "husky install",
@@ -66,6 +66,7 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@ngneat/falso": "^6.4.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",

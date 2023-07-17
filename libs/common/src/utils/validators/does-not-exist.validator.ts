@@ -16,7 +16,7 @@ type ValidationEntity =
 @Injectable()
 @ValidatorConstraint({ name: 'DoesNotExist', async: true })
 export class DoesNotExist implements ValidatorConstraintInterface {
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+  constructor(@InjectDataSource() public readonly dataSource: DataSource) {}
 
   async validate(value: string, validationArguments: ValidationArguments) {
     const repository = validationArguments.constraints[0] as string
