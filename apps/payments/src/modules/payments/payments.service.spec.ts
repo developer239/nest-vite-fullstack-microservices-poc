@@ -1,57 +1,69 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, TestingModule as NestTestingModule } from '@nestjs/testing'
 import Stripe from 'stripe'
 import { WrappedConfigModule } from '@app/payments/modules/config/config.module'
 import { WrappedDatabaseModule } from '@app/payments/modules/database/database.module'
-import { CreateChargeDto } from '@app/payments/modules/payments/dto/create-charge.dto'
 import { RefundChargeDto } from '@app/payments/modules/payments/dto/refund-charge.dto'
+import { PaymentTestingService } from '@app/payments/modules/payments/entities/payment-testing.service'
 import { PaymentsModule } from '@app/payments/modules/payments/payments.module'
 import { PaymentsService } from '@app/payments/modules/payments/payments.service'
+import { TestingDatabaseService } from '@shared/common/modules/testing/testing-database.service'
+import { TestingModule } from '@shared/common/modules/testing/testing.module'
 
-// TODO: refactor and implement proper tests
-describe('PaymentsService', () => {
+describe('[payments] PaymentsService', () => {
+  let databaseService: TestingDatabaseService
+  let testingEntityService: PaymentTestingService
   let service: PaymentsService
   let mockStripe: jest.Mocked<Stripe>
 
-  it('should create a charge', async () => {
-    const dto: CreateChargeDto = {
-      entityId: 1,
-      entityType: 'testEntity',
-      userId: 2,
-      amount: 100,
-      stripeToken: 'tok_test',
-    }
+  describe('createCharge', () => {
+    it('should create a charge', async () => {
+      // Arrange
+      const data = testingEntityService.createPaymentData()
 
-    const payment = await service.createCharge(dto)
+      // Act
+      const payment = await service.createCharge({
+        ...data,
+        stripeToken: data.stripeId,
+      })
 
-    expect(payment.stripeId).toBe('mockPaymentIntentId')
-    expect(mockStripe.paymentIntents.create).toHaveBeenCalledWith({
-      amount: dto.amount,
-      currency: 'usd',
-      payment_method: dto.stripeToken,
-      description: `Charge for ${dto.entityType} with id ${dto.entityId}`,
-      confirm: true,
+      // Assert
+      expect(payment.stripeId).toBe('mockPaymentIntentId')
+      expect(mockStripe.paymentIntents.create).toHaveBeenCalledWith({
+        amount: data.amount,
+        currency: 'usd',
+        payment_method: data.stripeId,
+        description: `Charge for ${data.entityType} with id ${data.entityId}`,
+        confirm: true,
+      })
     })
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should create a refund', async () => {
-    // create mock entity after you create payment test helper
+  describe('refundCharge', () => {
+    it('should create a refund', async () => {
+      // Arrange
+      const { payment } = await testingEntityService.createTestPayment()
+      const dto: RefundChargeDto = {
+        userId: payment.userId,
+        entityId: payment.entityId,
+        entityType: payment.entityType,
+      }
 
-    const dto: RefundChargeDto = {
-      userId: 1,
-      entityId: 3,
-      entityType: 'EventEntity',
-    }
+      // Act
+      const refund = await service.refundCharge(dto)
 
-    const refund = await service.refundCharge(dto)
-
-    expect(refund.id).toBe('mockRefundId')
-    expect(mockStripe.refunds.create).toHaveBeenCalledWith({
-      payment_intent: 'mockStripeId',
+      // Assert
+      expect(refund.id).toBe('mockRefundId')
+      expect(mockStripe.refunds.create).toHaveBeenCalledWith({
+        payment_intent: payment.stripeId,
+      })
     })
   })
 
-  beforeEach(async () => {
+  //
+  //
+  // setup
+
+  beforeAll(async () => {
     mockStripe = {
       paymentIntents: {
         create: jest.fn().mockResolvedValue({ id: 'mockPaymentIntentId' }),
@@ -61,13 +73,29 @@ describe('PaymentsService', () => {
       },
     } as any
 
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [WrappedConfigModule, WrappedDatabaseModule, PaymentsModule],
+    const module: NestTestingModule = await Test.createTestingModule({
+      imports: [
+        TestingModule,
+        WrappedConfigModule,
+        WrappedDatabaseModule,
+        PaymentsModule,
+      ],
+      providers: [PaymentTestingService],
     })
       .overrideProvider('STRIPE')
       .useValue(mockStripe)
       .compile()
 
+    databaseService = module.get(TestingDatabaseService)
     service = module.get<PaymentsService>(PaymentsService)
+    testingEntityService = module.get(PaymentTestingService)
+  })
+
+  beforeEach(async () => {
+    await databaseService.clearDb()
+  })
+
+  afterAll(async () => {
+    await databaseService.dataSource.destroy()
   })
 })
