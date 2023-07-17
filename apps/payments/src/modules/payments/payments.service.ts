@@ -33,12 +33,14 @@ export class PaymentsService {
   async createCharge(createChargeDto: CreateChargeDto): Promise<PaymentEntity> {
     const { entityId, entityType, userId, amount, stripeToken } =
       createChargeDto
+
     try {
-      const charge = await this.stripe.charges.create({
+      const paymentIntent = await this.stripe.paymentIntents.create({
         amount,
         currency: 'usd',
-        source: stripeToken,
+        payment_method: stripeToken,
         description: `Charge for ${entityType} with id ${entityId}`,
+        confirm: true, // Confirm the payment after creating the PaymentIntent
       })
 
       const payment = new PaymentEntity()
@@ -46,28 +48,35 @@ export class PaymentsService {
       payment.entityType = entityType
       payment.userId = userId
       payment.amount = amount
-      payment.stripeId = charge.id
+      payment.stripeId = paymentIntent.id
       payment.status = 'Completed'
 
       return await payment.save()
     } catch (error) {
       Logger.error(error)
-      throw new HttpException('Payment failed', HttpStatus.BAD_REQUEST)
+      throw new HttpException(
+        'Payment failed',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      )
     }
   }
 
-  async refundCharge(
-    data: RefundChargeDto
-  ): Promise<Stripe.Response<Stripe.Refund>> {
+  async refundCharge(data: RefundChargeDto) {
     const payment = await this.paymentRepository.findOne(
       data.userId,
       data.entityId,
       data.entityType
     )
 
-    return this.stripe.refunds.create({
-      charge: payment.stripeId,
-      amount: Math.round(payment.amount),
-    })
+    try {
+      const result = await this.stripe.refunds.create({
+        payment_intent: payment.stripeId,
+      })
+
+      return result
+    } catch (error) {
+      Logger.error(error)
+      throw new HttpException('Refund failed', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 }
