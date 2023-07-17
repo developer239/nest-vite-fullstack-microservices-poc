@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nest build",
-    "test": "jest -i",
+    "test": "jest -i --forceExit",
     "format": "prettier --write '*/**/*.{ts,md,json}'",
     "lint:ts": "eslint --ext .ts {apps,libs}",
     "husky:prepare": "husky install",
