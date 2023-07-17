@@ -19,7 +19,7 @@ export class PaymentEntity extends EntityHelper {
 
   @Column() userId: number
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column({ comment: 'Amount in cents' })
   amount: number
 
   @Column() stripeId: string
@@ -29,7 +29,7 @@ export class PaymentEntity extends EntityHelper {
     enum: ['Pending', 'Completed', 'Failed'],
     default: 'Pending',
   })
-  transactionStatus: string
+  status: string
 
   @Exclude({ toPlainOnly: true }) @CreateDateColumn() createdAt: Date
 

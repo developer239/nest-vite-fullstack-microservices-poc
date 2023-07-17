@@ -11,7 +11,7 @@
     "husky:prepare": "husky install",
     "type-check": "tsc --noEmit",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "all:migration:run": "npm run auth:migration:run && npm run events:migration:run",
+    "all:migration:run": "npm run auth:migration:run && npm run events:migration:run && npm run payments:migration:run",
     "auth:dev": "nest start auth --watch",
     "auth:migration:generate": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:generate",
     "auth:migration:run": "npm run typeorm -- --dataSource=apps/auth/src/modules/database/data-source.ts migration:run",
@@ -22,7 +22,11 @@
     "events:migration:run": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:run",
     "events:migration:revert": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts migration:revert",
     "events:schema:drop": "npm run typeorm -- --dataSource=apps/events/src/modules/database/data-source.ts schema:drop",
-    "payments:dev": "nest start payments --watch"
+    "payments:dev": "nest start payments --watch",
+    "payments:migration:generate": "npm run typeorm -- --dataSource=apps/payments/src/modules/database/data-source.ts migration:generate",
+    "payments:migration:run": "npm run typeorm -- --dataSource=apps/payments/src/modules/database/data-source.ts migration:run",
+    "payments:migration:revert": "npm run typeorm -- --dataSource=apps/payments/src/modules/database/data-source.ts migration:revert",
+    "payments:schema:drop": "npm run typeorm -- --dataSource=apps/payments/src/modules/database/data-source.ts schema:drop"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

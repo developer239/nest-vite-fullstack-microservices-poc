@@ -35,7 +35,7 @@ export class PaymentsService {
       createChargeDto
     try {
       const charge = await this.stripe.charges.create({
-        amount: Math.round(amount * 100),
+        amount,
         currency: 'usd',
         source: stripeToken,
         description: `Charge for ${entityType} with id ${entityId}`,
@@ -47,7 +47,7 @@ export class PaymentsService {
       payment.userId = userId
       payment.amount = amount
       payment.stripeId = charge.id
-      payment.transactionStatus = 'Completed'
+      payment.status = 'Completed'
 
       return await payment.save()
     } catch (error) {
@@ -67,7 +67,7 @@ export class PaymentsService {
 
     return this.stripe.refunds.create({
       charge: payment.stripeId,
-      amount: Math.round(payment.amount * 100),
+      amount: Math.round(payment.amount),
     })
   }
 }

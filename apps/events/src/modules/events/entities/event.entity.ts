@@ -32,7 +32,7 @@ export class EventEntity extends EntityHelper {
 
   @Column() capacity: number
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  @Column({ comment: 'Cost in cents', default: 0 })
   cost: number
 
   @Column() startsAt: Date

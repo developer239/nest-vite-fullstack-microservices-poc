@@ -42,49 +42,61 @@ Database schema:
 
 ```mermaid
 classDiagram
-direction TB
-class attendee {
-   integer userId
-   integer id
-}
-class event {
-   integer ownerUserId
-   varchar title
-   varchar description
-   integer capacity
-   timestamp startsAt
-   timestamp createdAt
-   timestamp updatedAt
-   timestamp deletedAt
-   integer id
-}
-class event_attendees_attendee {
-   integer eventId
-   integer attendeeId
-}
+  direction BT
+  class attendee {
+    integer userId
+    integer id
+  }
+  class event {
+    integer ownerUserId
+    varchar title
+    varchar description
+    integer capacity
+    timestamp startsAt
+    timestamp createdAt
+    timestamp updatedAt
+    timestamp deletedAt
+    integer cost  /* Cost in cents */
+    integer id
+  }
+  class event_attendees_attendee {
+    integer eventId
+    integer attendeeId
+  }
+  class payment {
+    integer entityId
+    varchar entityType
+    integer userId
+    integer amount  /* Amount in cents */
+    varchar stripeId
+    payment_status_enum status
+    timestamp createdAt
+    timestamp updatedAt
+    timestamp deletedAt
+    integer paymentId
+  }
+  class refresh_token {
+    varchar value
+    varchar ipAddress
+    timestamp createdAt
+    timestamp updatedAt
+    integer userId
+    integer id
+  }
+  class user {
+    varchar email
+    varchar firstName
+    varchar lastName
+    varchar password
+    timestamp createdAt
+    timestamp updatedAt
+    timestamp deletedAt
+    integer id
+  }
 
-class refresh_token {
-   varchar value
-   varchar ipAddress
-   timestamp createdAt
-   timestamp updatedAt
-   integer userId
-   integer id
-}
-class user {
-   varchar email
-   varchar firstName
-   varchar lastName
-   varchar password
-   timestamp createdAt
-   timestamp updatedAt
-   timestamp deletedAt
-   integer id
-}
-
-event_attendees_attendee  -->  attendee : attendeeId_id
-event_attendees_attendee  -->  event : eventId_id
-refresh_token  -->  user : userId_id
+  event_attendees_attendee  -->  attendee : attendeeId_id
+  event_attendees_attendee  -->  event : eventId_id
+  refresh_token  -->  user : userId_id
 ```
 
 ## Testing
