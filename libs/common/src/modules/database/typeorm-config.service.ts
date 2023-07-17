@@ -24,13 +24,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       dropSchema: false,
       keepConnectionAlive: true,
       logging: false,
-      // entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
-      // migrations: [`${__dirname}/migrations/**/*{.ts,.js}`],
-      // cli: {
-      //   entitiesDir: 'src',
-      //   migrationsDir: 'src/modules/database/migrations',
-      //   subscribersDir: 'subscriber',
-      // },
       extra: {
         // based on https://node-postgres.com/apis/pool
         // max connection pool size

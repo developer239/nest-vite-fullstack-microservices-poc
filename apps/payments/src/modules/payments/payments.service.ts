@@ -53,7 +53,7 @@ export class PaymentsService {
 
       return await payment.save()
     } catch (error) {
-      Logger.error(error)
+      Logger.error('[PaymentsService] An error occurred:', error)
       throw new HttpException(
         'Payment failed',
         HttpStatus.INTERNAL_SERVER_ERROR
@@ -73,7 +73,7 @@ export class PaymentsService {
         payment_intent: payment.stripeId,
       })
     } catch (error) {
-      Logger.error(error)
+      Logger.error('[PaymentsService] An error occurred:', error)
       throw new HttpException('Refund failed', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
