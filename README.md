@@ -3,10 +3,12 @@
 ```mermaid
 graph TB
   A[Web/Mobile Client] -- HTTP --> B[Events Microservice]
-  B -- TCP --> D[Auth Microservice]
   A -- HTTP --> D
-  B -- Query --> E[Database]
-  D -- Query --> E
+  B -- TCP --> C[Payments Microservice]
+  B -- TCP --> D[Auth Microservice]
+  B --> E((Database))
+  C --> E
+  D --> E
 ```
 
 ## Setup
