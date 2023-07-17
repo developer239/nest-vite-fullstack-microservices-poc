@@ -7,11 +7,12 @@ import {
   Post,
   UseGuards,
   SerializeOptions,
+  Query,
 } from '@nestjs/common'
-import { MessagePattern, Payload } from '@nestjs/microservices'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@app/auth/modules/auth/auth.service'
+import { ListUsersDTO } from '@app/auth/modules/auth/dto/list-users.dto'
 import { MeDTO } from '@app/auth/modules/auth/dto/me.dto'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
 import { User } from '@app/auth/modules/auth/entities/user.entity'
@@ -44,9 +45,8 @@ export class UsersController {
     return user
   }
 
-  @MessagePattern('AUTH_USERS_LIST')
-  listUsers(@Payload() data: { payload: number[] }) {
-    const userIds = data.payload
-    return this.service.listUsers(userIds)
+  @Get()
+  listUsers(@Query() listUsersDTO: ListUsersDTO) {
+    return this.service.listUsers(listUsersDTO.ids)
   }
 }

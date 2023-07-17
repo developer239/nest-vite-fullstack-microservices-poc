@@ -1,26 +1,20 @@
+/* eslint-disable no-underscore-dangle */
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
 import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
 import { EventsRepository } from '@app/events/modules/events/entities/events.repository'
-import { UsersService } from '@app/events/modules/events/users.service'
 import { PAYMENTS_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
 export class EventsService {
   constructor(
     private readonly eventsRepository: EventsRepository,
-    private readonly usersService: UsersService,
     @Inject(PAYMENTS_SERVICE_TOKEN) private readonly client: ClientProxy
   ) {}
 
-  async listEvents() {
-    const events = await this.eventsRepository.findAll()
-
-    // TODO: implement mapUsersToEvents for more efficiency
-    return Promise.all(
-      events.map((event) => this.usersService.mapUsersToEvent(event))
-    )
+  listEvents() {
+    return this.eventsRepository.findAll()
   }
 
   async detail(id: number) {
@@ -36,12 +30,11 @@ export class EventsService {
       )
     }
 
-    return this.usersService.mapUsersToEvent(event)
+    return event
   }
 
-  async createEvent(ownerId: number, data: UpsertEventDto) {
-    const event = await this.eventsRepository.create(ownerId, data)
-    return this.usersService.mapUsersToEvent(event)
+  createEvent(ownerId: number, data: UpsertEventDto) {
+    return this.eventsRepository.create(ownerId, data)
   }
 
   async updateEvent(ownerId: number, data: UpsertEventDto, eventId: number) {
@@ -57,7 +50,7 @@ export class EventsService {
       )
     }
 
-    return this.usersService.mapUsersToEvent(event)
+    return event
   }
 
   async deleteEvent(ownerId: number, eventId: number) {
@@ -80,10 +73,8 @@ export class EventsService {
     if (event.cost > 0) {
       try {
         await firstValueFrom(
-          // TODO: use constant and type data
-          this.client.send('create_charge', {
+          this.client.send('PAYMENTS_CREATE_CHARGE', {
             entityId: eventId,
-            // eslint-disable-next-line no-underscore-dangle
             entityType: event.__entity,
             userId,
             amount: event.cost,
@@ -102,7 +93,7 @@ export class EventsService {
     }
     await this.eventsRepository.attend(userId, eventId)
 
-    return this.usersService.mapUsersToEvent(event)
+    return event
   }
 
   async leaveEvent(userId: number, eventId: number) {
@@ -111,10 +102,8 @@ export class EventsService {
     if (event.cost > 0) {
       try {
         await firstValueFrom(
-          // TODO: use constant and type data
-          this.client.send('refund_charge', {
+          this.client.send('PAYMENTS_REFUND_CHARGE', {
             entityId: eventId,
-            // eslint-disable-next-line no-underscore-dangle
             entityType: event.__entity,
             userId,
             amount: event.cost,
@@ -132,6 +121,6 @@ export class EventsService {
     }
     await this.eventsRepository.leave(userId, eventId)
 
-    return this.usersService.mapUsersToEvent(event)
+    return event
   }
 }

@@ -8,13 +8,13 @@ import { PaymentsService } from '@app/payments/modules/payments/payments.service
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @MessagePattern('create_charge')
+  @MessagePattern('PAYMENTS_CREATE_CHARGE')
   @UsePipes(new ValidationPipe())
   createCharge(@Payload() data: CreateChargeDto) {
     return this.paymentsService.createCharge(data)
   }
 
-  @MessagePattern('refund_charge')
+  @MessagePattern('PAYMENTS_REFUND_CHARGE')
   @UsePipes(new ValidationPipe())
   refundCharge(@Payload() data: RefundChargeDto) {
     return this.paymentsService.refundCharge(data)

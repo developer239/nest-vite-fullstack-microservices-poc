@@ -40,7 +40,7 @@ export class PaymentsService {
         currency: 'usd',
         payment_method: stripeToken,
         description: `Charge for ${entityType} with id ${entityId}`,
-        confirm: true, // Confirm the payment after creating the PaymentIntent
+        confirm: true,
       })
 
       const payment = new PaymentEntity()
@@ -69,11 +69,9 @@ export class PaymentsService {
     )
 
     try {
-      const result = await this.stripe.refunds.create({
+      return this.stripe.refunds.create({
         payment_intent: payment.stripeId,
       })
-
-      return result
     } catch (error) {
       Logger.error(error)
       throw new HttpException('Refund failed', HttpStatus.INTERNAL_SERVER_ERROR)

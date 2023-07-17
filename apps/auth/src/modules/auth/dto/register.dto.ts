@@ -5,7 +5,7 @@ import { lowerCaseTransformer } from '@shared/common/utils/transformers/lower-ca
 import { DoesNotExist } from '@shared/common/utils/validators/does-not-exist.validator'
 
 export class RegisterRequestDTO {
-  @ApiProperty({ example: 'test1@example.com' })
+  @ApiProperty()
   @Transform(lowerCaseTransformer)
   @Validate(DoesNotExist, ['User'], {
     message: 'emailAlreadyExists',

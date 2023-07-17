@@ -2,29 +2,19 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty } from 'class-validator'
 
 export class UserDTO {
-  @ApiProperty({
-    example: 1,
-    description: 'Unique user ID.',
-  })
+  @ApiProperty()
   @IsNotEmpty()
   readonly id: number
 
-  @ApiProperty({
-    example: 'owl@gmail.com',
-    description: 'Your wise owl email address.',
-  })
+  @ApiProperty()
   @IsNotEmpty()
   readonly email: string
 
-  @ApiProperty({
-    example: 'Owl',
-  })
+  @ApiProperty()
   @IsNotEmpty()
   readonly firstName: string
 
-  @ApiProperty({
-    example: 'Bert',
-  })
+  @ApiProperty()
   @IsNotEmpty()
   readonly lastName: string
 }
