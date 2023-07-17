@@ -17,17 +17,11 @@ import { PaymentRepository } from '@app/payments/modules/payments/entities/payme
 
 @Injectable()
 export class PaymentsService {
-  private readonly stripe = new Stripe(
-    this.paymentsConfigValues.stripeSecretKey,
-    {
-      apiVersion: '2022-11-15',
-    }
-  )
-
   constructor(
     @Inject(paymentsConfig.KEY)
     private readonly paymentsConfigValues: PaymentsConfigType,
-    private readonly paymentRepository: PaymentRepository
+    private readonly paymentRepository: PaymentRepository,
+    @Inject('STRIPE') private readonly stripe: Stripe
   ) {}
 
   async createCharge(createChargeDto: CreateChargeDto): Promise<PaymentEntity> {
