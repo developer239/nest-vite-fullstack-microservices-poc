@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IAuthServiceUser {
   id: number
   email: string
   firstName: string

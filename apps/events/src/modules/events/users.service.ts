@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
+import { IAuthServiceUser } from '@app/events/interfaces'
 import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 import { AttendeeModel } from '@app/events/modules/events/models/attendee.model'
 import { EventModel } from '@app/events/modules/events/models/event.model'
-import { IUser } from '@shared/common/interfaces'
 import { AUTH_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
@@ -14,11 +14,14 @@ export class UsersService {
     private readonly client: ClientProxy
   ) {}
 
-  getUserData(userIds: number[]): Promise<IUser[]> {
+  getUserData(userIds: number[]): Promise<IAuthServiceUser[]> {
     return firstValueFrom(
-      this.client.send<IUser[], { payload: number[] }>('AUTH_USERS_LIST', {
-        payload: userIds,
-      })
+      this.client.send<IAuthServiceUser[], { payload: number[] }>(
+        'AUTH_USERS_LIST',
+        {
+          payload: userIds,
+        }
+      )
     )
   }
 
