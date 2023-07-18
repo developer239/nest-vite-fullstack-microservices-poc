@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { randNumber, randText, randWord, randFutureDate } from '@ngneat/falso'
+import { randNumber, randWord, randFutureDate } from '@ngneat/falso'
 import { AttendeeEntity } from '@app/events/modules/events/entities/attendee.entity'
 import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 import { TestingEntityService } from '@shared/common/modules/testing/testing-entity.service'
@@ -8,12 +8,11 @@ import { TestingEntityService } from '@shared/common/modules/testing/testing-ent
 export class EventTestingService extends TestingEntityService {
   public createEventData() {
     return {
-      ownerUserId: randNumber({ min: 1, max: 100 }),
-      title: randWord({ length: 10 }),
-      description: randText({ length: 100 }),
+      title: randWord(),
+      description: randWord(),
       capacity: randNumber({ min: 1, max: 100 }),
-      cost: randNumber({ min: 1, max: 100, precision: 0.01 }),
       startsAt: randFutureDate(),
+      cost: randNumber({ min: 0, max: 1000 }),
     }
   }
 
@@ -23,10 +22,13 @@ export class EventTestingService extends TestingEntityService {
     }
   }
 
-  public async createTestEvent() {
+  public async createTestEvent(ownerId = 1) {
     const eventData = this.createEventData()
 
-    const event = await this.saveFixture(EventEntity, eventData)
+    const event = await this.saveFixture(EventEntity, {
+      ...eventData,
+      ownerUserId: ownerId,
+    })
 
     return {
       event,

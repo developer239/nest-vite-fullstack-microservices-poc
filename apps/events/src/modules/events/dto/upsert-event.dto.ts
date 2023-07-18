@@ -7,6 +7,8 @@ export class UpsertEventDto {
 
   @ApiProperty() @IsNotEmpty() description: string
 
+  @ApiProperty() @IsNotEmpty() cost: number
+
   @ApiProperty() @IsNotEmpty() capacity: number
 
   @ApiProperty() @IsNotEmpty() @Type(() => Date) @IsDate() startsAt: Date

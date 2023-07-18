@@ -13,6 +13,8 @@ export class EventDTO {
 
   @ApiProperty() @IsNotEmpty() capacity: number
 
+  @ApiProperty() @IsNotEmpty() cost: number
+
   @ApiProperty() @IsNotEmpty() startsAt: Date
 
   @ApiProperty() @IsNotEmpty() ownerUserId: number
