@@ -1,11 +1,8 @@
 # Nest Microservices Example
 
-- Each microservice is deployable independently ✅
-- Each microservice is independently scalable ✅
-- Loosely coupled (use _auth_ or _payments_ microservices with your own microservices) ✅
-- Each service exposes a well-defined API and maintain a contract with its consumers ❌🙅 (versioning and contracts
-  between microservices are
-  not robust enough or implemented at all when it comes to TCP communication)
+- Each microservice is deployable independently
+- Each microservice is independently scalable
+- Loosely coupled (use _auth_ or _payments_ microservices with your own microservices)
 
 ```mermaid
 graph TB
@@ -22,14 +19,21 @@ graph TB
 2. Run infrastructure `docker-compose up`
 3. Run database migrations: `make migration-run`
 
+Set `STRIPE_SECRET_KEY` in `/apps/payments/.env` to your Stripe secret key.
+
 ## Development
 
-- `yarn auth:dev` - run auth microservice
-- `yarn events:dev` - run events microservice
+- `docker-compose up` - run database and all microservices
 - `yarn type-check` - run type checking
 - `yarn lint:ts` - run linter
 - `yarn format` - run prettier
 - `yarn test` - run tests
+
+You can also run microservices without docker:
+
+- `yarn auth:dev` - run auth microservice
+- `yarn events:dev` - run events microservice
+- `yarn payments:dev` - run payments microservice
 
 ## Database
 
