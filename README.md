@@ -2,13 +2,11 @@
 
 ```mermaid
 graph TB
-  A[Web/Mobile Client] -- HTTP --> B[Events Microservice]
-  A -- HTTP --> D
-  B -- TCP --> C[Payments Microservice]
-  B -- TCP --> D[Auth Microservice]
+  A[Events Microservice] --> B[Payments Microservice]
+  A --> C[Auth Microservice]
+  A --> D((Database))
   B --> E((Database))
-  C --> E
-  D --> E
+  C --> F((Database))
 ```
 
 ## Setup
@@ -106,3 +104,27 @@ classDiagram
 Most of the tests are E2E tests, which means that they are testing the whole application, including the database.
 
 - `yarn test` - run all tests
+
+You can use `bootstrap` from `@shared/common` to reduce boilerplate in services tests:
+
+```ts
+//
+//
+// setup
+
+beforeAll(async () => {
+  app = await bootstrap({
+    imports: [WrappedConfigModule, WrappedDatabaseModule, YourModule],
+  })
+
+  databaseService = app.get(TestingDatabaseService)
+})
+
+beforeEach(async () => {
+  await databaseService.clearDb()
+})
+
+afterAll(async () => {
+  await databaseService.dataSource.destroy()
+})
+```
