@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { catchError, map, Observable, tap } from 'rxjs'
-import { IAuthServiceJwtStrategyPayload } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
+import {
+  AUTH_SESSION_AUTHENTICATE_PATTERN,
+  IAuthSessionAuthenticateResult,
+} from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
 import { AUTH_SERVICE_TOKEN } from '@shared/common/tokens'
 
 @Injectable()
@@ -29,7 +32,7 @@ export class AuthServiceJwtStrategy implements CanActivate {
     }
 
     return this.authClient
-      .send<IAuthServiceJwtStrategyPayload>('AUTH_SESSION_AUTHENTICATE', {
+      .send<IAuthSessionAuthenticateResult>(AUTH_SESSION_AUTHENTICATE_PATTERN, {
         token: bearerToken,
       })
       .pipe(

@@ -18,7 +18,7 @@ import { UpsertEventDto } from '@app/events/modules/events/dto/upsert-event.dto'
 import { EventsService } from '@app/events/modules/events/events.service'
 import { GetUserPayload } from '@shared/common/modules/auth/decorators/get-user-payload.decorator'
 import { AuthServiceJwtStrategy } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy'
-import { IAuthServiceJwtStrategyPayload } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
+import { IAuthSessionAuthenticateResult } from '@shared/common/modules/auth/strategies/auth-service-jwt.strategy.types'
 
 @ApiTags('Events')
 @Controller({
@@ -53,7 +53,7 @@ export class EventsController {
     type: EventDTO,
   })
   public create(
-    @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
+    @GetUserPayload() user: IAuthSessionAuthenticateResult,
     @Body() data: UpsertEventDto
   ) {
     return this.service.createEvent(user.id, data)
@@ -66,7 +66,7 @@ export class EventsController {
     type: EventDTO,
   })
   public update(
-    @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
+    @GetUserPayload() user: IAuthSessionAuthenticateResult,
     @Param('id', ParseIntPipe) eventId: number,
     @Body() data: UpsertEventDto
   ) {
@@ -78,7 +78,7 @@ export class EventsController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   public delete(
-    @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
+    @GetUserPayload() user: IAuthSessionAuthenticateResult,
     @Param('id', ParseIntPipe) eventId: number
   ) {
     return this.service.deleteEvent(user.id, eventId)
@@ -92,7 +92,7 @@ export class EventsController {
     type: EventDTO,
   })
   public attend(
-    @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
+    @GetUserPayload() user: IAuthSessionAuthenticateResult,
     @Param('id', ParseIntPipe) eventId: number,
     @Body() data: AttendEventDto
   ) {
@@ -107,7 +107,7 @@ export class EventsController {
     type: EventDTO,
   })
   public leave(
-    @GetUserPayload() user: IAuthServiceJwtStrategyPayload,
+    @GetUserPayload() user: IAuthSessionAuthenticateResult,
     @Param('id', ParseIntPipe) eventId: number
   ) {
     return this.service.leaveEvent(user.id, eventId)
