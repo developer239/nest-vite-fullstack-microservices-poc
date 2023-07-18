@@ -143,3 +143,5 @@ afterAll(async () => {
   await databaseService.dataSource.destroy()
 })
 ```
+
+In case you don't want to run tests use postman collection in `./apps.postman_collection.json`.
