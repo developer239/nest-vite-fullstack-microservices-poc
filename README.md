@@ -6,8 +6,8 @@
 
 ```mermaid
 graph TB
-  A[Events Microservice] --> B[Payments Microservice]
-  A --> C[Auth Microservice]
+  A[Events] --> B[Payments]
+  A --> C[Auth]
   A --> D((Database))
   B --> E((Database))
   C --> F((Database))
