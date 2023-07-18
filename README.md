@@ -1,5 +1,12 @@
 # Nest Microservices Example
 
+- Each microservice is deployable independently ✅
+- Each microservice is independently scalable ✅
+- Loosely coupled (use _auth_ or _payments_ microservices with your own microservices) ✅
+- Each service exposes a well-defined API and maintain a contract with its consumers ❌🙅 (versioning and contracts
+  between microservices are
+  not robust enough or implemented at all when it comes to TCP communication)
+
 ```mermaid
 graph TB
   A[Events Microservice] --> B[Payments Microservice]
@@ -29,7 +36,8 @@ graph TB
 Note that for simplicity all microservices use the same database. Update `# database config` section in `.env` files to
 use different database.
 
-- `yarn {appName}:migration:generate  apps/{appName}/src/modules/database/migrations/{migrationName}` - create new migration file
+- `yarn {appName}:migration:generate  apps/{appName}/src/modules/database/migrations/{migrationName}` - create new
+  migration file
 - `yarn {appName}:migration:run` - run all pending migrations
 - `yarn {appName}:migration:revert` - revert last migration
 - `yarn {appName}:schema:drop` - drop all tables
@@ -59,7 +67,7 @@ classDiagram
     timestamp createdAt
     timestamp updatedAt
     timestamp deletedAt
-    integer cost  /* Cost in cents */
+    integer cost /* Cost in cents */
     integer id
   }
   class event_attendees_attendee {
@@ -70,7 +78,7 @@ classDiagram
     integer entityId
     varchar entityType
     integer userId
-    integer amount  /* Amount in cents */
+    integer amount /* Amount in cents */
     varchar stripeId
     payment_status_enum status
     timestamp createdAt
@@ -97,9 +105,9 @@ classDiagram
     integer id
   }
 
-  event_attendees_attendee  -->  attendee : attendeeId_id
-  event_attendees_attendee  -->  event : eventId_id
-  refresh_token  -->  user : userId_id
+  event_attendees_attendee --> attendee: attendeeId_id
+  event_attendees_attendee --> event: eventId_id
+  refresh_token --> user: userId_id
 ```
 
 ## Testing
