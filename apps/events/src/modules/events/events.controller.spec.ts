@@ -2,6 +2,12 @@
 import { INestApplication } from '@nestjs/common'
 import { of } from 'rxjs'
 import * as request from 'supertest'
+import {
+  IPaymentsCreateChargeInput,
+  IPaymentsRefundChargeInput,
+  PAYMENTS_CREATE_CHARGE_MESSAGE_PATTERN,
+  PAYMENTS_REFUND_CHARGE_MESSAGE_PATTERN,
+} from '@app/events/interface'
 import { WrappedConfigModule } from '@app/events/modules/config/config.module'
 import { WrappedDatabaseModule } from '@app/events/modules/database/database.module'
 import { EventTestingService } from '@app/events/modules/events/entities/event-testing.service'
@@ -12,6 +18,13 @@ import {
   AUTH_SERVICE_TOKEN,
   PAYMENTS_SERVICE_TOKEN,
 } from '@shared/common/tokens'
+
+const DEFAULT_USER_ID = 1
+const SOME_ELSE_USER_ID = DEFAULT_USER_ID + 99
+
+const paymentClientMock = {
+  send: jest.fn().mockImplementation(() => of({})),
+}
 
 describe('[events] controller', () => {
   let app: INestApplication
@@ -156,7 +169,9 @@ describe('[events] controller', () => {
       it('should return 404', async () => {
         // Arrange
         const accessToken = 'BEARER_TOKEN'
-        const { event } = await testingEntityService.createTestEvent(99)
+        const { event } = await testingEntityService.createTestEvent(
+          SOME_ELSE_USER_ID
+        )
 
         const updatedData = testingEntityService.createEventData()
 
@@ -190,7 +205,7 @@ describe('[events] controller', () => {
     })
 
     describe('when user is not authenticated', () => {
-      it('should return 401', async () => {
+      it('should return 403', async () => {
         // Arrange
         const { event } = await testingEntityService.createTestEvent()
 
@@ -207,7 +222,9 @@ describe('[events] controller', () => {
       it('should return 404', async () => {
         // Arrange
         const accessToken = 'BEARER_TOKEN'
-        const { event } = await testingEntityService.createTestEvent(99)
+        const { event } = await testingEntityService.createTestEvent(
+          SOME_ELSE_USER_ID
+        )
 
         // Act
         const server = app.getHttpServer()
@@ -221,77 +238,236 @@ describe('[events] controller', () => {
     })
   })
 
-  // describe('POST /events/:id/attendees/me', () => {
-  //   it('should add me to attendees', async () => {
-  //     // Arrange
-  //     const { user, accessToken } =
-  //       await testingEntityService.createAuthenticatedUser(jwtService)
-  //
-  //     const data = await testingEntityService.createEvent(0)
-  //
-  //     // Act
-  //     const server = app.getHttpServer()
-  //     const response = await request(server)
-  //       .post(`/api/v1/events/${data.id}/attendees/me`)
-  //       .set('Authorization', `Bearer ${accessToken}`)
-  //
-  //     // Assert
-  //     expect(response.status).toBe(200)
-  //     expect(response.body).toStrictEqual({
-  //       ...data,
-  //       attendees: [user],
-  //     })
-  //   })
-  //
-  //   describe('when user is not authenticated', () => {
-  //     it('should return 401', async () => {
-  //       // Arrange
-  //       const { id } = await testingEntityService.createEvent(0)
-  //
-  //       // Act
-  //       const server = app.getHttpServer()
-  //       const response = await request(server).post(
-  //         `/api/v1/events/${id}/attendees/me`
-  //       )
-  //
-  //       // Assert
-  //       expect(response.status).toBe(401)
-  //     })
-  //   })
-  //
-  //   // TODO:
-  //   // describe('when user is already attendee', () => {
-  //   //
-  //   // })
-  // })
-  //
-  // describe('DELETE /events/:id/attendees/me', () => {
-  //   it('should add remove me from attendees', async () => {
-  //     // Arrange
-  //     const { user, accessToken } =
-  //       await testingEntityService.createAuthenticatedUser(jwtService)
-  //
-  //     const data = await testingEntityService.createEvent(0, undefined, user.id)
-  //
-  //     // Act
-  //     const server = app.getHttpServer()
-  //     const response = await request(server)
-  //       .delete(`/api/v1/events/${data.id}/attendees/me`)
-  //       .set('Authorization', `Bearer ${accessToken}`)
-  //
-  //     // Assert
-  //     expect(response.status).toBe(200)
-  //     expect(response.body).toStrictEqual({
-  //       ...data,
-  //       attendees: [],
-  //     })
-  //   })
-  //
-  //   // TODO:
-  //   // describe('when user not in attendees', () => {
-  //   //
-  //   // })
-  // })
+  describe('POST /events/:id/attendees/me', () => {
+    it('should add me to attendees', async () => {
+      // Arrange
+      const accessToken = 'BEARER_TOKEN'
+      const { event } = await testingEntityService.createTestEvent(
+        DEFAULT_USER_ID,
+        0
+      )
+
+      // Act
+      const server = app.getHttpServer()
+      const response = await request(server)
+        .post(`/v1/events/${event.id}/attendees/me`)
+        .set('Authorization', `Bearer ${accessToken}`)
+
+      // Assert
+      expect(response.status).toBe(200)
+      expect(response.body).toStrictEqual({
+        id: event.id,
+        ownerUserId: event.ownerUserId,
+        title: event.title,
+        description: event.description,
+        capacity: event.capacity,
+        cost: event.cost,
+        attendees: [
+          {
+            id: expect.any(Number),
+            userId: DEFAULT_USER_ID,
+          },
+        ],
+        startsAt: event.startsAt.toISOString(),
+      })
+    })
+
+    describe('when user is not authenticated', () => {
+      it('should return 403', async () => {
+        // Arrange
+
+        // Act
+        const server = app.getHttpServer()
+        const response = await request(server).post(
+          '/v1/events/99/attendees/me'
+        )
+
+        // Assert
+        expect(response.status).toBe(403)
+      })
+    })
+
+    describe('when user is already attendee', () => {
+      it('should return 400 bad request', async () => {
+        // Arrange
+        const accessToken = 'BEARER_TOKEN'
+        const { event } = await testingEntityService.createTestEvent(
+          DEFAULT_USER_ID,
+          0,
+          [
+            {
+              userId: DEFAULT_USER_ID,
+            },
+          ]
+        )
+
+        // Act
+        const server = app.getHttpServer()
+        const response = await request(server)
+          .post(`/v1/events/${event.id}/attendees/me`)
+          .set('Authorization', `Bearer ${accessToken}`)
+
+        // Assert
+        expect(response.status).toBe(400)
+        expect(response.body).toStrictEqual({
+          message: 'user is already attending',
+          status: 400,
+        })
+      })
+    })
+
+    describe('when event is not free', () => {
+      it('should call payment service', async () => {
+        // Arrange
+        const accessToken = 'BEARER_TOKEN'
+        const stripeToken = 'some-stripe-token'
+        const { event } = await testingEntityService.createTestEvent(
+          DEFAULT_USER_ID,
+          99
+        )
+        const input: IPaymentsCreateChargeInput = {
+          amount: 99,
+          description: `Event registration: ${event.title}`,
+          entityId: 1,
+          entityType: 'EventEntity',
+          stripeToken,
+          userId: 1,
+        }
+
+        // Act
+        const server = app.getHttpServer()
+        const response = await request(server)
+          .post(`/v1/events/${event.id}/attendees/me`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .send({ stripeToken })
+
+        // Assert
+        expect(paymentClientMock.send).toHaveBeenCalledWith(
+          PAYMENTS_CREATE_CHARGE_MESSAGE_PATTERN,
+          input
+        )
+        expect(response.status).toBe(200)
+        expect(response.body).toStrictEqual({
+          id: event.id,
+          ownerUserId: event.ownerUserId,
+          title: event.title,
+          description: event.description,
+          capacity: event.capacity,
+          cost: event.cost,
+          attendees: [
+            {
+              id: expect.any(Number),
+              userId: DEFAULT_USER_ID,
+            },
+          ],
+          startsAt: event.startsAt.toISOString(),
+        })
+      })
+
+      describe('when stripe token is not provided', () => {
+        it('should return validation error', async () => {
+          // Arrange
+          const accessToken = 'BEARER_TOKEN'
+          const { event } = await testingEntityService.createTestEvent(
+            DEFAULT_USER_ID,
+            99
+          )
+
+          // Act
+          const server = app.getHttpServer()
+          const response = await request(server)
+            .post(`/v1/events/${event.id}/attendees/me`)
+            .set('Authorization', `Bearer ${accessToken}`)
+
+          // Assert
+          expect(response.status).toBe(422)
+          expect(response.body).toStrictEqual({
+            message: 'stripeToken is required',
+            status: 422,
+          })
+        })
+      })
+    })
+  })
+
+  describe('DELETE /events/:id/attendees/me', () => {
+    it('should add remove me from attendees', async () => {
+      // Arrange
+      const accessToken = 'BEARER_TOKEN'
+      const { event } = await testingEntityService.createTestEvent(
+        DEFAULT_USER_ID,
+        0,
+        [
+          {
+            userId: DEFAULT_USER_ID,
+          },
+        ]
+      )
+
+      // Act
+      const server = app.getHttpServer()
+      const response = await request(server)
+        .delete(`/v1/events/${event.id}/attendees/me`)
+        .set('Authorization', `Bearer ${accessToken}`)
+
+      // Assert
+      expect(response.status).toBe(200)
+      expect(response.body).toStrictEqual({
+        capacity: event.capacity,
+        cost: event.cost,
+        description: event.description,
+        id: event.id,
+        ownerUserId: event.ownerUserId,
+        title: event.title,
+        startsAt: event.startsAt.toISOString(),
+        attendees: [],
+      })
+    })
+
+    describe('when event is not free', () => {
+      it('should call payment service', async () => {
+        // Arrange
+        const accessToken = 'BEARER_TOKEN'
+        const { event } = await testingEntityService.createTestEvent(
+          DEFAULT_USER_ID,
+          99,
+          [
+            {
+              userId: DEFAULT_USER_ID,
+            },
+          ]
+        )
+        const input: IPaymentsRefundChargeInput = {
+          entityId: 1,
+          entityType: 'EventEntity',
+          userId: 1,
+        }
+
+        // Act
+        const server = app.getHttpServer()
+        const response = await request(server)
+          .delete(`/v1/events/${event.id}/attendees/me`)
+          .set('Authorization', `Bearer ${accessToken}`)
+
+        // Assert
+        expect(paymentClientMock.send).toHaveBeenCalledWith(
+          PAYMENTS_REFUND_CHARGE_MESSAGE_PATTERN,
+          input
+        )
+        expect(response.status).toBe(200)
+        expect(response.body).toStrictEqual({
+          capacity: event.capacity,
+          cost: event.cost,
+          description: event.description,
+          id: event.id,
+          ownerUserId: event.ownerUserId,
+          title: event.title,
+          startsAt: event.startsAt.toISOString(),
+          attendees: [],
+        })
+      })
+    })
+  })
 
   //
   //
@@ -308,10 +484,10 @@ describe('[events] controller', () => {
           {
             provide: AUTH_SERVICE_TOKEN,
             useValue: {
-              send: () => of({ id: 1 }),
+              send: () => of({ id: DEFAULT_USER_ID }),
             },
           },
-          { provide: PAYMENTS_SERVICE_TOKEN, useValue: jest.fn() },
+          { provide: PAYMENTS_SERVICE_TOKEN, useValue: paymentClientMock },
         ],
       }
     )
@@ -321,6 +497,7 @@ describe('[events] controller', () => {
   })
 
   beforeEach(async () => {
+    paymentClientMock.send.mockClear()
     await databaseService.clearDb()
   })
 

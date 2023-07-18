@@ -1,49 +1,36 @@
 import { Injectable } from '@nestjs/common'
 import { randNumber, randWord, randFutureDate } from '@ngneat/falso'
-import { AttendeeEntity } from '@app/events/modules/events/entities/attendee.entity'
 import { EventEntity } from '@app/events/modules/events/entities/event.entity'
 import { TestingEntityService } from '@shared/common/modules/testing/testing-entity.service'
 
 @Injectable()
 export class EventTestingService extends TestingEntityService {
-  public createEventData() {
+  public createEventData(cost?: number) {
     return {
       title: randWord(),
       description: randWord(),
       capacity: randNumber({ min: 1, max: 100 }),
       startsAt: randFutureDate(),
-      cost: randNumber({ min: 0, max: 1000 }),
+      cost: cost === undefined ? randNumber({ min: 0, max: 1000 }) : cost,
     }
   }
 
-  public createAttendeeData() {
-    return {
-      userId: randNumber({ min: 1, max: 100 }),
-    }
-  }
-
-  public async createTestEvent(ownerId = 1) {
-    const eventData = this.createEventData()
+  public async createTestEvent(
+    ownerId = 1,
+    cost?: number,
+    attendees?: [{ userId: number }]
+  ) {
+    const eventData = this.createEventData(cost)
 
     const event = await this.saveFixture(EventEntity, {
       ...eventData,
       ownerUserId: ownerId,
+      attendees,
     })
 
     return {
       event,
       meta: eventData,
-    }
-  }
-
-  public async createTestAttendee() {
-    const attendeeData = this.createAttendeeData()
-
-    const attendee = await this.saveFixture(AttendeeEntity, attendeeData)
-
-    return {
-      attendee,
-      meta: attendeeData,
     }
   }
 
@@ -60,20 +47,5 @@ export class EventTestingService extends TestingEntityService {
     )
 
     return events
-  }
-
-  public async createTestAttendees(count: number): Promise<AttendeeEntity[]> {
-    const attendees: AttendeeEntity[] = []
-
-    await Promise.all(
-      Array(count)
-        .fill(0)
-        .map(async () => {
-          const { attendee } = await this.createTestAttendee()
-          attendees.push(attendee)
-        })
-    )
-
-    return attendees
   }
 }

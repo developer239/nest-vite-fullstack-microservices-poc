@@ -77,7 +77,7 @@ export class EventsRepository {
     }
 
     if (event.attendees.length >= event.capacity) {
-      return event
+      throw new Error(`Event with id ${eventId} is full`)
     }
 
     let user = await this.attendeesRepository.findOne({
@@ -85,7 +85,6 @@ export class EventsRepository {
         id: userId,
       },
     })
-
     if (!user) {
       user = await this.attendeesRepository
         .create({
@@ -115,13 +114,11 @@ export class EventsRepository {
     const userIndex = event.attendees.findIndex(
       (user) => user.userId === userId
     )
-
     if (userIndex === -1) {
       return event
     }
 
     event.attendees.splice(userIndex, 1)
-
     await this.eventsRepository.save(event)
 
     return event
