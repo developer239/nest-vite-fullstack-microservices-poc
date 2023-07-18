@@ -26,6 +26,9 @@ graph TB
 
 ## Database
 
+Note that for simplicity all microservices use the same database. Update `# database config` section in `.env` files to
+use different database.
+
 - `yarn {appName}:migration:generate  apps/{appName}/src/modules/database/migrations/{migrationName}` - create new migration file
 - `yarn {appName}:migration:run` - run all pending migrations
 - `yarn {appName}:migration:revert` - revert last migration
