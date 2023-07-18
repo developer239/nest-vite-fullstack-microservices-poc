@@ -150,7 +150,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg5MjkxMDIwLCJleHAiOjE2ODkzNzc0MjB9.Wz6MmVARmipxQXe7Lk7jbWcj1CS65a9Y2b7Uspvbjkw",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg5NjkwMTYxLCJleHAiOjE2ODk3NzY1NjF9.9dOU6KFx88UIcIAdS0fHbnOhzggdnWtS_536Ln-ZujY",
               "type": "string"
             }
           ]
@@ -159,7 +159,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"title\": \"Event Title\",\n  \"description\": \"Event Description\",\n  \"capacity\": 100,\n  \"startsAt\": \"2023-07-15T09:00:00Z\"\n}\n",
+          "raw": "{\n  \"title\": \"Event Title\",\n  \"description\": \"Event Description\",\n  \"capacity\": 100,\n  \"startsAt\": \"2023-07-15T09:00:00Z\",\n  \"cost\": 99\n}\n",
           "options": {
             "raw": {
               "language": "json"
