@@ -17,4 +17,8 @@ export class CreateChargeDto {
   @IsString()
   @IsNotEmpty()
   stripeToken: string
+
+  @IsString()
+  @IsNotEmpty()
+  description: string
 }

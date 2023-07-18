@@ -5,11 +5,19 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm'
 import { EntityHelper } from '@shared/common/utils/database/entity-helper'
 
+export enum PaymentStatus {
+  PENDING = 'Pending',
+  COMPLETED = 'Completed',
+  FAILED = 'Failed',
+}
+
 @Entity('payment')
+@Unique(['entityId', 'entityType', 'userId'])
 export class PaymentEntity extends EntityHelper {
   @PrimaryGeneratedColumn() paymentId: number
 
@@ -26,10 +34,12 @@ export class PaymentEntity extends EntityHelper {
 
   @Column({
     type: 'enum',
-    enum: ['Pending', 'Completed', 'Failed'],
-    default: 'Pending',
+    enum: PaymentStatus,
+    default: PaymentStatus.PENDING,
   })
-  status: string
+  status: PaymentStatus
+
+  @Column({ default: false }) isRefunded: boolean
 
   @Exclude({ toPlainOnly: true }) @CreateDateColumn() createdAt: Date
 

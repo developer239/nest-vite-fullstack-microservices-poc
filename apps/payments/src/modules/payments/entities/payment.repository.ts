@@ -16,6 +16,7 @@ export class PaymentRepository {
         userId,
         entityId,
         entityType,
+        isRefunded: false,
       },
     })
   }

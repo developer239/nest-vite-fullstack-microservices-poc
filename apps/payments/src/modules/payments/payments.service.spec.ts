@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Test, TestingModule as NestTestingModule } from '@nestjs/testing'
 import Stripe from 'stripe'
 import { WrappedConfigModule } from '@app/payments/modules/config/config.module'
@@ -19,11 +20,13 @@ describe('[payments] PaymentsService', () => {
     it('should create a charge', async () => {
       // Arrange
       const data = testingEntityService.createPaymentData()
+      const description = `Charge for ${data.entityType} with id ${data.entityId}`
 
       // Act
       const payment = await service.createCharge({
         ...data,
         stripeToken: data.stripeId,
+        description,
       })
 
       // Assert
@@ -32,8 +35,38 @@ describe('[payments] PaymentsService', () => {
         amount: data.amount,
         currency: 'usd',
         payment_method: data.stripeId,
-        description: `Charge for ${data.entityType} with id ${data.entityId}`,
+        description,
         confirm: true,
+        metadata: {
+          entityId: payment.entityId.toString(),
+          entityType: payment.entityType,
+        },
+      })
+    })
+
+    describe('when payment for entity already exists', () => {
+      it('should throw an error', async () => {
+        // Arrange
+        const { payment } = await testingEntityService.createTestPayment()
+        const DTO = {
+          description: 'some description',
+          entityId: payment.entityId,
+          entityType: payment.entityType,
+          userId: payment.userId,
+          amount: payment.amount,
+          stripeToken: payment.stripeId,
+        }
+
+        // Act
+        try {
+          await service.createCharge(DTO)
+          throw new Error(
+            'should not create a payment if within constraints already exists'
+          )
+        } catch (error) {
+          // Assert
+          expect(error.message).toStrictEqual('Payment failed')
+        }
       })
     })
   })
@@ -49,10 +82,11 @@ describe('[payments] PaymentsService', () => {
       }
 
       // Act
-      const refund = await service.refundCharge(dto)
+      const response = await service.refundCharge(dto)
 
       // Assert
-      expect(refund.id).toBe('mockRefundId')
+      expect(response.refund.id).toBe('mockRefundId')
+      expect(response.payment.isRefunded).toBe(true)
       expect(mockStripe.refunds.create).toHaveBeenCalledWith({
         payment_intent: payment.stripeId,
       })
