@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { DeepPartial } from 'typeorm'
 import { RegisterRequestDTO } from '@app/auth/modules/auth/dto/register.dto'
 import { RefreshTokenRepository } from '@app/auth/modules/auth/entities/refresh-token-repository'

@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   postgres:
@@ -11,3 +11,56 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: api_db
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: yarn auth:dev
+    environment:
+      DATABASE_HOST: postgres
+    env_file:
+      - ./apps/auth/.env
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+
+  events:
+    build:
+      context: .
+      dockerfile: ./apps/events/Dockerfile
+      target: development
+    command: yarn events:dev
+    environment:
+      DATABASE_HOST: postgres
+      AUTH_SERVICE_HOST: auth
+      PAYMENTS_SERVICE_HOST: payments
+    env_file:
+      - ./apps/events/.env
+    ports:
+      - '8081:8081'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+
+  payments:
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: yarn payments:dev
+    environment:
+      DATABASE_HOST: postgres
+    env_file:
+      - ./apps/payments/.env
+    ports:
+      - '8082:8082'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
