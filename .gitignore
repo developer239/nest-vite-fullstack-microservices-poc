@@ -20,3 +20,6 @@ yarn-error.log*
 /.idea
 /.vscode
 
+# dist
+/apps/*/dist
+/packages/*/dist

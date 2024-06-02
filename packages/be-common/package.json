@@ -2,6 +2,11 @@
   "name": "be-common",
   "version": "0.0.1",
   "license": "MIT",
+  "main": "./dist/index",
+  "types": "./dist/index",
+  "scripts": {
+    "build": "tsc --build --force tsconfig.json"
+  },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",

@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from "be-events-service/src/app.module";
-import { appConfig, AppConfigType } from "be-common/src/config/app.config";
+import { AppModule } from "src/app.module";
+import { appConfig, AppConfigType } from "be-common";
 
 // TODO: generalize and move to shared
 async function bootstrap() {
