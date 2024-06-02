@@ -19,9 +19,6 @@ import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace
       autoSchemaFile: true,
       introspection: true,
       plugins: [ApolloServerPluginInlineTrace()],
-      // buildSchemaOptions: {
-      //   orphanedTypes: [User],
-      // },
     }),
     EventModule,
   ],
