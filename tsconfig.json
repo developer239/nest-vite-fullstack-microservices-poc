@@ -1,27 +1,9 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2021",
-    "declaration": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "useUnknownInCatchVariables": false,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictPropertyInitialization": false,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@app/auth/*": ["apps/auth/src/*"],
-      "@app/events/*": ["apps/events/src/*"],
-      "@app/payments/*": ["apps/payments/src/*"],
-      "@shared/common/*": ["libs/common/src/*"]
+      "@app/*": ["apps/*/src"],
+      "@package/*": ["packages/*"]
     }
   }
 }
