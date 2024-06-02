@@ -22,7 +22,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"],
-    },
-  },
+      "src/*": ["src/*"]
+    }
+  }
 }

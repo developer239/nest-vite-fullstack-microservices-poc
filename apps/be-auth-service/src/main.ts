@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { appConfig, AppConfigType } from "be-common";
-import { AppModule } from "src/app.module";
+import { appConfig, AppConfigType } from 'be-common'
+import { AppModule } from 'src/app.module'
 
 // TODO: generalize and move to shared
 async function bootstrap() {
