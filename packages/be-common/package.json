@@ -16,7 +16,7 @@
     "rxjs": "7.8.1"
   },
   "devDependencies": {
-    "@nestjs/cli": "9.1.9",
+    "@nestjs/cli": "10.3.2",
     "@nestjs/schematics": "9.0.0",
     "@types/node": "18.11.18",
     "source-map-support": "0.5.20"
