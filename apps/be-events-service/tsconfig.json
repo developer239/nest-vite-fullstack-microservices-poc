@@ -18,6 +18,7 @@
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "useUnknownInCatchVariables": false,
+    "strictPropertyInitialization": false,
 
     "outDir": "./dist",
     "baseUrl": "./",
