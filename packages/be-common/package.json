@@ -5,7 +5,7 @@
   "main": "./dist/index",
   "types": "./dist/index",
   "scripts": {
-    "build": "tsc --build --force tsconfig.json"
+    "build": "nest build"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
