@@ -3,19 +3,22 @@ import { HomeModule } from 'backend-shared'
 import { WrappedConfigModule } from 'src/modules/config/config.module'
 import { GraphQLModule } from '@nestjs/graphql'
 import { UserModule } from 'src/modules/users/user.module'
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo'
+import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace'
 
 @Module({
   imports: [
     WrappedConfigModule,
     HomeModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      // TODO: add complexity plugin
-      driver: ApolloDriver,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
       playground: true,
       autoSchemaFile: true,
       introspection: true,
-      context: ({ req, res }: any) => ({ req, res }),
+      plugins: [ApolloServerPluginInlineTrace()],
     }),
     UserModule,
   ],

@@ -10,4 +10,10 @@ export class EventResolver {
   events() {
     return this.eventService.findAll()
   }
+
+  // @ResolveField('attendees', () => [User])
+  // getAttendees(@Parent() event: Event) {
+  //   const { attendees } = event
+  //   return attendees.map((id) => ({ __typename: 'User', id }))
+  // }
 }
