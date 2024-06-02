@@ -15,14 +15,14 @@
     "lint-staged": "lint-staged"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.4.4",
+    "@commitlint/cli": "19.3.0",
     "@linters/commitlint-config": "1.8.0",
     "@linters/prettier-config": "1.4.1",
-    "husky": "8.0.3",
-    "lint-staged": "13.2.0",
-    "prettier": "2.8.4",
+    "husky": "9.0.11",
+    "lint-staged": "15.2.5",
+    "prettier": "3.3.0",
     "turbo": "1.13.3",
-    "typescript": "4.7.4"
+    "typescript": "5.4.5"
   },
   "packageManager": "yarn@1.22.22"
 }
