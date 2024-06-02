@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as Joi from 'joi'
-import { appConfig, appConfigSchema } from 'be-common'
+import { appConfig, appConfigSchema } from 'backend-shared'
 
 @Module({
   imports: [
