@@ -8,6 +8,7 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo'
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace'
+import { User } from 'src/modules/events/models/user.model'
 
 @Module({
   imports: [
@@ -19,6 +20,9 @@ import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace
       autoSchemaFile: true,
       introspection: true,
       plugins: [ApolloServerPluginInlineTrace()],
+      buildSchemaOptions: {
+        orphanedTypes: [User],
+      },
     }),
     EventModule,
   ],

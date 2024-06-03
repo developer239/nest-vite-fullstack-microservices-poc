@@ -12,7 +12,8 @@
     "test": "turbo run test",
     "format": "prettier --write '*/**/*.{ts,tsx,css,md,json}'",
     "prepare:husky": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "postinstall": "patch -p0 < patch/schemaUpgrader.patch"
   },
   "devDependencies": {
     "@commitlint/cli": "19.3.0",
