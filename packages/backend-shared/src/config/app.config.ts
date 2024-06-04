@@ -6,7 +6,7 @@ export const appConfigSchema = {
   APP_NAME: Joi.string().required(),
   API_PREFIX: Joi.string().default('api'),
   HTTP_PORT: Joi.number().port().required(),
-  TCP_PORT: Joi.number(),
+  TCP_PORT: Joi.number().port(),
 }
 
 export const appConfig = registerAs('app', () => ({
