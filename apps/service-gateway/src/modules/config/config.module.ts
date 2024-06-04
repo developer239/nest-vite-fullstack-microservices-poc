@@ -1,18 +1,21 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import * as Joi from 'joi'
-import { appConfig, appConfigSchema } from 'backend-shared'
+import {
+  appConfig,
+  appConfigSchema,
+  WrappedConfigModule as ConfigBase,
+} from 'backend-shared'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [appConfig],
-      envFilePath: ['.env'],
-      validationSchema: Joi.object({
-        ...appConfigSchema,
-      }),
-    }),
+    ConfigBase.forRoot(
+      ['.env'],
+      [
+        {
+          appConfig,
+          appConfigSchema,
+        },
+      ]
+    ),
   ],
 })
 export class WrappedConfigModule {}
