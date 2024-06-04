@@ -1,5 +1,5 @@
 {
-  "name": "be-events-service",
+  "name": "service-gateway",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
@@ -8,6 +8,8 @@
     "dev": "NODE_ENV=development nest start --watch"
   },
   "dependencies": {
+    "@apollo/federation": "0.38.1",
+    "@apollo/gateway": "2.8.0",
     "@apollo/server": "4.10.4",
     "@nestjs/apollo": "12.1.0",
     "@nestjs/common": "10.3.9",
