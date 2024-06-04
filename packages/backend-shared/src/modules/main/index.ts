@@ -1,14 +1,11 @@
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { Transport } from '@nestjs/microservices'
-import { useContainer } from 'class-validator'
 import { appConfig, AppConfigType } from '../config/app.config'
 
 export const bootstrap = async (appModule: any) => {
   const app = await NestFactory.create(appModule, { cors: true })
   app.enableShutdownHooks()
-
-  useContainer(app.select(appModule), { fallbackOnErrors: true })
 
   const appConfigValues = app.get<AppConfigType>(appConfig.KEY)
 
