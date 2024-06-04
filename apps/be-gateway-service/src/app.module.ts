@@ -13,9 +13,10 @@ import { IntrospectAndCompose } from '@apollo/gateway'
       driver: ApolloGatewayDriver,
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
+          // TODO: get ports fron .env
           subgraphs: [
-            { name: 'auth', url: 'http://localhost:8080/graphql' },
-            { name: 'events', url: 'http://localhost:8081/graphql' },
+            { name: 'auth', url: 'http://localhost:8081/graphql' },
+            { name: 'events', url: 'http://localhost:8082/graphql' },
           ],
         }),
       },
