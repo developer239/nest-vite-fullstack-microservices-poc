@@ -10,9 +10,9 @@
     "migration-generate": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate",
     "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/initial",
     "migration-create": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
-    "migration-run": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run",
-    "migration-revert": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert",
-    "schema-drop": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts schema:drop && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts schema:drop"
+    "migration-run": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run",
+    "migration-revert": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert",
+    "schema-drop": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts schema:drop"
   },
   "dependencies": {
     "@apollo/server": "4.10.4",
