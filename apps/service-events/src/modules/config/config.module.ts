@@ -11,8 +11,8 @@ import {
       ['.env'],
       [
         {
-          appConfig,
-          appConfigSchema,
+          values: appConfig,
+          schema: appConfigSchema,
         },
       ]
     ),

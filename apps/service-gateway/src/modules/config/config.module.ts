@@ -4,6 +4,7 @@ import {
   appConfigSchema,
   WrappedConfigModule as ConfigBase,
 } from 'backend-shared'
+import { gatewayConfig, gatewayConfigSchema } from 'src/config/gateway.config'
 
 @Module({
   imports: [
@@ -11,8 +12,12 @@ import {
       ['.env'],
       [
         {
-          appConfig,
-          appConfigSchema,
+          values: appConfig,
+          schema: appConfigSchema,
+        },
+        {
+          values: gatewayConfig,
+          schema: gatewayConfigSchema,
         },
       ]
     ),

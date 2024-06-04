@@ -8,8 +8,8 @@ export class WrappedConfigModule {
   static forRoot(
     envFilePath: string[],
     configs: {
-      appConfig: ConfigFactory
-      appConfigSchema: { [key: string]: Joi.Schema }
+      values: ConfigFactory
+      schema: { [key: string]: Joi.Schema }
     }[],
     isGlobal = true
   ) {
@@ -18,13 +18,13 @@ export class WrappedConfigModule {
       imports: [
         ConfigModule.forRoot({
           isGlobal,
-          load: configs.map((config) => config.appConfig),
+          load: configs.map((config) => config.values),
           envFilePath,
           validationSchema: Joi.object(
             configs.reduce(
               (acc, config) => ({
                 ...acc,
-                ...config.appConfigSchema,
+                ...config.schema,
               }),
               {}
             )
