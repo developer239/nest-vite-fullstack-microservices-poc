@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo'
-import { HomeModule } from 'backend-shared'
+import { ApolloComplexityPlugin, HomeModule } from 'backend-shared'
 import { WrappedConfigModule } from 'src/modules/config/config.module'
 import { IntrospectAndCompose } from '@apollo/gateway'
 
@@ -10,6 +10,9 @@ import { IntrospectAndCompose } from '@apollo/gateway'
     WrappedConfigModule,
     HomeModule,
     GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
+      server: {
+        plugins: [new ApolloComplexityPlugin(50)],
+      },
       driver: ApolloGatewayDriver,
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
