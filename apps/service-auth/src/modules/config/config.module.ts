@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common'
 import {
   appConfig,
   appConfigSchema,
+  databaseConfig,
+  databaseConfigSchema,
   WrappedConfigModule as ConfigBase,
 } from 'backend-shared'
 
@@ -13,6 +15,10 @@ import {
         {
           values: appConfig,
           schema: appConfigSchema,
+        },
+        {
+          values: databaseConfig,
+          schema: databaseConfigSchema,
         },
       ]
     ),

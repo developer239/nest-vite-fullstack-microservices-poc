@@ -5,7 +5,14 @@
   "scripts": {
     "build": "nest build",
     "start": "node dist/main",
-    "dev": "NODE_ENV=development nest start --watch"
+    "dev": "NODE_ENV=development nest start --watch",
+    "seed-database": "npx env-cmd ts-node -r tsconfig-paths/register ./src/modules/database/seeds/run-seed.ts",
+    "migration-generate": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate",
+    "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/initial",
+    "migration-create": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
+    "migration-run": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run",
+    "migration-revert": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert",
+    "schema-drop": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts schema:drop && npx env-cmd -f .env env-cmd -f .env.test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts schema:drop"
   },
   "dependencies": {
     "@apollo/server": "4.10.4",
@@ -16,6 +23,7 @@
     "@nestjs/graphql": "12.1.1",
     "@nestjs/microservices": "10.3.9",
     "@nestjs/platform-express": "10.3.9",
+    "@nestjs/typeorm": "10.0.0",
     "apollo-server-express": "3.13.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
@@ -23,14 +31,19 @@
     "graphql-subscriptions": "2.0.0",
     "graphql-tools": "9.0.1",
     "joi": "17.13.1",
+    "pg": "^8.11.1",
+    "pg-connection-string": "^2.6.1",
     "reflect-metadata": "0.2.2",
-    "rxjs": "7.8.1"
+    "rxjs": "7.8.1",
+    "typeorm": "0.3.17"
   },
   "devDependencies": {
     "@nestjs/cli": "10.3.2",
     "@types/express": "4.17.21",
     "@types/node": "20.14.1",
+    "@types/pg-connection-string": "^2.0.0",
     "source-map-support": "0.5.21",
+    "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0"
   }
 }

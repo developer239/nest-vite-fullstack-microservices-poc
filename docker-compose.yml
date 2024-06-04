@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  auth_database:
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: auth_db
+    volumes:
+      - ./.data/auth_database:/var/lib/postgresql/data
+      - ./.db/init:/docker-entrypoint-initdb.d
+  events_database:
+    image: postgres:16-alpine
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: events_db
+    volumes:
+      - ./.data/events_database:/var/lib/postgresql/data
+      - ./.db/init:/docker-entrypoint-initdb.d
+
