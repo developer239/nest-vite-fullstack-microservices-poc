@@ -19,4 +19,3 @@ export {
   DatabaseConfigType,
   databaseConfigSchema,
 } from './src/config/database.config'
-export { RabbitMQModule } from './src/modules/amqb/amqb.module'

@@ -5,13 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
 import { UserRepository } from 'src/modules/users/entities/user.repository'
 import { UserController } from 'src/modules/users/users.controller'
-import { RabbitMQModule } from 'backend-shared'
+import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity]),
-    // RabbitMQModule.forRoot(9081),
-  ],
+  imports: [TypeOrmModule.forFeature([UserEntity]), RabbitMQModule],
   controllers: [UserController],
   providers: [UserService, UserResolver, UserRepository],
 })

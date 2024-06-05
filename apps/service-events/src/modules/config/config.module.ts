@@ -6,6 +6,7 @@ import {
   databaseConfigSchema,
   WrappedConfigModule as ConfigBase,
 } from 'backend-shared'
+import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
 
 @Module({
   imports: [
@@ -19,6 +20,10 @@ import {
         {
           values: databaseConfig,
           schema: databaseConfigSchema,
+        },
+        {
+          values: eventsConfig,
+          schema: eventsConfigSchema,
         },
       ]
     ),

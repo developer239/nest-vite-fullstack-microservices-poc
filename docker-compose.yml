@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 9081:5672
+
   auth_database:
     image: postgres:16-alpine
     ports:

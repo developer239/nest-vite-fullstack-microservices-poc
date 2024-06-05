@@ -6,8 +6,8 @@ export const appConfigSchema = {
   APP_NAME: Joi.string().required(),
   API_PREFIX: Joi.string().default('api'),
   HTTP_PORT: Joi.number().port().required(),
-  // TODO: rename TCP port to rabbitmq port and add host
-  TCP_PORT: Joi.number().port(),
+  AMQP_HOST: Joi.number().port(),
+  AMQP_PORT: Joi.number().port(),
 }
 
 export const appConfig = registerAs('app', () => ({
@@ -15,7 +15,8 @@ export const appConfig = registerAs('app', () => ({
   name: process.env.APP_NAME,
   workingDirectory: process.env.PWD || process.cwd(),
   httPort: parseInt(process.env.HTTP_PORT!, 10) || 8080,
-  tcpPort: parseInt(process.env.TCP_PORT!, 10),
+  amqpHost: process.env.AMQP_HOST || 'localhost',
+  amqpPort: parseInt(process.env.AMQP_PORT!, 10),
   apiPrefix: process.env.API_PREFIX || 'api',
 }))
 

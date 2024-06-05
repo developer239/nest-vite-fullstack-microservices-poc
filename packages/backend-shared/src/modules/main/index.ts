@@ -9,12 +9,13 @@ export const bootstrap = async (appModule: any) => {
 
   const appConfigValues = app.get<AppConfigType>(appConfig.KEY)
 
-  if (appConfigValues.tcpPort) {
+  if (appConfigValues.amqpHost && appConfigValues.amqpPort) {
     app.connectMicroservice<MicroserviceOptions>({
       transport: Transport.RMQ,
       options: {
-        // TODO: pass host from env
-        urls: [`amqp://localhost:${appConfigValues.tcpPort}`],
+        urls: [
+          `amqp://${appConfigValues.amqpHost}:${appConfigValues.amqpPort}`,
+        ],
         queue: 'some_queue',
         queueOptions: {
           durable: false,
@@ -22,12 +23,14 @@ export const bootstrap = async (appModule: any) => {
       },
     })
     Logger.log(
-      `[NestApplication] Registering microservice on port: ${appConfigValues.tcpPort}`
+      `\x1b[34m [NestApplication] Registering microservice on port: ${appConfigValues.amqpPort} \x1b[34m`
     )
 
     await app.startAllMicroservices()
   }
 
   await app.listen(appConfigValues.httPort)
-  Logger.log(`[NestApplication] Running on port: ${appConfigValues.httPort}`)
+  Logger.log(
+    `\x1b[34m [NestApplication] Running on port: ${appConfigValues.httPort} \x1b[34m`
+  )
 }
