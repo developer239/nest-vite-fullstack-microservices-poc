@@ -1,22 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { EventEntity } from 'src/modules/events/entities/event.entity'
 import { EntityHelper } from 'backend-shared'
-import { EventAttendeeEntity } from 'src/modules/events/entities/event-attendee.entity'
 
-@Entity('attendee')
-export class AttendeeEntity extends EntityHelper {
+@Entity('event-attendee')
+export class EventAttendeeEntity extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ unique: true })
+  @Column()
   userId: number
 
-  @OneToMany(
-    () => EventAttendeeEntity,
-    (eventAttendee) => eventAttendee.attendee,
-    {
-      eager: true,
-      cascade: true,
-    }
-  )
-  eventAttendees: EventAttendeeEntity[]
+  @ManyToOne(() => EventEntity, (event) => event.attendees)
+  event: EventEntity
 }

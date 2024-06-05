@@ -12,7 +12,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     @Inject(databaseConfig.KEY)
     private readonly databaseConfigValues: DatabaseConfigType,
     @Inject(appConfig.KEY)
-    private readonly appConfigValues: AppConfigType
+    private readonly appConfigValues: AppConfigType,
+    @Inject('WORKING_DIRECTORY') private readonly workingDir: string
   ) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
@@ -35,10 +36,12 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       autoLoadEntities: true,
       logging: ['error'],
       migrationsRun: !isLocalDevelopment,
-      migrations: isVitest ? [] : [`${__dirname}/migrations/**/*{.ts,.js}`],
+      migrations: isVitest
+        ? []
+        : [`${this.workingDir}/migrations/**/*{.ts,.js}`],
       cli: {
-        entitiesDir: 'src',
-        migrationsDir: 'src/modules/database/migrations',
+        entitiesDir: `${this.workingDir}/../../../src/modules/database/entities`,
+        migrationsDir: `${this.workingDir}/../../../src/modules/database/migrations`,
         subscribersDir: 'subscriber',
       },
     } as TypeOrmModuleOptions

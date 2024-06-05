@@ -1,4 +1,10 @@
-import { EventSeedService } from 'src/modules/database/seeds/user/event-seed.service'
-import { runSeed } from 'backend-shared'
+import { EventSeedService } from 'src/modules/database/seeds/event/event-seed.service'
+import { runSeed, SeedModule } from 'backend-shared'
+import { EventSeedModule } from 'src/modules/database/seeds/event/event-seed.module'
 
-void runSeed([EventSeedService])
+void runSeed(
+  SeedModule.forRoot(__dirname, {
+    imports: [EventSeedModule],
+  }),
+  [EventSeedService]
+)

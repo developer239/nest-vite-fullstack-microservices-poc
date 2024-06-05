@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DataSource } from 'typeorm'
-import { SeedModule } from './seeed.module'
 
 export const clearDatabase = async (app: INestApplication) => {
   const dataSource = app.get(DataSource)
@@ -16,8 +15,8 @@ export const clearDatabase = async (app: INestApplication) => {
   )
 }
 
-export const runSeed = async (seedServices: any[]) => {
-  const app = await NestFactory.create(SeedModule)
+export const runSeed = async (seedModule: any, seedServices: any[]) => {
+  const app = await NestFactory.create(seedModule)
 
   await clearDatabase(app)
 
