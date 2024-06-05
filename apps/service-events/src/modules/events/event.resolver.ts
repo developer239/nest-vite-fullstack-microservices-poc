@@ -71,21 +71,33 @@ export class EventResolver {
 
   // TODO: only authenticated user
   @Mutation(() => Event)
-  attendEvent(@Args('id') id: string, @Context() context: ExecutionContext) {
+  async attendEvent(
+    @Args('id') id: string,
+    @Context() context: ExecutionContext
+  ) {
     const ctx = GqlExecutionContext.create(context)
     const request = ctx.getContext().req
     const { userId } = request.headers
 
-    return this.eventService.attendEvent(id, userId)
+    await this.eventService.attendEvent(id, userId)
+
+    const event = await this.eventService.findOne(id)
+    return this.entityModelMapService.mapEventToModel(event)
   }
 
   // TODO: only authenticated user
   @Mutation(() => Event)
-  unattendEvent(@Args('id') id: string, @Context() context: ExecutionContext) {
+  async unattendEvent(
+    @Args('id') id: string,
+    @Context() context: ExecutionContext
+  ) {
     const ctx = GqlExecutionContext.create(context)
     const request = ctx.getContext().req
     const { userId } = request.headers
 
-    return this.eventService.unattendEvent(id, userId)
+    await this.eventService.unattendEvent(id, userId)
+
+    const event = await this.eventService.findOne(id)
+    return this.entityModelMapService.mapEventToModel(event)
   }
 }
