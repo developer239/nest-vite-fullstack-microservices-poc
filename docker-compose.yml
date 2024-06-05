@@ -29,4 +29,3 @@ services:
     volumes:
       - ./.data/events_database:/var/lib/postgresql/data
       - ./.db/init:/docker-entrypoint-initdb.d
-
