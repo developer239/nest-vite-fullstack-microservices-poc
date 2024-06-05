@@ -14,7 +14,7 @@ This service is responsible for handling authentication and user management with
 - `yarn start` - Run the compiled service in production mode.
 - `yarn build` - Compile the TypeScript files to JavaScript.
 - `yarn lint` - Lint the codebase using ESLint.
- 
+
 ## Database Management
 
 - `yarn seed-database` - Seed the database with initial data for development.

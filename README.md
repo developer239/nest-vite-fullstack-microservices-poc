@@ -4,11 +4,18 @@ This repository is structured as a monorepo containing multiple NestJS microserv
 
 ## Apps
 
-| Name                                      | Platform | Description                        |
-|-------------------------------------------| -------- | ---------------------------------- |
+| Name                                      | Platform | Description                                                                       |
+| ----------------------------------------- | -------- | --------------------------------------------------------------------------------- |
 | [Service Gateway](./apps/service-gateway) | Backend  | The GraphQL gateway for routing queries and mutations between different services. |
-| [Service Events](./apps/service-events)   | Backend  | Manages event-related data and interactions. |
-| [Service Auth](./apps/service-auth)       | Backend  | Handles authentication and user management. |
+| [Service Events](./apps/service-events)   | Backend  | Manages event-related data and interactions.                                      |
+| [Service Auth](./apps/service-auth)       | Backend  | Handles authentication and user management.                                       |
+
+## Packages
+
+| Name                                              | Description                                                                          |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [Backend Contracts](./packages/backend-contracts) | TypeScript interfaces and constants used across different backend services.          |
+| [Backend Shared](./packages/backend-shared)       | Shared configurations, utilities, and modules used across multiple backend services. |
 
 ## Infrastructure
 
