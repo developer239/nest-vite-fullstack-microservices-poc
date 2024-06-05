@@ -21,15 +21,8 @@ export class EventService {
     return event
   }
 
-  async findAll() {
-    const events = await this.eventRepository.findAll()
-
-    return events.map((event) => ({
-      id: event.id,
-      name: event.name,
-      description: event.description,
-      attendees: event.attendees.map((attendee) => attendee.userId),
-    }))
+  findAll() {
+    return this.eventRepository.findAll()
   }
 
   async joinEvent(eventId: number, userId: number) {

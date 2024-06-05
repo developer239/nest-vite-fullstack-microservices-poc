@@ -8,6 +8,7 @@ import { EventRepository } from 'src/modules/events/entities/event.repository'
 import { EventAttendeeRepository } from 'src/modules/events/entities/event-attendee.repository'
 import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
 import { AMQPClientService } from 'src/modules/events/services/amqp-client'
+import { EntityModelMapService } from 'src/modules/events/services/entity-model-map.service'
 
 @Module({
   imports: [
@@ -15,11 +16,12 @@ import { AMQPClientService } from 'src/modules/events/services/amqp-client'
     RabbitMQModule.forRoot(),
   ],
   providers: [
-    EventService,
     EventResolver,
+    EventService,
     EventRepository,
     EventAttendeeRepository,
     AMQPClientService,
+    EntityModelMapService,
   ],
 })
 export class EventModule {}

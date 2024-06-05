@@ -1,35 +1,29 @@
 import {
   Args,
-  Field,
-  ID,
-  InputType,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
-import { EventService } from './services/event.service'
-import { Event } from './models/event.model'
+import { EventService } from 'src/modules/events/services/event.service'
+import { Event } from 'src/modules/events/models/event.model'
 import { User } from 'src/modules/events/models/user.model'
-
-// TODO: move to separate file
-@InputType()
-export class JoinEventInput {
-  @Field(() => ID)
-  eventId: number
-
-  @Field(() => ID)
-  userId: number
-}
+import { EntityModelMapService } from 'src/modules/events/services/entity-model-map.service'
+import { JoinEventInput } from 'src/modules/events/inputs/join-event.input'
 
 @Resolver(() => Event)
 export class EventResolver {
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    private entityModelMapService: EntityModelMapService
+  ) {}
 
   @Query((returns) => [Event])
-  events() {
-    return this.eventService.findAll()
+  async events() {
+    const events = await this.eventService.findAll()
+
+    return this.entityModelMapService.mapEventToModelCollection(events)
   }
 
   @ResolveField('attendees', () => [User])
@@ -44,11 +38,6 @@ export class EventResolver {
 
     const event = await this.eventService.findOne(input.eventId)
 
-    return {
-      id: event.id,
-      name: event.name,
-      description: event.description,
-      attendees: event.attendees.map((attendee) => attendee.userId),
-    }
+    return this.entityModelMapService.mapEventToModel(event)
   }
 }
