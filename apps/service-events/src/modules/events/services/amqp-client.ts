@@ -7,6 +7,11 @@ import {
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
+import {
+  CHECK_USER_EXISTS_CMD,
+  ICheckUserExistsInput,
+  ICheckUserExistsResult,
+} from 'backend-contracts'
 
 @Injectable()
 export class AMQPClientService {
@@ -17,8 +22,8 @@ export class AMQPClientService {
   async checkUserExists(userId: number): Promise<boolean> {
     try {
       const response = await firstValueFrom(
-        this.rabbitClient.send<{ exists: boolean }, { userId: number }>(
-          { cmd: 'check_user_exists' },
+        this.rabbitClient.send<ICheckUserExistsResult, ICheckUserExistsInput>(
+          { cmd: CHECK_USER_EXISTS_CMD },
           { userId }
         )
       )

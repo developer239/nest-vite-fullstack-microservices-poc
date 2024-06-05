@@ -1,0 +1,10 @@
+{
+  "name": "backend-contracts",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "./dist/index",
+  "types": "./dist/index",
+  "scripts": {
+    "build": "tsc"
+  }
+}
