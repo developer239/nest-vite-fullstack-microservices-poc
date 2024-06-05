@@ -2,6 +2,7 @@ import { InternalServerErrorException, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DataSource } from 'typeorm'
 import { TypeOrmConfigService } from './typeorm-config.service'
+import { HackProvideWorkingDirModule } from './provide-working-dir.module'
 
 @Module({})
 export class DatabaseModule {
@@ -9,6 +10,7 @@ export class DatabaseModule {
     return {
       module: DatabaseModule,
       imports: [
+        HackProvideWorkingDirModule.forRoot('NONE'),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (options) => {

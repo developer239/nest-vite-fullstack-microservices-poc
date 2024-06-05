@@ -1,6 +1,7 @@
 import { Query, Resolver, ResolveReference } from '@nestjs/graphql'
 import { UserService } from 'src/modules/users/user.service'
 import { User } from 'src/modules/users/models/user.model'
+import { NotFoundException } from '@nestjs/common'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -12,12 +13,11 @@ export class UserResolver {
   }
 
   @ResolveReference()
-  resolveReference(reference: { __typename: string; id: number }): User {
+  resolveReference(reference: { __typename: string; id: number }) {
     const user = this.userService.findById(reference.id)
 
     if (!user) {
-      // TODO: maybe throw exception instead?
-      throw new Error(`User with id ${reference.id} not found`)
+      throw new NotFoundException(`User with id ${reference.id} not found`)
     }
 
     return user

@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common'
+import { UserRepository } from 'src/modules/users/entities/user.repository'
 
 @Injectable()
 export class UserService {
-  private readonly users = [
-    { id: 1, name: 'Alice', email: 'alice@example.com' },
-    { id: 2, name: 'Bob', email: 'bob@example.com' },
-    { id: 3, name: 'John', email: 'john@example.com' },
-  ]
+  constructor(private readonly userRepository: UserRepository) {}
 
   findAll() {
-    return this.users
+    return this.userRepository.findAll()
   }
 
   findById(id: number) {
-    return this.users.find((user) => user.id === Number(id))
+    return this.userRepository.findOne(id)
   }
 }

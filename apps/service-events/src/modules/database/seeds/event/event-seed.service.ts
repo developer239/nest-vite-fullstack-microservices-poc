@@ -14,13 +14,13 @@ export class EventSeedService implements ISeedService {
 
   public async run() {
     await this.createEvent({
-      title: 'Event 1',
+      name: 'Event 1',
       description: 'Description for Event 1',
       attendees: [{ userId: 1 }, { userId: 2 }],
     })
 
     await this.createEvent({
-      title: 'Event 2',
+      name: 'Event 2',
       description: 'Description for Event 2',
       attendees: [{ userId: 2 }],
     })

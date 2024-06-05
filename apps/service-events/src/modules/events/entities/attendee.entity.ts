@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { EventEntity } from 'src/modules/events/entities/event.entity'
 import { EntityHelper } from 'backend-shared'
 
-@Entity('event-attendee')
+@Entity('event_attendee')
 export class EventAttendeeEntity extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number

@@ -1,23 +1,18 @@
 import { Injectable } from '@nestjs/common'
+import { EventRepository } from 'src/modules/events/entities/event.repository'
 
 @Injectable()
 export class EventService {
-  private readonly events = [
-    {
-      id: 1,
-      name: 'GraphQL Introduction',
-      description: 'Learn about GraphQL basics',
-      attendees: [1, 2], // Assuming these are user IDs for example
-    },
-    {
-      id: 2,
-      name: 'Advanced GraphQL',
-      description: 'Deep dive into GraphQL features',
-      attendees: [3],
-    },
-  ]
+  constructor(private readonly eventRepository: EventRepository) {}
 
-  findAll() {
-    return this.events
+  async findAll() {
+    const events = await this.eventRepository.findAll()
+
+    return events.map((event) => ({
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      attendees: event.attendees.map((attendee) => attendee.userId),
+    }))
   }
 }

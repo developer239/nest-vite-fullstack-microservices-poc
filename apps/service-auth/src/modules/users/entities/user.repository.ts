@@ -9,4 +9,12 @@ export class UserRepository {
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>
   ) {}
+
+  findAll() {
+    return this.usersRepository.find()
+  }
+
+  findOne(id: number) {
+    return this.usersRepository.findOneByOrFail({ id })
+  }
 }

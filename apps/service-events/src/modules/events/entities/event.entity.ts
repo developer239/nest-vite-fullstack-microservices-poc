@@ -14,7 +14,7 @@ export class EventEntity extends EntityHelper {
   attendees: EventAttendeeEntity[]
 
   @Column()
-  title: string
+  name: string
 
   @Column()
   description: string
