@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 import { HomeModule } from 'backend-shared'
-import { WrappedConfigModule } from 'src/modules/config/config.module'
-import { WrappedGraphQLModule } from 'src/modules/graphql/graphql.module'
+import { ConfigModule } from 'src/modules/config/config.module'
+import { GraphQLModule } from 'src/modules/graphql/graphql.module'
 
 @Module({
-  imports: [WrappedConfigModule, HomeModule, WrappedGraphQLModule],
+  imports: [ConfigModule, HomeModule, GraphQLModule],
 })
 export class AppModule {}

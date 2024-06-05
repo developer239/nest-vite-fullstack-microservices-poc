@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
-import { WrappedConfigModule } from 'src/modules/config/config.module'
+import { ConfigModule } from 'src/modules/config/config.module'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
 import { eventsConfig, EventsConfigType } from 'src/config/events.config'
 import { appConfig, AppConfigType } from 'backend-shared'
@@ -14,7 +14,7 @@ export class RabbitMQModule {
         ClientsModule.registerAsync([
           {
             name: AMQP_SERVICE_AUTH,
-            imports: [WrappedConfigModule],
+            imports: [ConfigModule],
             inject: [appConfig.KEY, eventsConfig.KEY],
             useFactory: (
               appConfig: AppConfigType,

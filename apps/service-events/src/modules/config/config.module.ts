@@ -4,13 +4,13 @@ import {
   appConfigSchema,
   databaseConfig,
   databaseConfigSchema,
-  WrappedConfigModule as ConfigBase,
+  WrappedConfigModule as BaseConfigModule,
 } from 'backend-shared'
 import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
 
 @Module({
   imports: [
-    ConfigBase.forRoot(
+    BaseConfigModule.forRoot(
       ['.env'],
       [
         {
@@ -29,4 +29,4 @@ import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
     ),
   ],
 })
-export class WrappedConfigModule {}
+export class ConfigModule {}

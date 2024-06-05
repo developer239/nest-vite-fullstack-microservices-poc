@@ -1,18 +1,14 @@
 import { Module } from '@nestjs/common'
-import {
-  DatabaseModule,
-  HomeModule,
-  WrappedGraphQLModule,
-} from 'backend-shared'
-import { WrappedConfigModule } from 'src/modules/config/config.module'
+import { DatabaseModule, HomeModule, GraphQLModule } from 'backend-shared'
+import { ConfigModule } from 'src/modules/config/config.module'
 import { UserModule } from 'src/modules/users/user.module'
 
 @Module({
   imports: [
-    WrappedConfigModule,
+    ConfigModule,
     DatabaseModule.forRootAsync(),
     HomeModule,
-    WrappedGraphQLModule.forRoot(),
+    GraphQLModule.forRoot(),
     UserModule,
   ],
 })

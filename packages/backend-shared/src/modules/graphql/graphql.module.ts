@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { GraphQLModule } from '@nestjs/graphql'
+import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
@@ -7,12 +7,12 @@ import {
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace'
 
 @Module({})
-export class WrappedGraphQLModule {
+export class GraphQLModule {
   static forRoot() {
     return {
-      module: WrappedGraphQLModule,
+      module: GraphQLModule,
       imports: [
-        GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+        BaseGraphQLModule.forRoot<ApolloFederationDriverConfig>({
           driver: ApolloFederationDriver,
           autoSchemaFile: true,
           introspection: true,

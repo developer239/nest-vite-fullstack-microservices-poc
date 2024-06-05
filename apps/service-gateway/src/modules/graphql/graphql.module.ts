@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common'
-import { GraphQLModule } from '@nestjs/graphql'
+import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo'
-import { WrappedConfigModule } from 'src/modules/config/config.module'
+import { ConfigModule } from 'src/modules/config/config.module'
 import { gatewayConfig, GatewayConfigType } from 'src/config/gateway.config'
 import { ApolloComplexityPlugin } from 'backend-shared'
 import { IntrospectAndCompose } from '@apollo/gateway'
 
 @Module({
   imports: [
-    GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
-      imports: [WrappedConfigModule],
+    BaseGraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
+      imports: [ConfigModule],
       inject: [gatewayConfig.KEY],
       useFactory: (config: GatewayConfigType) => ({
         server: {
@@ -34,4 +34,4 @@ import { IntrospectAndCompose } from '@apollo/gateway'
     }),
   ],
 })
-export class WrappedGraphQLModule {}
+export class GraphQLModule {}

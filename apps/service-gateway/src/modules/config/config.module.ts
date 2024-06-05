@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common'
 import {
   appConfig,
   appConfigSchema,
-  WrappedConfigModule as ConfigBase,
+  WrappedConfigModule as BaseConfigModule,
 } from 'backend-shared'
 import { gatewayConfig, gatewayConfigSchema } from 'src/config/gateway.config'
 
 @Module({
   imports: [
-    ConfigBase.forRoot(
+    BaseConfigModule.forRoot(
       ['.env'],
       [
         {
@@ -23,4 +23,4 @@ import { gatewayConfig, gatewayConfigSchema } from 'src/config/gateway.config'
     ),
   ],
 })
-export class WrappedConfigModule {}
+export class ConfigModule {}
