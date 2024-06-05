@@ -3,7 +3,7 @@ import { User } from 'src/modules/events/models/user.model'
 
 @ObjectType()
 export class Event {
-  @Field((type) => ID)
+  @Field(() => ID)
   id: number
 
   @Field()

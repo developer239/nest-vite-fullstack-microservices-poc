@@ -10,7 +10,7 @@ export class EventRepository {
     private readonly eventsRepository: Repository<EventEntity>
   ) {}
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return this.eventsRepository.findOneBy({ id })
   }
 

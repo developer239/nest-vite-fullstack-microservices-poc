@@ -10,7 +10,7 @@ export class UserService {
   }
 
   findById(id: number) {
-    return this.userRepository.findOne(id)
+    return this.userRepository.findOneById(id)
   }
 
   checkUserExists(userId: number) {

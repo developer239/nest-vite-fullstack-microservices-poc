@@ -6,12 +6,10 @@ import { UserService } from 'src/modules/users/user.service'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // TODO: move cmd name and response to packages
   @MessagePattern({ cmd: 'check_user_exists' })
   async checkUserExists(data: {
     userId: number
   }): Promise<{ exists: boolean }> {
-    const exists = await this.userService.checkUserExists(data.userId)
-    return { exists }
+    return { exists: await this.userService.checkUserExists(data.userId) }
   }
 }

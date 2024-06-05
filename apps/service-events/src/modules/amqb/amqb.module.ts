@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { WrappedConfigModule } from 'src/modules/config/config.module'
-import { RABBITMQ_SERVICE } from 'src/constants'
+import { AMQP_SERVICE_AUTH } from 'src/constants'
 import { eventsConfig, EventsConfigType } from 'src/config/events.config'
+import { appConfig, AppConfigType } from 'backend-shared'
 
 @Module({})
 export class RabbitMQModule {
@@ -12,14 +13,17 @@ export class RabbitMQModule {
       imports: [
         ClientsModule.registerAsync([
           {
-            name: RABBITMQ_SERVICE,
+            name: AMQP_SERVICE_AUTH,
             imports: [WrappedConfigModule],
-            inject: [eventsConfig.KEY],
-            useFactory: (config: EventsConfigType) => ({
+            inject: [appConfig.KEY, eventsConfig.KEY],
+            useFactory: (
+              appConfig: AppConfigType,
+              eventsConfig: EventsConfigType
+            ) => ({
               transport: Transport.RMQ,
               options: {
-                urls: [`amqp://${config.authAmqpHost}:${config.authAmqpPort}`],
-                queue: 'rpc_queue',
+                urls: [`amqp://${appConfig.amqpHost}:${appConfig.amqpPort}`],
+                queue: eventsConfig.AUTH_AMQP_QUEUE,
                 queueOptions: {
                   durable: false,
                 },

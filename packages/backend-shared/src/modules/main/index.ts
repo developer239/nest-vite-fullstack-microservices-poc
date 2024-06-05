@@ -9,14 +9,18 @@ export const bootstrap = async (appModule: any) => {
 
   const appConfigValues = app.get<AppConfigType>(appConfig.KEY)
 
-  if (appConfigValues.amqpHost && appConfigValues.amqpPort) {
+  if (
+    appConfigValues.amqpQueueName &&
+    appConfigValues.amqpHost &&
+    appConfigValues.amqpPort
+  ) {
     app.connectMicroservice<MicroserviceOptions>({
       transport: Transport.RMQ,
       options: {
         urls: [
           `amqp://${appConfigValues.amqpHost}:${appConfigValues.amqpPort}`,
         ],
-        queue: 'some_queue',
+        queue: appConfigValues.amqpQueueName,
         queueOptions: {
           durable: false,
         },

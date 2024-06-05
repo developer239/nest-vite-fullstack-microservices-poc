@@ -1,6 +1,7 @@
 import {
   Args,
   Field,
+  ID,
   InputType,
   Mutation,
   Parent,
@@ -8,17 +9,17 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
-import { EventService } from './event.service'
+import { EventService } from './services/event.service'
 import { Event } from './models/event.model'
 import { User } from 'src/modules/events/models/user.model'
 
 // TODO: move to separate file
 @InputType()
 export class JoinEventInput {
-  @Field()
+  @Field(() => ID)
   eventId: number
 
-  @Field()
+  @Field(() => ID)
   userId: number
 }
 
@@ -41,6 +42,13 @@ export class EventResolver {
   async joinEvent(@Args('input') input: JoinEventInput) {
     await this.eventService.joinEvent(input.eventId, input.userId)
 
-    return this.eventService.fndOne(input.eventId)
+    const event = await this.eventService.findOne(input.eventId)
+
+    return {
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      attendees: event.attendees.map((attendee) => attendee.userId),
+    }
   }
 }

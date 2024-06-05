@@ -6,8 +6,9 @@ export const appConfigSchema = {
   APP_NAME: Joi.string().required(),
   API_PREFIX: Joi.string().default('api'),
   HTTP_PORT: Joi.number().port().required(),
-  AMQP_HOST: Joi.number().port(),
+  AMQP_HOST: Joi.string(),
   AMQP_PORT: Joi.number().port(),
+  AMQP_QUEUE_NAME: Joi.string(),
 }
 
 export const appConfig = registerAs('app', () => ({
@@ -17,6 +18,7 @@ export const appConfig = registerAs('app', () => ({
   httPort: parseInt(process.env.HTTP_PORT!, 10) || 8080,
   amqpHost: process.env.AMQP_HOST || 'localhost',
   amqpPort: parseInt(process.env.AMQP_PORT!, 10),
+  amqpQueueName: process.env.AMQP_QUEUE_NAME,
   apiPrefix: process.env.API_PREFIX || 'api',
 }))
 

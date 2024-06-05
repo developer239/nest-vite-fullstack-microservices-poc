@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
@@ -14,15 +14,20 @@ export class UserRepository {
     return this.usersRepository.find()
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return this.usersRepository.findOneBy({ id })
   }
 
-  checkUserExists(userId: number) {
+  async checkUserExists(userId: number): Promise<boolean> {
     try {
-      return Boolean(this.usersRepository.findOneByOrFail({ id: userId }))
+      await this.usersRepository.findOneByOrFail({ id: userId })
+      return true
     } catch (error) {
-      return false
+      if (error.name === 'EntityNotFound') {
+        return false
+      } else {
+        throw new InternalServerErrorException('Database error')
+      }
     }
   }
 }
