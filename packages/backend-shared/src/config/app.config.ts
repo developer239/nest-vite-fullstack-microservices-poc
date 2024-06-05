@@ -6,6 +6,7 @@ export const appConfigSchema = {
   APP_NAME: Joi.string().required(),
   API_PREFIX: Joi.string().default('api'),
   HTTP_PORT: Joi.number().port().required(),
+  // TODO: rename TCP port to rabbitmq port and add host
   TCP_PORT: Joi.number().port(),
 }
 

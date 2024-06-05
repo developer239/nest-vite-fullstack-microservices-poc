@@ -15,6 +15,14 @@ export class UserRepository {
   }
 
   findOne(id: number) {
-    return this.usersRepository.findOneByOrFail({ id })
+    return this.usersRepository.findOneBy({ id })
+  }
+
+  checkUserExists(userId: number) {
+    try {
+      return Boolean(this.usersRepository.findOneByOrFail({ id: userId }))
+    } catch (error) {
+      return false
+    }
   }
 }

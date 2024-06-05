@@ -12,4 +12,8 @@ export class UserService {
   findById(id: number) {
     return this.userRepository.findOne(id)
   }
+
+  checkUserExists(userId: number) {
+    return this.userRepository.checkUserExists(userId)
+  }
 }

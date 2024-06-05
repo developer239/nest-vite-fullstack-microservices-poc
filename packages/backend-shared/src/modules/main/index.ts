@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { Transport } from '@nestjs/microservices'
+import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { appConfig, AppConfigType } from '../../config/app.config'
 
 export const bootstrap = async (appModule: any) => {
@@ -10,16 +10,23 @@ export const bootstrap = async (appModule: any) => {
   const appConfigValues = app.get<AppConfigType>(appConfig.KEY)
 
   if (appConfigValues.tcpPort) {
-    app.connectMicroservice({
-      transport: Transport.TCP,
+    app.connectMicroservice<MicroserviceOptions>({
+      transport: Transport.RMQ,
       options: {
-        host: '0.0.0.0',
-        port: appConfigValues.tcpPort,
+        // TODO: pass host from env
+        urls: [`amqp://localhost:${appConfigValues.tcpPort}`],
+        queue: 'some_queue',
+        queueOptions: {
+          durable: false,
+        },
       },
     })
-  }
+    Logger.log(
+      `[NestApplication] Registering microservice on port: ${appConfigValues.tcpPort}`
+    )
 
-  await app.startAllMicroservices()
+    await app.startAllMicroservices()
+  }
 
   await app.listen(appConfigValues.httPort)
   Logger.log(`[NestApplication] Running on port: ${appConfigValues.httPort}`)

@@ -10,6 +10,10 @@ export class EventRepository {
     private readonly eventsRepository: Repository<EventEntity>
   ) {}
 
+  findOne(id: number) {
+    return this.eventsRepository.findOneBy({ id })
+  }
+
   findAll() {
     return this.eventsRepository.find()
   }
