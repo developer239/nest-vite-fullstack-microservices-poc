@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common'
-import { Query, Resolver, ResolveReference } from '@nestjs/graphql'
+import { Args, Query, Resolver, ResolveReference } from '@nestjs/graphql'
 import { User } from 'src/modules/users/models/user.model'
 import { UserService } from 'src/modules/users/services/user.service'
 
@@ -7,9 +7,18 @@ import { UserService } from 'src/modules/users/services/user.service'
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => [User])
-  users() {
-    return this.userService.findAll()
+  // TODO: only show email for admin
+
+  // TODO: only admin
+  @Query(() => User)
+  async user(@Args('id') id: string) {
+    const user = await this.userService.findById(id)
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`)
+    }
+
+    return user
   }
 
   @ResolveReference()

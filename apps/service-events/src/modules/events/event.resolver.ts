@@ -44,6 +44,7 @@ export class EventResolver {
     return attendees.map((id) => ({ __typename: 'User', id }))
   }
 
+  // TODO: only admin
   @Mutation(() => Event)
   async createEvent(@Args('input') input: CreateEventInput) {
     const event = await this.eventService.create(input)
@@ -51,6 +52,7 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
+  // TODO: only admin
   @Mutation(() => Event)
   async updateEvent(
     @Args('id') id: string,
@@ -61,11 +63,13 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
+  // TODO: only admin
   @Mutation(() => Boolean)
   deleteEvent(@Args('id') id: string) {
     return this.eventService.delete(id)
   }
 
+  // TODO: only authenticated user
   @Mutation(() => Event)
   attendEvent(@Args('id') id: string, @Context() context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context)
@@ -75,6 +79,7 @@ export class EventResolver {
     return this.eventService.attendEvent(id, userId)
   }
 
+  // TODO: only authenticated user
   @Mutation(() => Event)
   unattendEvent(@Args('id') id: string, @Context() context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context)
