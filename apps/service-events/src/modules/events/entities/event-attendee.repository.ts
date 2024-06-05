@@ -10,11 +10,22 @@ export class EventAttendeeRepository {
     private readonly eventAttendeeRepository: Repository<EventAttendeeEntity>
   ) {}
 
-  async joinEvent(eventId: number, userId: number) {
+  async joinEvent(eventId: string, userId: string) {
     const attendee = this.eventAttendeeRepository.create({
       userId,
       event: { id: eventId },
     })
     await this.eventAttendeeRepository.save(attendee)
+    return attendee
+  }
+
+  findAttendee(eventId: string, userId: string) {
+    return this.eventAttendeeRepository.findOne({
+      where: { event: { id: eventId }, userId },
+    })
+  }
+
+  remove(attendee: EventAttendeeEntity) {
+    return this.eventAttendeeRepository.remove(attendee)
   }
 }

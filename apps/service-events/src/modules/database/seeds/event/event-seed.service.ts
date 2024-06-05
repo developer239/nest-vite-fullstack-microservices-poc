@@ -14,15 +14,24 @@ export class EventSeedService implements ISeedService {
 
   public async run() {
     await this.createEvent({
-      name: 'Event 1',
+      title: 'Event 1',
       description: 'Description for Event 1',
-      attendees: [{ userId: 1 }, { userId: 2 }],
+      capacity: 10,
+      attendees: [
+        { userId: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1b3b' },
+        { userId: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1ffc' },
+      ],
+      owner: { userId: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1ffc' },
+      startsAt: new Date().toISOString(),
     })
 
     await this.createEvent({
-      name: 'Event 2',
+      title: 'Event 2',
       description: 'Description for Event 2',
-      attendees: [{ userId: 2 }],
+      capacity: 10,
+      attendees: [{ userId: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1ffc' }],
+      owner: { userId: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1b3b' },
+      startsAt: new Date().toISOString(),
     })
 
     Logger.log('Seeded events with attendees')

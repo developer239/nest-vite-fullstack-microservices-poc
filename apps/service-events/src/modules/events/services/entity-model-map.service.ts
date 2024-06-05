@@ -3,10 +3,13 @@ import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { EventEntity } from 'src/modules/events/entities/event.entity'
 
 export interface IEventModel {
-  id: number
-  name: string
+  id: string
+  title: string
   description: string
-  attendees: number[]
+  capacity: number
+  startsAt: Date
+  owner: string
+  attendees: string[]
 }
 
 @Injectable()
@@ -14,8 +17,11 @@ export class EntityModelMapService {
   mapEventToModel(event: DeepPartial<EventEntity>): IEventModel {
     return {
       id: event.id!,
-      name: event.name!,
+      title: event.title!,
       description: event.description!,
+      capacity: event.capacity!,
+      startsAt: event.startsAt! as Date,
+      owner: event.owner?.id!,
       attendees: event.attendees?.map((attendee) => attendee.userId!) || [],
     }
   }

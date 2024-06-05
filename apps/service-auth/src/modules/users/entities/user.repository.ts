@@ -14,11 +14,11 @@ export class UserRepository {
     return this.usersRepository.find()
   }
 
-  findOneById(id: number) {
+  findOneById(id: string) {
     return this.usersRepository.findOneBy({ id })
   }
 
-  async checkUserExists(userId: number): Promise<boolean> {
+  async checkUserExists(userId: string): Promise<boolean> {
     try {
       await this.usersRepository.findOneByOrFail({ id: userId })
       return true

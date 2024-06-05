@@ -1,7 +1,7 @@
+import { NotFoundException } from '@nestjs/common'
 import { Query, Resolver, ResolveReference } from '@nestjs/graphql'
-import { GraphQLException } from '@nestjs/graphql/dist/exceptions'
 import { User } from 'src/modules/users/models/user.model'
-import { UserService } from 'src/modules/users/user.service'
+import { UserService } from 'src/modules/users/services/user.service'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -13,18 +13,11 @@ export class UserResolver {
   }
 
   @ResolveReference()
-  async resolveReference(reference: { __typename: string; id: number }) {
+  async resolveReference(reference: { __typename: string; id: string }) {
     const user = await this.userService.findById(reference.id)
 
     if (!user) {
-      // TODO: is this correct way to handle exceptions?
-      throw new GraphQLException(`User with id ${reference.id} not found`, {
-        extensions: {
-          http: {
-            status: 404,
-          },
-        },
-      })
+      throw new NotFoundException(`User with id ${reference.id} not found`)
     }
 
     return user

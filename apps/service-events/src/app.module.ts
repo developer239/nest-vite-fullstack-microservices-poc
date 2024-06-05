@@ -8,6 +8,7 @@ import { EventModule } from 'src/modules/events/events.module'
     ConfigModule,
     HomeModule,
     DatabaseModule.forRootAsync(),
+    // TODO: pass orphans to the module
     GraphQLModule.forRoot(),
     EventModule,
   ],

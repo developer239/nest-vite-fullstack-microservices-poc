@@ -3,20 +3,19 @@ import {
   Column,
   Entity,
   Index,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { EventEntity } from 'src/modules/events/entities/event.entity'
 
-@Entity('event_attendee')
-export class EventAttendeeEntity extends EntityHelper {
+@Entity('event_owner')
+export class EventOwnerEntity extends EntityHelper {
   @PrimaryGeneratedColumn('uuid') id: string
 
   @Index()
   @Column('uuid')
   userId: string
 
-  @Index()
-  @ManyToOne(() => EventEntity, (event) => event.attendees)
-  event: EventEntity
+  @OneToMany(() => EventEntity, (event) => event.owner)
+  events: EventEntity[]
 }

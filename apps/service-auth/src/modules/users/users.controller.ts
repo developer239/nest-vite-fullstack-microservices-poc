@@ -5,7 +5,7 @@ import {
   ICheckUserExistsInput,
   ICheckUserExistsResult,
 } from 'backend-contracts'
-import { UserService } from 'src/modules/users/user.service'
+import { UserService } from 'src/modules/users/services/user.service'
 
 @Controller()
 export class UserController {

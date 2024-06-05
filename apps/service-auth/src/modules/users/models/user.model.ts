@@ -6,9 +6,9 @@ export class User {
   @Field(() => ID)
   id: number
 
-  @Field()
-  name: string
+  @Field() firstName: string
 
-  @Field()
-  email: string
+  @Field() lastName: string
+
+  @Field() email: string
 }

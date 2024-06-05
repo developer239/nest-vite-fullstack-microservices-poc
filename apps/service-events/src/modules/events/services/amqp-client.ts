@@ -19,7 +19,7 @@ export class AMQPClientService {
     @Inject(AMQP_SERVICE_AUTH) private readonly rabbitClient: ClientProxy
   ) {}
 
-  async checkUserExists(userId: number): Promise<boolean> {
+  async checkUserExists(userId: string): Promise<boolean> {
     try {
       const response = await firstValueFrom(
         this.rabbitClient.send<ICheckUserExistsResult, ICheckUserExistsInput>(

@@ -9,11 +9,11 @@ export class UserService {
     return this.userRepository.findAll()
   }
 
-  findById(id: number) {
+  findById(id: string) {
     return this.userRepository.findOneById(id)
   }
 
-  checkUserExists(userId: number) {
+  checkUserExists(userId: string) {
     return this.userRepository.checkUserExists(userId)
   }
 }

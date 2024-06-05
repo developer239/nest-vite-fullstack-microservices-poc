@@ -13,16 +13,26 @@ export class UserSeedService implements ISeedService {
 
   public async run() {
     await this.createUser({
+      id: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1b3b',
+      firstName: 'Jane',
+      lastName: 'Doe',
       email: 'joane@doe.com',
-      name: 'Joane Doe',
     })
     await this.createUser({
+      id: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1ffc',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'john@doe.com',
-      name: 'John Doe',
+    })
+    await this.createUser({
+      id: 'f7b3b3b0-0b1b-4b3b-8b3b-333b3b0b1fdd',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@smith',
     })
   }
 
-  private async createUser(data: any) {
+  private async createUser(data: Partial<UserEntity>) {
     await this.repository.save(this.repository.create(data))
 
     Logger.log(`Created user: ${JSON.stringify(data)}`)
