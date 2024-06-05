@@ -5,13 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
-import { firstValueFrom } from 'rxjs'
-import { AMQP_SERVICE_AUTH } from 'src/constants'
 import {
   CHECK_USER_EXISTS_CMD,
   ICheckUserExistsInput,
   ICheckUserExistsResult,
 } from 'backend-contracts'
+import { firstValueFrom } from 'rxjs'
+import { AMQP_SERVICE_AUTH } from 'src/constants'
 
 @Injectable()
 export class AMQPClientService {

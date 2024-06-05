@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
-import { UserService } from 'src/modules/users/user.service'
-import { UserResolver } from 'src/modules/users/user.resolver'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
 import { UserRepository } from 'src/modules/users/entities/user.repository'
+import { UserResolver } from 'src/modules/users/user.resolver'
+import { UserService } from 'src/modules/users/user.service'
 import { UserController } from 'src/modules/users/users.controller'
-import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), RabbitMQModule],

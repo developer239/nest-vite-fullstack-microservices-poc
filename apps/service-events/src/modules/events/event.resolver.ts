@@ -6,20 +6,20 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
-import { EventService } from 'src/modules/events/services/event.service'
+import { JoinEventInput } from 'src/modules/events/inputs/join-event.input'
 import { Event } from 'src/modules/events/models/event.model'
 import { User } from 'src/modules/events/models/user.model'
 import { EntityModelMapService } from 'src/modules/events/services/entity-model-map.service'
-import { JoinEventInput } from 'src/modules/events/inputs/join-event.input'
+import { EventService } from 'src/modules/events/services/event.service'
 
 @Resolver(() => Event)
 export class EventResolver {
   constructor(
-    private eventService: EventService,
-    private entityModelMapService: EntityModelMapService
+    private readonly eventService: EventService,
+    private readonly entityModelMapService: EntityModelMapService
   ) {}
 
-  @Query((returns) => [Event])
+  @Query(() => [Event])
   async events() {
     const events = await this.eventService.findAll()
 

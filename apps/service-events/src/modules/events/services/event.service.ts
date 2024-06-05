@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { EventRepository } from 'src/modules/events/entities/event.repository'
 import { EventAttendeeRepository } from 'src/modules/events/entities/event-attendee.repository'
+import { EventRepository } from 'src/modules/events/entities/event.repository'
 import { AMQPClientService } from 'src/modules/events/services/amqp-client'
 
 @Injectable()
@@ -26,9 +26,9 @@ export class EventService {
   }
 
   async joinEvent(eventId: number, userId: number) {
-    const userExists = await this.amqpClientService.checkUserExists(userId)
+    const isUserExists = await this.amqpClientService.checkUserExists(userId)
 
-    if (!userExists) {
+    if (!isUserExists) {
       throw new NotFoundException(`User with id ${userId} does not exist`)
     }
 

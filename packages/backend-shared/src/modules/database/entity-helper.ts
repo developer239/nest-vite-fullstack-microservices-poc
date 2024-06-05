@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Exclude, instanceToPlain } from 'class-transformer'
 import { AfterLoad, BaseEntity } from 'typeorm'
 

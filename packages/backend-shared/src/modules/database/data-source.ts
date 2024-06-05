@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises,no-async-promise-executor */
 import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
 import { DataSource } from 'typeorm'

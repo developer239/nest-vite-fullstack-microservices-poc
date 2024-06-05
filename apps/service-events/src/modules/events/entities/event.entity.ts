@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { EntityHelper } from 'backend-shared'
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { EventAttendeeEntity } from 'src/modules/events/entities/attendee.entity'
 
 @Entity('event')

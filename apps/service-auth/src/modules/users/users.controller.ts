@@ -1,11 +1,11 @@
 import { Controller } from '@nestjs/common'
 import { MessagePattern } from '@nestjs/microservices'
-import { UserService } from 'src/modules/users/user.service'
 import {
   CHECK_USER_EXISTS_CMD,
   ICheckUserExistsInput,
   ICheckUserExistsResult,
 } from 'backend-contracts'
+import { UserService } from 'src/modules/users/user.service'
 
 @Controller()
 export class UserController {

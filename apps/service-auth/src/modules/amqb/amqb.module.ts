@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
-import { ConfigModule } from 'src/modules/config/config.module'
 import { appConfig, AppConfigType } from 'backend-shared'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
+import { ConfigModule } from 'src/modules/config/config.module'
 
 @Module({})
 export class RabbitMQModule {

@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common'
-import { EventService } from 'src/modules/events/services/event.service'
-import { EventResolver } from 'src/modules/events/event.resolver'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { EventEntity } from 'src/modules/events/entities/event.entity'
-import { EventAttendeeEntity } from 'src/modules/events/entities/attendee.entity'
-import { EventRepository } from 'src/modules/events/entities/event.repository'
-import { EventAttendeeRepository } from 'src/modules/events/entities/event-attendee.repository'
 import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
+import { EventAttendeeEntity } from 'src/modules/events/entities/attendee.entity'
+import { EventAttendeeRepository } from 'src/modules/events/entities/event-attendee.repository'
+import { EventEntity } from 'src/modules/events/entities/event.entity'
+import { EventRepository } from 'src/modules/events/entities/event.repository'
+import { EventResolver } from 'src/modules/events/event.resolver'
 import { AMQPClientService } from 'src/modules/events/services/amqp-client'
 import { EntityModelMapService } from 'src/modules/events/services/entity-model-map.service'
+import { EventService } from 'src/modules/events/services/event.service'
 
 @Module({
   imports: [

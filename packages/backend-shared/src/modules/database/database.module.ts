@@ -1,8 +1,8 @@
 import { InternalServerErrorException, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DataSource } from 'typeorm'
-import { TypeOrmConfigService } from './typeorm-config.service'
 import { HackProvideWorkingDirModule } from './provide-working-dir.module'
+import { TypeOrmConfigService } from './typeorm-config.service'
 
 @Module({})
 export class DatabaseModule {

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { ConfigFactory } from '@nestjs/config/dist/interfaces/config-factory.interface'
 import * as Joi from 'joi'
-import { ConfigModule } from '@nestjs/config'
 
 @Module({})
 export class WrappedConfigModule {

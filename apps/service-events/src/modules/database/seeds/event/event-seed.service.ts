@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 import { ISeedService } from 'backend-shared'
-import { EventEntity } from 'src/modules/events/entities/event.entity'
+import { Repository } from 'typeorm'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
+import { EventEntity } from 'src/modules/events/entities/event.entity'
 
 @Injectable()
 export class EventSeedService implements ISeedService {

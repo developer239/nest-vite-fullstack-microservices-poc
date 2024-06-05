@@ -5,6 +5,7 @@
   "main": "./dist/index",
   "types": "./dist/index",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext ts src"
   }
 }

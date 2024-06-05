@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
+import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace'
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo'
-import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace'
+import { Module } from '@nestjs/common'
+import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
 
 @Module({})
 export class GraphQLModule {

@@ -2,10 +2,10 @@ import { InternalServerErrorException, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DataSource } from 'typeorm'
-import { databaseConfig } from '../../../config/database.config'
-import { TypeOrmConfigService } from '../typeorm-config.service'
 import { appConfig } from '../../../config/app.config'
+import { databaseConfig } from '../../../config/database.config'
 import { HackProvideWorkingDirModule } from '../provide-working-dir.module'
+import { TypeOrmConfigService } from '../typeorm-config.service'
 
 @Module({})
 export class SeedModule {

@@ -5,7 +5,8 @@
   "scripts": {
     "build": "nest build",
     "start": "node dist/main",
-    "dev": "NODE_ENV=development nest start --watch"
+    "dev": "NODE_ENV=development nest start --watch",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext ts src"
   },
   "dependencies": {
     "@apollo/federation": "0.38.1",

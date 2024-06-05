@@ -25,9 +25,8 @@ export class UserRepository {
     } catch (error) {
       if (error.name === 'EntityNotFound') {
         return false
-      } else {
-        throw new InternalServerErrorException('Database error')
       }
+      throw new InternalServerErrorException('Database error')
     }
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { INestApplication } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DataSource } from 'typeorm'

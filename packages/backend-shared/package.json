@@ -5,7 +5,8 @@
   "main": "./dist/index",
   "types": "./dist/index",
   "scripts": {
-    "build": "nest build"
+    "build": "nest build",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext ts src"
   },
   "dependencies": {
     "@apollo/server": "4.10.4",
@@ -20,6 +21,7 @@
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.4",
     "apollo-server-express": "3.13.0",
+    "apollo-server-plugin-base": "^3.7.2",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
     "graphql": "16.8.1",

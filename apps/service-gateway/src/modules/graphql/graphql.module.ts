@@ -1,10 +1,10 @@
+import { IntrospectAndCompose } from '@apollo/gateway'
+import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
-import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo'
-import { ConfigModule } from 'src/modules/config/config.module'
-import { gatewayConfig, GatewayConfigType } from 'src/config/gateway.config'
 import { ApolloComplexityPlugin } from 'backend-shared'
-import { IntrospectAndCompose } from '@apollo/gateway'
+import { gatewayConfig, GatewayConfigType } from 'src/config/gateway.config'
+import { ConfigModule } from 'src/modules/config/config.module'
 
 @Module({
   imports: [

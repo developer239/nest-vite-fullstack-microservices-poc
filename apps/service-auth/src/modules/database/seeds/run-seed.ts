@@ -1,6 +1,6 @@
 import { runSeed, SeedModule } from 'backend-shared'
-import { UserSeedService } from 'src/modules/database/seeds/user/user-seed.service'
 import { UserSeedModule } from 'src/modules/database/seeds/user/user-seed.module'
+import { UserSeedService } from 'src/modules/database/seeds/user/user-seed.service'
 
 void runSeed(
   SeedModule.forRoot(__dirname, {

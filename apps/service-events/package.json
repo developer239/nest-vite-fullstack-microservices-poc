@@ -6,6 +6,7 @@
     "build": "nest build",
     "start": "node dist/main",
     "dev": "NODE_ENV=development nest start --watch",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext ts src",
     "seed-database": "npx env-cmd ts-node -r tsconfig-paths/register ./src/modules/database/seeds/run-seed.ts",
     "migration-generate": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate",
     "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/initial",

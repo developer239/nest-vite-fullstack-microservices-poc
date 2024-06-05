@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await,require-await */
 import { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import { GraphQLSchema, separateOperations } from 'graphql'
 import {
