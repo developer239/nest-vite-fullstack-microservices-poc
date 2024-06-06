@@ -1,7 +1,10 @@
 import { Controller } from '@nestjs/common'
 import { MessagePattern } from '@nestjs/microservices'
 import {
+  AUTH_SYNC_USER_CMD,
   CHECK_USER_EXISTS_CMD,
+  ISyncUserAuthorizedInput,
+  ISyncUserResult,
   ICheckUserExistsInput,
   ICheckUserExistsResult,
 } from 'backend-contracts'
@@ -16,5 +19,25 @@ export class UserController {
     data: ICheckUserExistsInput
   ): Promise<ICheckUserExistsResult> {
     return { exists: await this.userService.checkUserExists(data.userId) }
+  }
+
+  @MessagePattern({ cmd: AUTH_SYNC_USER_CMD })
+  async syncUser(data: ISyncUserAuthorizedInput): Promise<ISyncUserResult> {
+    let user = await this.userService.validateUserByFirebasePayload(
+      data.decodedIdToken
+    )
+
+    if (!user) {
+      user = await this.userService.createUserFromFirebasePayload(
+        data.decodedIdToken.email,
+        data.decodedIdToken.uid
+      )
+    }
+
+    return {
+      role: user.role,
+      userId: user.id,
+      email: user.email,
+    }
   }
 }

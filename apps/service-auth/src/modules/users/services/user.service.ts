@@ -16,4 +16,15 @@ export class UserService {
   checkUserExists(userId: string) {
     return this.userRepository.checkUserExists(userId)
   }
+
+  validateUserByFirebasePayload(decodedIdToken: {
+    uid: string
+    email: string
+  }) {
+    return this.userRepository.validateUserByFirebasePayload(decodedIdToken)
+  }
+
+  createUserFromFirebasePayload(email: string, uid: string) {
+    return this.userRepository.createUserFromFirebasePayload(email, uid)
+  }
 }

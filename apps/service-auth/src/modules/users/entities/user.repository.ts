@@ -29,4 +29,23 @@ export class UserRepository {
       throw new InternalServerErrorException('Database error')
     }
   }
+
+  validateUserByFirebasePayload(decodedIdToken: {
+    uid: string
+    email: string
+  }) {
+    return this.usersRepository.findOneBy({
+      email: decodedIdToken.email,
+      uid: decodedIdToken.uid,
+    })
+  }
+
+  createUserFromFirebasePayload(email: string, uid: string) {
+    return this.usersRepository.save(
+      this.usersRepository.create({
+        email,
+        uid,
+      })
+    )
+  }
 }

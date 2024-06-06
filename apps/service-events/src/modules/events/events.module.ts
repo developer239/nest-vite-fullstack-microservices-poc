@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { SharedAuthModule } from 'backend-shared'
 import { RabbitMQModule } from 'src/modules/amqb/amqb.module'
 import { EventAttendeeEntity } from 'src/modules/events/entities/attendee.entity'
 import { EventAttendeeRepository } from 'src/modules/events/entities/event-attendee.repository'
@@ -19,6 +20,9 @@ import { EventService } from 'src/modules/events/services/event.service'
       EventOwnerEntity,
     ]),
     RabbitMQModule.forRoot(),
+    SharedAuthModule.forRoot({
+      userVerificationService: AMQPClientService,
+    }),
   ],
   providers: [
     EventResolver,

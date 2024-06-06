@@ -19,3 +19,16 @@ export {
   DatabaseConfigType,
   databaseConfigSchema,
 } from './src/config/database.config'
+export {
+  gpcConfig,
+  GpcConfigType,
+  gpcConfigSchema,
+} from './src/config/gpc.config'
+export { UserRole } from './src/modules/auth/roles/roles.types'
+export { Roles } from './src/modules/auth/roles/roles.decorator'
+export { FirebaseService } from './src/modules/auth/services/firebase.service'
+export { FirebaseStrategy } from './src/modules/auth/strategies/firebase.strategy'
+export { RolesGuard } from './src/modules/auth/guards/roles.guard'
+export { GqlAuthGuard } from './src/modules/auth/guards/gql.guard'
+export { SharedAuthModule } from './src/modules/auth/shared-auth.module'
+export { IUserVerificationService } from './src/modules/auth/constants'

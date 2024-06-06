@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common'
 import {
   Args,
   Context,
@@ -8,6 +9,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
+import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'backend-shared'
 import { CreateEventInput } from 'src/modules/events/inputs/create-event.input'
 import { UpdateEventInput } from 'src/modules/events/inputs/update-event.input'
 import { Event } from 'src/modules/events/models/event.model'
@@ -44,7 +46,8 @@ export class EventResolver {
     return attendees.map((id) => ({ __typename: 'User', id }))
   }
 
-  // TODO: only admin
+  @Roles(UserRole.ADMIN)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Event)
   async createEvent(@Args('input') input: CreateEventInput) {
     const event = await this.eventService.create(input)
@@ -52,7 +55,8 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
-  // TODO: only admin
+  @Roles(UserRole.ADMIN)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Event)
   async updateEvent(
     @Args('id') id: string,
@@ -63,13 +67,14 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
-  // TODO: only admin
+  @Roles(UserRole.ADMIN)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Boolean)
   deleteEvent(@Args('id') id: string) {
     return this.eventService.delete(id)
   }
 
-  // TODO: only authenticated user
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async attendEvent(
     @Args('id') id: string,
@@ -85,7 +90,7 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
-  // TODO: only authenticated user
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async unattendEvent(
     @Args('id') id: string,
