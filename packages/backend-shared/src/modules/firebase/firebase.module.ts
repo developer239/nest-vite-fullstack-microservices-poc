@@ -9,12 +9,12 @@ export interface IAsyncModuleOptions {
 
 @Global()
 @Module({})
-export class SharedAuthModule {
+export class FirebaseModule {
   static forRoot({
     userVerificationService,
   }: IAsyncModuleOptions): DynamicModule {
     return {
-      module: SharedAuthModule,
+      module: FirebaseModule,
       providers: [
         FirebaseService,
         FirebaseStrategy,
