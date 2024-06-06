@@ -8,6 +8,7 @@ The `backend-shared` package encapsulates shared configurations, utilities, and 
 - Utility functions for database seeding and clearing.
 - Apollo server complexity plugin for GraphQL performance optimization.
 - Configurable application and database settings through environment variables.
+- Firebase authentication module (guards, strategies, and decorators) with abstract user sync implementation
 
 ## Useful Commands
 
