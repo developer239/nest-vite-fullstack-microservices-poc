@@ -24,3 +24,6 @@ yarn-error.log*
 /apps/*/dist
 /apps/*/.env
 /packages/*/dist
+
+# prevent accidental commit
+**/*service-account-key.json

@@ -4,6 +4,8 @@ import {
   appConfigSchema,
   databaseConfig,
   databaseConfigSchema,
+  gpcConfig,
+  gpcConfigSchema,
   WrappedConfigModule as BaseConfigModule,
 } from 'backend-shared'
 import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
@@ -24,6 +26,10 @@ import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
         {
           values: eventsConfig,
           schema: eventsConfigSchema,
+        },
+        {
+          values: gpcConfig,
+          schema: gpcConfigSchema,
         },
       ]
     ),
