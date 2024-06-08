@@ -13,6 +13,7 @@ export class UserEntity extends EntityHelper {
   @Column({ unique: true })
   email: string
 
+  @Index()
   @Column({ unique: true })
   uid: string
 

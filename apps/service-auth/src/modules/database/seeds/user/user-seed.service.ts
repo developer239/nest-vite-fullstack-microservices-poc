@@ -17,18 +17,21 @@ export class UserSeedService implements ISeedService {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'joane@doe.com',
+      uid: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1bfirebase',
     })
     await this.createUser({
       id: 'f7b3b3b0-0b1b-4b3b-8b3b-0b1b3b0b1ffc',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@doe.com',
+      uid: '3b03b3b0-0b1b-4b3b-8b3b-0b1bfirebase',
     })
     await this.createUser({
       id: 'f7b3b3b0-0b1b-4b3b-8b3b-333b3b0b1fdd',
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@smith',
+      uid: 'b3b3b3b0-0b1b-4b3b-8b3b-0b1bfirebase',
     })
   }
 

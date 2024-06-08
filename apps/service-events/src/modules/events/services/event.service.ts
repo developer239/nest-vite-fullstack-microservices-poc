@@ -3,7 +3,7 @@ import { EventAttendeeRepository } from 'src/modules/events/entities/event-atten
 import { EventRepository } from 'src/modules/events/entities/event.repository'
 import { CreateEventInput } from 'src/modules/events/inputs/create-event.input'
 import { UpdateEventInput } from 'src/modules/events/inputs/update-event.input'
-import { AMQPClientService } from 'src/modules/events/services/amqp-client'
+import { AMQPClientService } from 'src/modules/events/services/amqp-client.service'
 
 @Injectable()
 export class EventService {

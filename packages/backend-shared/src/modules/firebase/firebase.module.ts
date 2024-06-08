@@ -7,7 +7,6 @@ export interface IAsyncModuleOptions {
   userVerificationService: Type<IUserVerificationService>
 }
 
-@Global()
 @Module({})
 export class FirebaseModule {
   static forRoot({
