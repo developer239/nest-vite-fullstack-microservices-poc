@@ -22,6 +22,7 @@ import { EventService } from 'src/modules/events/services/event.service'
     ]),
     RabbitMQModule.forRoot(),
     FirebaseModule.forRoot({
+      imports: [RabbitMQModule.forRoot()],
       userVerificationService: AmqpSyncUserClientService,
     }),
   ],

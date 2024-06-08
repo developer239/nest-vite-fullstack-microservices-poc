@@ -21,6 +21,6 @@ export interface ISyncUserAuthorizedInput {
 
 export interface ISyncUserResult {
   role: UserRole
-  userId: string
+  id: string
   email: string
 }

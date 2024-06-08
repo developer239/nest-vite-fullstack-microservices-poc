@@ -41,7 +41,7 @@ export class AmqpSyncUserClientService implements IUserVerificationService {
       }
 
       return {
-        id: response.userId,
+        id: response.id,
         email: response.email,
         role: response.role,
       } as TUser

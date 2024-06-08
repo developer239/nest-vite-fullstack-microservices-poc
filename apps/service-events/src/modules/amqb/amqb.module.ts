@@ -5,7 +5,6 @@ import { eventsConfig, EventsConfigType } from 'src/config/events.config'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
 import { ConfigModule } from 'src/modules/config/config.module'
 
-@Global()
 @Module({})
 export class RabbitMQModule {
   static forRoot() {

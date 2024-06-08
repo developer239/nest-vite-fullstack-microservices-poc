@@ -4,6 +4,8 @@ import {
   appConfigSchema,
   databaseConfig,
   databaseConfigSchema,
+  gpcConfig,
+  gpcConfigSchema,
   WrappedConfigModule as BaseConfigModule,
 } from 'backend-shared'
 
@@ -19,6 +21,10 @@ import {
         {
           values: databaseConfig,
           schema: databaseConfigSchema,
+        },
+        {
+          values: gpcConfig,
+          schema: gpcConfigSchema,
         },
       ]
     ),

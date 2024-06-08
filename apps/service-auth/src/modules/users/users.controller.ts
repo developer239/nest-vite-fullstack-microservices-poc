@@ -35,9 +35,9 @@ export class UserController {
     }
 
     return {
-      role: user.role,
-      userId: user.id,
+      id: user.id,
       email: user.email,
+      role: user.role,
     }
   }
 }
