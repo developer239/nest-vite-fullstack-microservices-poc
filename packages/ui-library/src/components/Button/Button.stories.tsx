@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
 import { Button, IProps } from './index'
 
-export default {
+const meta: Meta<IProps> = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
@@ -38,7 +38,9 @@ export default {
     disabled: false,
     children: 'Button',
   },
-} as Meta<IProps>
+}
+
+export default meta
 
 export const Default: StoryObj<IProps> = {
   render: (args) => <Button {...args} />,
