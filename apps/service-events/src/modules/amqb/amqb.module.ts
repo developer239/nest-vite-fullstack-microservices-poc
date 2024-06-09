@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { appConfig, AppConfigType } from 'backend-shared'
 import { eventsConfig, EventsConfigType } from 'src/config/events.config'

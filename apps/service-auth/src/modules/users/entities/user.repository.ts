@@ -1,9 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserRole } from 'backend-shared'
 import { Repository } from 'typeorm'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
-import { RegisterInput } from 'src/modules/users/inputs/register.input'
 
 @Injectable()
 export class UserRepository {
