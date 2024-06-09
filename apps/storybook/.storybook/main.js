@@ -11,6 +11,10 @@ function getAbsolutePath(value) {
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
   stories: ['../../../packages/ui-library/src/**/*.stories.tsx'],
+  staticDirs: [
+    { from: '../../../packages/ui-library/dist/images', to: '/images' },
+    { from: '../../../packages/ui-library/dist/fonts', to: '/fonts' },
+  ],
   addons: [
     getAbsolutePath('@storybook/addon-onboarding'),
     getAbsolutePath('@storybook/addon-links'),

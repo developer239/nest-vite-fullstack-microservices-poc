@@ -1,7 +1,4 @@
 import clsx from 'clsx'
-// Base64
-// import lightSpinner from '../../../public/images/light-spinner.png'
-// import darkSpinner from '../../../public/images/dark-spinner.png'
 
 export type IProps = {
   isSmaller?: boolean
