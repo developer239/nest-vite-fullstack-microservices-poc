@@ -59,8 +59,11 @@ export class EventResolver {
   @Roles(UserRole.ADMIN)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Event)
-  async createEvent(@Args('input') input: CreateEventInput) {
-    const event = await this.eventService.create(input)
+  async createEvent(
+    @Args('input') input: CreateEventInput,
+    @GetUser() user: IUserPayload
+  ) {
+    const event = await this.eventService.create(input, user.id)
 
     return this.entityModelMapService.mapEventToModel(event)
   }

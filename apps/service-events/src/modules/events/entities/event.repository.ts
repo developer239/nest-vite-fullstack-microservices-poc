@@ -20,8 +20,15 @@ export class EventRepository {
     return this.eventsRepository.find()
   }
 
-  create(input: CreateEventInput) {
-    return this.eventsRepository.create(input)
+  create(input: CreateEventInput, ownerId: string) {
+    const newEvent = this.eventsRepository.create({
+      ...input,
+      owner: {
+        userId: ownerId,
+      },
+    })
+
+    return this.save(newEvent)
   }
 
   save(event: EventEntity) {

@@ -27,12 +27,8 @@ export class EventService {
     return this.eventRepository.findAll()
   }
 
-  async create(input: CreateEventInput) {
-    const newEvent = this.eventRepository.create(input)
-
-    await this.eventRepository.save(newEvent)
-
-    return newEvent
+  create(input: CreateEventInput, ownerId: string) {
+    return this.eventRepository.create(input, ownerId)
   }
 
   async update(id: string, input: UpdateEventInput) {

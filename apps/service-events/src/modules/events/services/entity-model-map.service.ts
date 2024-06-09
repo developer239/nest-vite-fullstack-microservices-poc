@@ -21,7 +21,7 @@ export class EntityModelMapService {
       description: event.description!,
       capacity: event.capacity!,
       startsAt: event.startsAt! as Date,
-      owner: event.owner?.id!,
+      owner: event.owner?.userId!,
       attendees: event.attendees?.map((attendee) => attendee.userId!) || [],
     }
   }
