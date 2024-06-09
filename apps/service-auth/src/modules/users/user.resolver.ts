@@ -1,6 +1,6 @@
 import { NotFoundException, UseGuards } from '@nestjs/common'
 import { Args, ID, Query, Resolver, ResolveReference } from '@nestjs/graphql'
-import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'backend-shared'
+import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'nest-helpers'
 import { User } from 'src/modules/users/models/user.model'
 import { UserService } from 'src/modules/users/services/user.service'
 

@@ -2,7 +2,7 @@ import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway'
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule as BaseGraphQLModule } from '@nestjs/graphql'
-import { ApolloComplexityPlugin } from 'backend-shared'
+import { ApolloComplexityPlugin } from 'nest-helpers'
 import { gatewayConfig, GatewayConfigType } from 'src/config/gateway.config'
 import { ConfigModule } from 'src/modules/config/config.module'
 

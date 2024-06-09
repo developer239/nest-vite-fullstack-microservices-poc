@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
-import { appConfig, AppConfigType } from 'backend-shared'
+import { appConfig, AppConfigType } from 'nest-helpers'
 import { eventsConfig, EventsConfigType } from 'src/config/events.config'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
 import { ConfigModule } from 'src/modules/config/config.module'

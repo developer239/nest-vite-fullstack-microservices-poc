@@ -6,7 +6,7 @@ import {
   randText,
   randUuid,
 } from '@ngneat/falso'
-import { TestingEntityService } from 'backend-shared'
+import { TestingEntityService } from 'nest-helpers'
 import { EventEntity } from 'src/modules/events/entities/event.entity'
 
 @Injectable()

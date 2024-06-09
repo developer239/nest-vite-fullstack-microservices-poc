@@ -8,7 +8,7 @@ import {
   MockFirebaseStrategy,
   TestingDatabaseService,
   UserRole,
-} from 'backend-shared'
+} from 'nest-helpers'
 import request from 'supertest'
 import { beforeEach, describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { ConfigModule } from 'src/modules/config/config.module'

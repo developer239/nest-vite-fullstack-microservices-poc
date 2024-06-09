@@ -1,4 +1,4 @@
-import { UserRole } from 'backend-shared'
+import { UserRole } from 'nest-helpers'
 
 export const CHECK_USER_EXISTS_CMD = 'check_user_exists'
 

@@ -12,10 +12,10 @@ This repository is structured as a monorepo containing multiple NestJS microserv
 
 ## Packages
 
-| Name                                              | Description                                                                          |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| [Backend Contracts](./packages/backend-contracts) | TypeScript interfaces and constants used across different backend services.          |
-| [Backend Shared](./packages/backend-shared)       | Shared configurations, utilities, and modules used across multiple backend services. |
+| Name                                           | Description                                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [Backend Contracts](./packages/amqp-contracts) | TypeScript interfaces and constants used across different backend services.          |
+| [Backend Shared](./packages/nest-helpers)      | Shared configurations, utilities, and modules used across multiple backend services. |
 
 ## Infrastructure
 

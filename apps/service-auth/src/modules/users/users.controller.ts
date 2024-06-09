@@ -7,7 +7,7 @@ import {
   ISyncUserResult,
   ICheckUserExistsInput,
   ICheckUserExistsResult,
-} from 'backend-contracts'
+} from 'amqp-contracts'
 import { UserService } from 'src/modules/users/services/user.service'
 
 @Controller()

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { IUserVerificationService, UserRole } from 'backend-shared'
+import { IUserVerificationService, UserRole } from 'nest-helpers'
 import { UserService } from 'src/modules/users/services/user.service'
 
 @Injectable()

@@ -15,7 +15,7 @@ import {
   Roles,
   RolesGuard,
   UserRole,
-} from 'backend-shared'
+} from 'nest-helpers'
 import { CreateEventInput } from 'src/modules/events/inputs/create-event.input'
 import { UpdateEventInput } from 'src/modules/events/inputs/update-event.input'
 import { Event } from 'src/modules/events/models/event.model'

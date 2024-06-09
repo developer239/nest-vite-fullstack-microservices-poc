@@ -1,4 +1,4 @@
-import { runSeed, SeedModule } from 'backend-shared'
+import { runSeed, SeedModule } from 'nest-helpers'
 import { UserSeedModule } from 'src/modules/database/seeds/user/user-seed.module'
 import { UserSeedService } from 'src/modules/database/seeds/user/user-seed.service'
 

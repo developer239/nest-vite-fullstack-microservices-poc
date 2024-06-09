@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import {
   createDataSource,
   SeedModule as ModuleWithDataSource,
-} from 'backend-shared'
+} from 'nest-helpers'
 import { DataSource } from 'typeorm'
 import { EventSeedModule } from 'src/modules/database/seeds/event/event-seed.module'
 

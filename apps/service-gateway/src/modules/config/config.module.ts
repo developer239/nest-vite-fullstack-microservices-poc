@@ -3,7 +3,7 @@ import {
   appConfig,
   appConfigSchema,
   WrappedConfigModule as BaseConfigModule,
-} from 'backend-shared'
+} from 'nest-helpers'
 import { gatewayConfig, gatewayConfigSchema } from 'src/config/gateway.config'
 
 @Module({

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ISeedService } from 'backend-shared'
+import { ISeedService } from 'nest-helpers'
 import { Repository } from 'typeorm'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
 

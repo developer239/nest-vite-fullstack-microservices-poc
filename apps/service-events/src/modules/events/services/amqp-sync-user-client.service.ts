@@ -9,8 +9,8 @@ import {
   CHECK_USER_EXISTS_CMD,
   ISyncUserAuthorizedInput,
   ISyncUserResult,
-} from 'backend-contracts'
-import { IUserVerificationService, UserRole } from 'backend-shared'
+} from 'amqp-contracts'
+import { IUserVerificationService, UserRole } from 'nest-helpers'
 import { firstValueFrom } from 'rxjs'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
 

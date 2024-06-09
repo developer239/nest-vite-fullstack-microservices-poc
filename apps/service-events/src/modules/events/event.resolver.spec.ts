@@ -10,7 +10,7 @@ import {
   MockFirebaseStrategy,
   TestingDatabaseService,
   UserRole,
-} from 'backend-shared'
+} from 'nest-helpers'
 import request from 'supertest'
 import {
   beforeEach,

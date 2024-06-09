@@ -1,4 +1,4 @@
-import { EntityHelper } from 'backend-shared'
+import { EntityHelper } from 'nest-helpers'
 import {
   Column,
   Entity,

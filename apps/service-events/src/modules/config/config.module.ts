@@ -7,7 +7,7 @@ import {
   gpcConfig,
   gpcConfigSchema,
   WrappedConfigModule as BaseConfigModule,
-} from 'backend-shared'
+} from 'nest-helpers'
 import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
 
 @Module({

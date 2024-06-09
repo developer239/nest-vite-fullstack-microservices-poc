@@ -1,4 +1,4 @@
-import { EntityHelper, UserRole } from 'backend-shared'
+import { EntityHelper, UserRole } from 'nest-helpers'
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('user')

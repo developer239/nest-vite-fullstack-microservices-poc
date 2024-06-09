@@ -7,8 +7,8 @@ import {
   randLastName,
   randUuid,
 } from '@ngneat/falso'
-import { TestingEntityService, UserRole } from 'backend-shared'
 import { instanceToPlain, plainToInstance } from 'class-transformer'
+import { TestingEntityService, UserRole } from 'nest-helpers'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
 
 @Injectable()

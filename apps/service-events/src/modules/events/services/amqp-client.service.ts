@@ -9,7 +9,7 @@ import {
   CHECK_USER_EXISTS_CMD,
   ICheckUserExistsInput,
   ICheckUserExistsResult,
-} from 'backend-contracts'
+} from 'amqp-contracts'
 import { firstValueFrom } from 'rxjs'
 import { AMQP_SERVICE_AUTH } from 'src/constants'
 
