@@ -15,6 +15,7 @@ This service is responsible for handling authentication and user management with
 - `yarn build` - Compile the TypeScript files to JavaScript.
 - `yarn lint` - Lint the codebase using ESLint.
 - `yarn tsc` - Run type checking using the TypeScript compiler.
+- `yarn test` - Run tests
 
 ## Database Management
 
