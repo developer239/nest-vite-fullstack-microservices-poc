@@ -1,5 +1,5 @@
 import { NotFoundException, UseGuards } from '@nestjs/common'
-import { Args, Query, Resolver, ResolveReference } from '@nestjs/graphql'
+import { Args, ID, Query, Resolver, ResolveReference } from '@nestjs/graphql'
 import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'backend-shared'
 import { User } from 'src/modules/users/models/user.model'
 import { UserService } from 'src/modules/users/services/user.service'
@@ -13,7 +13,7 @@ export class UserResolver {
   @Roles(UserRole.ADMIN)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Query(() => User)
-  async user(@Args('id') id: string) {
+  async user(@Args('id', { type: () => ID }) id: string) {
     const user = await this.userService.findById(id)
 
     if (!user) {
