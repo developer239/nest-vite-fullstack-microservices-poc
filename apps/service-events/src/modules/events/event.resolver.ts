@@ -46,6 +46,12 @@ export class EventResolver {
     return attendees.map((id) => ({ __typename: 'User', id }))
   }
 
+  @ResolveField('owner', () => User)
+  getOwner(@Parent() event: Event) {
+    const { owner } = event
+    return { __typename: 'User', id: owner }
+  }
+
   @Roles(UserRole.ADMIN)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Event)

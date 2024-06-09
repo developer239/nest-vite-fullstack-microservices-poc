@@ -8,6 +8,7 @@
     "dev": "NODE_ENV=development nest start --watch",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext ts src",
     "tsc": "tsc --noEmit",
+    "test": "NODE_ENV=test npx vitest --poolOptions.threads.singleThread",
     "seed-database": "npx env-cmd ts-node -r tsconfig-paths/register ./src/modules/database/seeds/run-seed.ts",
     "migration-generate": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate",
     "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/initial",
@@ -43,11 +44,21 @@
   },
   "devDependencies": {
     "@nestjs/cli": "10.3.2",
+    "@nestjs/testing": "^10.3.9",
+    "@ngneat/falso": "^7.2.0",
+    "@swc/cli": "^0.3.12",
+    "@swc/core": "^1.5.25",
     "@types/express": "4.17.21",
     "@types/node": "20.14.1",
     "@types/pg-connection-string": "^2.0.0",
+    "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "^1.6.0",
     "source-map-support": "0.5.21",
+    "supertest": "^7.0.0",
     "ts-node": "10.9.2",
-    "tsconfig-paths": "4.2.0"
+    "tsconfig-paths": "4.2.0",
+    "unplugin-swc": "^1.4.5",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.0"
   }
 }
