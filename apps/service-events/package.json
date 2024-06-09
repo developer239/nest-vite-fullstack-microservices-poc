@@ -11,7 +11,7 @@
     "test": "NODE_ENV=test npx vitest --poolOptions.threads.singleThread",
     "seed-database": "npx env-cmd ts-node -r tsconfig-paths/register ./src/modules/database/seeds/run-seed.ts",
     "migration-generate": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate",
-    "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/initial",
+    "migration-generate:named": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:generate src/modules/database/migrations/cascade",
     "migration-create": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
     "migration-run": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:run",
     "migration-revert": "npx env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource=src/modules/database/data-source.ts migration:revert",

@@ -17,6 +17,8 @@ export class EventAttendeeEntity extends EntityHelper {
   userId: string
 
   @Index()
-  @ManyToOne(() => EventEntity, (event) => event.attendees)
+  @ManyToOne(() => EventEntity, (event) => event.attendees, {
+    onDelete: 'CASCADE',
+  })
   event: EventEntity
 }
