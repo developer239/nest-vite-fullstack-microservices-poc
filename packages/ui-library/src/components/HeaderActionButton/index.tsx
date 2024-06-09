@@ -1,3 +1,4 @@
+import { JSX } from 'react'
 import ArrowBackIcon from '../Icons/ArrowBackIcon'
 import CloseIcon from '../Icons/CloseIcon'
 import clsx from 'clsx'

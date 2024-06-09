@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+import { JSX } from 'react'
 import clsx from 'clsx'
 import { useState } from 'react'
 import ShowIcon from '../Icons/ShowIcon'

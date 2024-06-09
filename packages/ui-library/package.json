@@ -10,7 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",

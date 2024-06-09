@@ -1,3 +1,5 @@
+import { JSX } from 'react'
+
 export type IProps = JSX.IntrinsicElements['svg']
 
 export default (svgProps: IProps) => (

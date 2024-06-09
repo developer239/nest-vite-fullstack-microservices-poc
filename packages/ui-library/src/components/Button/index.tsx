@@ -1,3 +1,4 @@
+import { JSX } from 'react'
 import clsx from 'clsx'
 import { Spinner } from '../Spinner'
 
