@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 62.5%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Hindi */
+
+@font-face {
+  font-weight: 400;
+  font-family: 'Hind';
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Hind/Hind-Regular.min.woff') format('woff');
+}
+
+@font-face {
+  font-weight: 500;
+  font-family: 'Hind';
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Hind/Hind-Medium.min.woff') format('woff');
+}
+
+@font-face {
+  font-weight: 600;
+  font-family: 'Hind';
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Hind/Hind-SemiBold.min.woff') format('woff');
+}
+
+/* Playfair */
+
+@font-face {
+  font-weight: 400;
+  font-family: 'Playfair';
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Playfair_Display/PlayfairDisplay-Regular.min.woff')
+  format('woff');
+}
