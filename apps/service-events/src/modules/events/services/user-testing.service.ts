@@ -20,6 +20,7 @@ export class EventTestingService extends TestingEntityService {
     }
   }
 
+  // TODO: enable overrides (event information, owner information, attendees information)
   public async createTestEvent() {
     const event = await this.saveFixture(EventEntity, {
       ...this.createEventData(),

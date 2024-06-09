@@ -37,3 +37,5 @@ export { TestingDatabaseService } from './src/modules/testing/testing-database.s
 export { TestingEntityService } from './src/modules/testing/testing-entity.service'
 export { bootstrap as bootstrapTest } from './src/modules/testing/utilities'
 export { MockFirebaseStrategy } from './src/modules/firebase/strategies/firebase.strategy.mock'
+export { GetUser } from './src/modules/firebase/strategies/user.decorator'
+export { IUserPayload } from './src/modules/firebase/constants'

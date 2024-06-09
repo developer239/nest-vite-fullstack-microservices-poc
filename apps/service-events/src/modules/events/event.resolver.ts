@@ -3,13 +3,21 @@ import {
   Args,
   Context,
   GqlExecutionContext,
+  ID,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
-import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'backend-shared'
+import {
+  GetUser,
+  GqlAuthGuard,
+  IUserPayload,
+  Roles,
+  RolesGuard,
+  UserRole,
+} from 'backend-shared'
 import { CreateEventInput } from 'src/modules/events/inputs/create-event.input'
 import { UpdateEventInput } from 'src/modules/events/inputs/update-event.input'
 import { Event } from 'src/modules/events/models/event.model'
@@ -34,7 +42,7 @@ export class EventResolver {
   }
 
   @Query(() => Event)
-  async event(@Args('id') id: string) {
+  async event(@Args('id', { type: () => ID }) id: string) {
     const event = await this.eventService.findOne(id)
 
     return this.entityModelMapService.mapEventToModel(event)
@@ -65,7 +73,7 @@ export class EventResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Event)
   async updateEvent(
-    @Args('id') id: string,
+    @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateEventInput
   ) {
     const event = await this.eventService.update(id, input)
@@ -76,21 +84,17 @@ export class EventResolver {
   @Roles(UserRole.ADMIN)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Mutation(() => Boolean)
-  deleteEvent(@Args('id') id: string) {
+  deleteEvent(@Args('id', { type: () => ID }) id: string) {
     return this.eventService.delete(id)
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async attendEvent(
-    @Args('id') id: string,
-    @Context() context: ExecutionContext
+    @Args('id', { type: () => ID }) id: string,
+    @GetUser() user: IUserPayload
   ) {
-    const ctx = GqlExecutionContext.create(context)
-    const request = ctx.getContext().req
-    const { userId } = request.headers
-
-    await this.eventService.attendEvent(id, userId)
+    await this.eventService.attendEvent(id, user.id)
 
     const event = await this.eventService.findOne(id)
     return this.entityModelMapService.mapEventToModel(event)
@@ -99,7 +103,7 @@ export class EventResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async unattendEvent(
-    @Args('id') id: string,
+    @Args('id', { type: () => ID }) id: string,
     @Context() context: ExecutionContext
   ) {
     const ctx = GqlExecutionContext.create(context)

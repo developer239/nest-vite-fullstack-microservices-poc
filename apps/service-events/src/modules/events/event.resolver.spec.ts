@@ -1,4 +1,6 @@
+/* eslint-disable max-lines-per-function */
 import { INestApplication } from '@nestjs/common'
+import { randUuid } from '@ngneat/falso'
 import {
   bootstrapTest,
   DatabaseModule,
@@ -7,11 +9,21 @@ import {
   GraphQLModule,
   MockFirebaseStrategy,
   TestingDatabaseService,
+  UserRole,
 } from 'backend-shared'
 import request from 'supertest'
-import { beforeEach, describe, it, expect, beforeAll, afterAll } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  vitest,
+} from 'vitest'
 import { ConfigModule } from 'src/modules/config/config.module'
 import { EventModule } from 'src/modules/events/events.module'
+import { AMQPClientService } from 'src/modules/events/services/amqp-client.service'
 import { EventTestingService } from 'src/modules/events/services/user-testing.service'
 
 describe('[events] resolver', () => {
@@ -73,6 +85,66 @@ describe('[events] resolver', () => {
     })
   })
 
+  describe('[mutation] attendEvent', () => {
+    it('should allow a user to join an event', async () => {
+      // Arrange
+      const { event } = await eventTestingEntityService.createTestEvent()
+
+      const mockUserId = randUuid()
+
+      MockFirebaseStrategy.setMockUser({
+        id: mockUserId,
+        role: UserRole.USER,
+      })
+
+      // Act
+      const server = app.getHttpServer()
+      const response = await request(server)
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .send({
+          query: `
+            mutation AttendEvent($id: ID!) {
+              attendEvent(id: $id) {
+                id
+                title
+                attendees {
+                  id
+                }
+              }
+            }
+          `,
+          variables: {
+            id: event.id,
+          },
+        })
+
+      // Assert
+      const expectedShape = {
+        data: {
+          attendEvent: {
+            id: event.id,
+            title: event.title,
+            attendees: expect.arrayContaining([
+              expect.objectContaining({
+                id: mockUserId,
+              }),
+            ]),
+          },
+        },
+      }
+
+      // TODO: assert exact number of new attendees (1)
+      // Note: createTestEvent helper adds 2 attendees by default
+      const DEFAULT_NUMBER_OF_ATTENDEES = 2
+
+      expect(response.body.data.attendEvent.attendees).toHaveLength(
+        DEFAULT_NUMBER_OF_ATTENDEES + 1
+      )
+      expect(response.body).toStrictEqual(expectedShape)
+    })
+  })
+
   //
   // Setup
 
@@ -93,6 +165,12 @@ describe('[events] resolver', () => {
           .useClass(MockFirebaseStrategy)
           .overrideProvider(FirebaseService)
           .useClass(class {})
+          .overrideProvider(AMQPClientService)
+          .useClass(
+            class {
+              checkUserExists = vitest.fn().mockResolvedValue(true)
+            }
+          )
     )
 
     databaseService = app.get(TestingDatabaseService)

@@ -5,6 +5,7 @@ import { Strategy } from 'passport-strategy'
 import { UserRole } from '../roles/roles.types'
 
 export interface IUser {
+  id: string
   role: UserRole
 }
 

@@ -1,5 +1,11 @@
 import { UserRole } from './roles/roles.types'
 
+export interface IUserPayload {
+  id: string
+  email: string
+  role: UserRole
+}
+
 // TODO: rename
 export abstract class IUserVerificationService {
   abstract syncUser<
