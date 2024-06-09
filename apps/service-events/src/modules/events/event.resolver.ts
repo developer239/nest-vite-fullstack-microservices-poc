@@ -1,8 +1,6 @@
 import { UseGuards } from '@nestjs/common'
 import {
   Args,
-  Context,
-  GqlExecutionContext,
   ID,
   Mutation,
   Parent,
@@ -24,8 +22,6 @@ import { Event } from 'src/modules/events/models/event.model'
 import { User } from 'src/modules/events/models/user.model'
 import { EntityModelMapService } from 'src/modules/events/services/entity-model-map.service'
 import { EventService } from 'src/modules/events/services/event.service'
-
-type ExecutionContext = any
 
 @Resolver(() => Event)
 export class EventResolver {
@@ -104,13 +100,9 @@ export class EventResolver {
   @Mutation(() => Event)
   async unattendEvent(
     @Args('id', { type: () => ID }) id: string,
-    @Context() context: ExecutionContext
+    @GetUser() user: IUserPayload
   ) {
-    const ctx = GqlExecutionContext.create(context)
-    const request = ctx.getContext().req
-    const { userId } = request.headers
-
-    await this.eventService.unattendEvent(id, userId)
+    await this.eventService.unattendEvent(id, user.id)
 
     const event = await this.eventService.findOne(id)
     return this.entityModelMapService.mapEventToModel(event)
