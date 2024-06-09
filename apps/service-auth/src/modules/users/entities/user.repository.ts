@@ -50,14 +50,4 @@ export class UserRepository {
       })
     )
   }
-
-  createUser(uid: string, data: RegisterInput) {
-    return this.usersRepository.save(
-      this.usersRepository.create({
-        uid,
-        ...data,
-        role: UserRole.USER,
-      })
-    )
-  }
 }

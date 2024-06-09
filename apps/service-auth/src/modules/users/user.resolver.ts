@@ -1,15 +1,7 @@
 import { NotFoundException, UseGuards } from '@nestjs/common'
-import {
-  Args,
-  Mutation,
-  Query,
-  Resolver,
-  ResolveReference,
-} from '@nestjs/graphql'
+import { Args, Query, Resolver, ResolveReference } from '@nestjs/graphql'
 import { GqlAuthGuard, Roles, RolesGuard, UserRole } from 'backend-shared'
-import { RegisterInput } from 'src/modules/users/inputs/register.input'
 import { User } from 'src/modules/users/models/user.model'
-import { RegisterOutput } from 'src/modules/users/outputs/register.output'
 import { UserService } from 'src/modules/users/services/user.service'
 
 @Resolver(() => User)
@@ -17,12 +9,6 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   // TODO: only show email for admin
-
-  @Mutation(() => RegisterOutput)
-  async register(@Args('input') input: RegisterInput): Promise<User> {
-    const user = await this.userService.register(input)
-    return user
-  }
 
   @Roles(UserRole.ADMIN)
   @UseGuards(GqlAuthGuard, RolesGuard)

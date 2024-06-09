@@ -1,5 +1,6 @@
 import { DynamicModule, Module, Type } from '@nestjs/common'
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface'
+import { PassportModule } from '@nestjs/passport'
 import { IUserVerificationService } from './constants'
 import { FirebaseService } from './services/firebase.service'
 import { FirebaseStrategy } from './strategies/firebase.strategy'
@@ -19,7 +20,7 @@ export class FirebaseModule {
   }: IAsyncModuleOptions): DynamicModule {
     return {
       module: FirebaseModule,
-      imports: [...(imports ? imports : [])],
+      imports: [PassportModule, ...(imports ? imports : [])],
       providers: [
         FirebaseService,
         FirebaseStrategy,
