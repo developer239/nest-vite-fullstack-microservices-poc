@@ -27,3 +27,5 @@ yarn-error.log*
 
 # prevent accidental commit
 **/*service-account-key.json
+
+*storybook.log

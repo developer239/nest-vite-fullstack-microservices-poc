@@ -1,0 +1,25 @@
+{
+  "name": "storybook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "storybook": "^8.1.6"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.5.0",
+    "@storybook/addon-essentials": "^8.1.6",
+    "@storybook/addon-interactions": "^8.1.6",
+    "@storybook/addon-links": "^8.1.6",
+    "@storybook/addon-onboarding": "^8.1.6",
+    "@storybook/blocks": "^8.1.6",
+    "@storybook/react": "^8.1.6",
+    "@storybook/react-vite": "^8.1.6",
+    "@storybook/test": "^8.1.6",
+    "prop-types": "^15.8.1"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  }
+}
