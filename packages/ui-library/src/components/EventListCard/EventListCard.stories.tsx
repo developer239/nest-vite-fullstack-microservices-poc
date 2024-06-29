@@ -5,7 +5,7 @@ const meta: Meta<EventListCardProps> = {
   title: 'Components/EventListCard',
   component: EventListCard,
   args: {
-    authenticatedUserId: 99,
+    authenticatedUserId: '99',
     event: {
       id: '1',
       title: 'Open Source Summit',

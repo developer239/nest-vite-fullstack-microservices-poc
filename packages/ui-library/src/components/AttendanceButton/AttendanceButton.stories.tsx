@@ -13,18 +13,21 @@ const meta: Meta<IProps> = {
 
 export default meta
 
-const OWNER_USER_ID = 1
-const ATTENDEE_USER_ID = 2
-const OTHER_USER_ID = 3
+const OWNER_USER_ID = '1'
+const ATTENDEE_USER_ID = '2'
+const OTHER_USER_ID = '3'
 
 export const Default: StoryObj<IProps> = {
   args: {
     authenticatedUserId: OTHER_USER_ID,
     event: {
-      id: 1,
-      owner: { id: OWNER_USER_ID },
-      attendees: [{ id: ATTENDEE_USER_ID }],
+      id: '1',
+      owner: { id: OWNER_USER_ID, firstName: 'John', lastName: 'Doe' },
+      attendees: [{ id: ATTENDEE_USER_ID, firstName: 'Jane', lastName: 'Doe' }],
       capacity: 10,
+      title: 'Event Title',
+      description: 'Event Description',
+      startsAt: '2021-01-01T00:00:00Z',
     },
     isAttending: false,
     isLeaving: false,
@@ -35,10 +38,13 @@ export const AttendeeView: StoryObj<IProps> = {
   args: {
     authenticatedUserId: ATTENDEE_USER_ID,
     event: {
-      id: 1,
-      owner: { id: OWNER_USER_ID },
-      attendees: [{ id: ATTENDEE_USER_ID }],
+      id: '1',
+      owner: { id: OWNER_USER_ID, firstName: 'John', lastName: 'Doe' },
+      attendees: [{ id: ATTENDEE_USER_ID, firstName: 'Jane', lastName: 'Doe' }],
       capacity: 10,
+      title: 'Event Title',
+      description: 'Event Description',
+      startsAt: '2021-01-01T00:00:00Z',
     },
     isAttending: false,
     isLeaving: false,
@@ -49,10 +55,13 @@ export const OwnerView: StoryObj<IProps> = {
   args: {
     authenticatedUserId: OWNER_USER_ID,
     event: {
-      id: 1,
-      owner: { id: OWNER_USER_ID },
-      attendees: [{ id: ATTENDEE_USER_ID }],
+      id: '1',
+      owner: { id: OWNER_USER_ID, firstName: 'John', lastName: 'Doe' },
+      attendees: [{ id: ATTENDEE_USER_ID, firstName: 'Jane', lastName: 'Doe' }],
       capacity: 10,
+      title: 'Event Title',
+      description: 'Event Description',
+      startsAt: '2021-01-01T00:00:00Z',
     },
     isAttending: false,
     isLeaving: false,
@@ -63,10 +72,13 @@ export const FullEvent: StoryObj<IProps> = {
   args: {
     authenticatedUserId: OTHER_USER_ID,
     event: {
-      id: 1,
-      owner: { id: OWNER_USER_ID },
-      attendees: [{ id: ATTENDEE_USER_ID }],
+      id: '1',
+      owner: { id: OWNER_USER_ID, firstName: 'John', lastName: 'Doe' },
+      attendees: [{ id: ATTENDEE_USER_ID, firstName: 'Jane', lastName: 'Doe' }],
       capacity: 1,
+      title: 'Event Title',
+      description: 'Event Description',
+      startsAt: '2021-01-01T00:00:00Z',
     },
     isAttending: false,
     isLeaving: false,

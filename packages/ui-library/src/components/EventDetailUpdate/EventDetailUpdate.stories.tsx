@@ -15,9 +15,9 @@ const meta: Meta<EventDetailUpdateProps> = {
         { id: '4', firstName: 'Jane', lastName: 'Smith' },
       ],
       owner: { id: '2', firstName: 'Alice', lastName: 'Smith' },
-      currentUser: '3',
       capacity: 100,
       description: 'This is a sample event',
+      startsAt: '2021-01-01T00:00:00Z',
     },
   },
 }

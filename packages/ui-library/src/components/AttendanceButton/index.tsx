@@ -1,7 +1,5 @@
 import { Button } from '../Button'
-
-// TODO: Add types
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export enum AttendanceState {
   default = 'default',
@@ -18,10 +16,10 @@ export type IProps = {
   onJoin: () => void
   onLeave: () => void
   onUpdate?: (event: EventDTO) => void
-  authenticatedUserId?: number
+  authenticatedUserId?: string
 }
 
-// TODO: should disable when event is in the past
+// TODO: should be disabled when event is in the past
 export const AttendanceButton = ({
   event,
   isAttending,
@@ -41,12 +39,7 @@ export const AttendanceButton = ({
 
   const getState = () => {
     if (event.owner.id === authenticatedUserId) return AttendanceState.mine
-    if (
-      event.attendees.some(
-        // TODO: remove any when typed properly
-        (attendee: any) => attendee.id === authenticatedUserId
-      )
-    )
+    if (event.attendees.some((attendee) => attendee.id === authenticatedUserId))
       return AttendanceState.joined
     if (event.attendees.length >= event.capacity) return AttendanceState.full
     return AttendanceState.default

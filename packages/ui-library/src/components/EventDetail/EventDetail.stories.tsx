@@ -15,30 +15,18 @@ const meta: Meta<EventDetailProps> = {
         { id: '4', firstName: 'Jane', lastName: 'Smith' },
       ],
       owner: { id: '2', firstName: 'Alice', lastName: 'Smith' },
-      currentUser: '3',
       capacity: 100,
       description: 'This is a sample event',
+      startsAt: '2021-01-01T00:00:00Z',
     },
     isLoading: false,
   },
   argTypes: {
     onUpdate: {
       action: 'updatedEvent',
-      table: {
-        type: {
-          summary: 'function',
-          detail: 'function(event: EventDTO): void',
-        },
-      },
     },
     onDelete: {
       action: 'deletedEvent',
-      table: {
-        type: {
-          summary: 'function',
-          detail: 'function(event: EventDTO): void',
-        },
-      },
     },
   },
 }

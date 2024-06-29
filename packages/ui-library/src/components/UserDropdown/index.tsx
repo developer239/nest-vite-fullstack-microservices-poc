@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import DropdownIcon from '../Icons/DropdownIcon.tsx'
-
-export type UserDTO = {
-  firstName: string
-  lastName: string
-}
+import { UserDTO } from '../../types.ts'
 
 export type UserDropdownProps = {
   user: UserDTO

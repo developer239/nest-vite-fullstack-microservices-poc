@@ -1,9 +1,7 @@
 import { EventGridCard } from '../EventGridCard'
 import { EventAttendeesCard } from '../EventAttendeesCard'
 import { EventDetailControls } from '../EventDetailControls'
-
-// TODO: add types
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export type EventDetailProps = {
   data: EventDTO

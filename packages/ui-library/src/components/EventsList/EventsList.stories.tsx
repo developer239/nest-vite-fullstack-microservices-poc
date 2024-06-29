@@ -5,14 +5,14 @@ const meta: Meta<EventsListProps> = {
   title: 'Components/EventsList',
   component: EventsList,
   args: {
-    authenticatedUserId: 2,
+    authenticatedUserId: '2',
     data: [
       {
         id: '1',
         title: 'Mine Event',
         description: 'This event is mine',
         owner: {
-          id: 2,
+          id: '2',
           firstName: 'John',
           lastName: 'Doe',
         },
@@ -25,7 +25,7 @@ const meta: Meta<EventsListProps> = {
         title: 'Others Event',
         description: 'This event was created by someone else',
         owner: {
-          id: 99,
+          id: '99',
           firstName: 'Jane',
           lastName: 'Doe',
         },
@@ -38,7 +38,7 @@ const meta: Meta<EventsListProps> = {
         title: 'Joined Event',
         description: 'I joined this event and should see a leave button',
         owner: {
-          id: 99,
+          id: '99',
           firstName: 'Jonny',
           lastName: 'Doe',
         },
@@ -46,7 +46,7 @@ const meta: Meta<EventsListProps> = {
         capacity: 100,
         attendees: [
           {
-            id: 2,
+            id: '2',
             firstName: 'John',
             lastName: 'Doe',
           },
@@ -57,7 +57,7 @@ const meta: Meta<EventsListProps> = {
         title: 'Full Event',
         description: 'This event is full and I am unable to join',
         owner: {
-          id: 99,
+          id: '99',
           firstName: 'Jonny',
           lastName: 'Doe',
         },
@@ -65,7 +65,7 @@ const meta: Meta<EventsListProps> = {
         capacity: 1,
         attendees: [
           {
-            id: 3,
+            id: '3',
             firstName: 'John',
             lastName: 'Doe',
           },
@@ -77,7 +77,7 @@ const meta: Meta<EventsListProps> = {
         description:
           'This event is in the future and will be visible when filtering future events',
         owner: {
-          id: 99,
+          id: '99',
           firstName: 'Jonny',
           lastName: 'Doe',
         },

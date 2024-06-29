@@ -5,7 +5,7 @@ const meta: Meta<EventGridCardProps> = {
   title: 'Components/EventGridCard',
   component: EventGridCard,
   args: {
-    authenticatedUserId: 99,
+    authenticatedUserId: '99',
     event: {
       id: '1',
       title: 'Annual Tech Conference',

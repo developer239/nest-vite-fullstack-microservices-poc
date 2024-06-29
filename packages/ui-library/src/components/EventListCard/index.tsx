@@ -1,16 +1,14 @@
 import { Card } from '../Card'
 import { ISOStringToReadable } from '../../utils/date.ts'
 import { AttendanceButton } from '../AttendanceButton'
-
-// TODO: add types
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export type EventListCardProps = {
   onUpdate?: (event: EventDTO) => void
   event: EventDTO
-  authenticatedUserId?: number
-  onJoin?: (event: EventDTO, authenticatedUserId: number) => void
-  onLeave?: (event: EventDTO, authenticatedUserId: number) => void
+  authenticatedUserId?: string
+  onJoin?: (event: EventDTO, authenticatedUserId: string) => void
+  onLeave?: (event: EventDTO, authenticatedUserId: string) => void
 }
 
 export const EventListCard = ({

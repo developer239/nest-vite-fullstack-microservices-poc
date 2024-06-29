@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import DeleteIcon from '../Icons/DeleteIcon.tsx'
-
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export type EventDetailControlsProps = {
   className?: string
@@ -24,7 +23,11 @@ export const EventDetailControls = ({
     </span>
     {isDeletable && (
       <button
-        onClick={onDelete}
+        onClick={() => {
+          if (onDelete) {
+            onDelete(event)
+          }
+        }}
         className={clsx('flex bg-transparent items-center', {
           'cursor-not-allowed': isLoading,
           'cursor-pointer': !isLoading,

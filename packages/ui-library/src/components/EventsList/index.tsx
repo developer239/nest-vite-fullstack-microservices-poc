@@ -2,16 +2,14 @@ import { EventsFilter } from '../EventsFilter'
 import { EventGridCard } from '../EventGridCard'
 import { EventListCard } from '../EventListCard'
 import { useStateWithLocalStorage } from '../../utils/useLocalStorageState.ts'
-
-// TODO: any
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export type EventsListProps = {
   data: EventDTO[]
   isLoading: boolean
   isProfile?: boolean
   onUpdate: (event: EventDTO) => void
-  authenticatedUserId?: number
+  authenticatedUserId?: string
 }
 
 export const EventsList = ({

@@ -1,35 +1,28 @@
 import clsx from 'clsx'
 import { Card } from '../Card'
 import { EventsList } from '../EventsList'
-
-// TODO: add types
-export type EventDTO = any
-
-export type MeDTO = {
-  firstName: string
-  lastName: string
-  email: string
-  events?: EventDTO[]
-}
+import { EventDTO, UserDTO } from '../../types.ts'
 
 export type UserProfileProps = {
-  data: MeDTO
+  user: UserDTO
+  events: EventDTO[]
   isLoading: boolean
   className?: string
   onUpdate: (event: EventDTO) => void
   error?: any
-  authenticatedUserId?: number
+  authenticatedUserId?: string
 }
 
 export const UserProfile = ({
-  data,
+  user,
+  events,
   isLoading,
   className,
   error,
   onUpdate,
   authenticatedUserId,
 }: UserProfileProps) => {
-  if (isLoading || !data || error) {
+  if (isLoading || !user || error) {
     return null
   }
 
@@ -37,23 +30,23 @@ export const UserProfile = ({
     <>
       <Card className={clsx('relative mt-[6rem]', className)}>
         <div className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center w-[12rem] h-[12rem] text-regent-gray font-medium text-4xl leading-4xl text-center bg-mischka rounded-full uppercase">
-          {data.firstName[0]}
-          {data.lastName[0]}
+          {user.firstName[0]}
+          {user.lastName[0]}
         </div>
         <div className="flex flex-col justify-center items-center pt-[8.3rem] pb-[4.4rem]">
           <span className="block text-limed-spruce text-lg font-primary leading-lg">
-            {data.firstName} {data.lastName}
+            {user.firstName} {user.lastName}
           </span>
           <span className="block mt-[0.8rem] text-regent-gray text-sm font-primary leading-sm">
-            {data.email}
+            {user.email}
           </span>
         </div>
       </Card>
-      {data.events && (
+      {events && (
         <EventsList
           isProfile={true}
           isLoading={isLoading}
-          data={data.events}
+          data={events}
           onUpdate={onUpdate}
           authenticatedUserId={authenticatedUserId}
         />

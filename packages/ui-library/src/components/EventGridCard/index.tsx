@@ -3,17 +3,16 @@ import { Card } from '../Card'
 import { ISOStringToReadable } from '../../utils/date.ts'
 import UserIcon from '../Icons/UserIcon.tsx'
 import { AttendanceButton } from '../AttendanceButton'
-
-export type EventDTO = any
+import { EventDTO } from '../../types.ts'
 
 export type EventGridCardProps = {
   onUpdate?: (event: EventDTO) => void
   isDetail?: boolean
   event: EventDTO
   className?: string
-  authenticatedUserId?: number
-  onJoin?: (event: EventDTO, authenticatedUserId: number) => void
-  onLeave?: (event: EventDTO, authenticatedUserId: number) => void
+  authenticatedUserId?: string
+  onJoin?: (event: EventDTO, authenticatedUserId: string) => void
+  onLeave?: (event: EventDTO, authenticatedUserId: string) => void
 }
 
 export const EventGridCard = ({
