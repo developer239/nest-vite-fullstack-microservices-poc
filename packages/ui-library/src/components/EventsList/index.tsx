@@ -5,15 +5,15 @@ import { useStateWithLocalStorage } from '../../utils/useLocalStorageState.ts'
 import { IEventUI } from '../../types.ts'
 
 export type EventsListProps = {
-  data: IEventUI[]
+  data?: IEventUI[]
   isLoading: boolean
   isProfile?: boolean
-  onUpdate: (event: IEventUI) => void
+  onUpdate?: (event: IEventUI) => void
   authenticatedUserId?: string
 }
 
 export const EventsList = ({
-  data,
+  data = [],
   isLoading,
   isProfile,
   onUpdate,

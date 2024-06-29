@@ -5,6 +5,9 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: Number(process.env.VITE_PORT) || 3000,
+  },
   plugins: [
     react(),
     // https://github.com/sapphi-red/vite-plugin-static-copy
