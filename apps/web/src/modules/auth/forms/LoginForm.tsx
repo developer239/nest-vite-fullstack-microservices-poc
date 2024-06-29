@@ -9,16 +9,15 @@ export const LoginForm = () => {
   const handleLogin = async () => {
     try {
       const result = await loginUser({ variables: { email, password } })
-      // eslint-disable-next-line
       console.log(result.data?.loginUser.message)
-    } catch (loginError) {
-      // eslint-disable-next-line
-      console.log('loginError', loginError)
+    } catch (err) {
+      console.log('Login failed:', err)
     }
   }
 
   return (
     <div>
+      {error && <p>Error: {error.message}</p>}
       <input
         type="email"
         value={email}
@@ -32,7 +31,6 @@ export const LoginForm = () => {
       <button type="button" onClick={handleLogin} disabled={isLoading}>
         Login
       </button>
-      {error && <p>Error: {error.message}</p>}
     </div>
   )
 }

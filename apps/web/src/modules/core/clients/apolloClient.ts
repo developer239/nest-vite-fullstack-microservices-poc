@@ -1,35 +1,34 @@
 /* eslint-disable no-console */
-import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from './firebaseConfig'
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
+import { getAccessToken } from '../../auth/localStorage'
+import { loginUser } from '../../auth/resolvers/loginUser'
 
-export const isLoggedInVar = makeVar(false)
+// TODO: implement refresh token
+
+const httpLink = new HttpLink({
+  uri: import.meta.env.VITE_GRAPHQL_URI,
+  headers: {
+    authorization: getAccessToken() ? `Bearer ${getAccessToken()}` : '',
+  },
+})
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    )
+  if (networkError) console.log(`[Network error]: ${networkError}`)
+})
 
 export const client = new ApolloClient({
-  uri: import.meta.env.VITE_GRAPHQL_URI,
+  link: from([errorLink, httpLink]),
   cache: new InMemoryCache(),
-  // TODO: extract resolver and move to auth module
   resolvers: {
     Mutation: {
-      loginUser: async (_, { email, password }) => {
-        try {
-          await signInWithEmailAndPassword(auth, email, password)
-          isLoggedInVar(true)
-
-          return {
-            code: 'success',
-            message: 'Login successful',
-            __typename: 'AuthResponse',
-          }
-        } catch (error) {
-          console.error(error)
-          return {
-            code: 'error',
-            message: error.message,
-            __typename: 'AuthResponse',
-          }
-        }
-      },
+      loginUser: (_, { email, password }) => loginUser(email, password),
     },
   },
 })
