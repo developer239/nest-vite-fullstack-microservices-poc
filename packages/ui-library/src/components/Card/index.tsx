@@ -1,9 +1,10 @@
-import { JSX } from 'react'
 import clsx from 'clsx'
 
 export type IProps = {
   uri?: string
-} & JSX.IntrinsicElements['div']
+  className?: string
+  children: React.ReactNode
+}
 
 export const Card = ({ children, className, uri, ...divProps }: IProps) => (
   <div

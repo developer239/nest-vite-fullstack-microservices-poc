@@ -12,8 +12,8 @@ import ShowIcon from './ShowIcon'
 import UserIcon from './UserIcon'
 
 const meta: Meta = {
-  title: 'Components/Icons',
-  component: ArrowBackIcon, // This can be any, doesn't impact the story in this case
+  title: 'Icons/Overview',
+  component: ArrowBackIcon,
 }
 
 export default meta
