@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/ui-library.umd.js",
+  "module": "dist/ui-library.es.js",
+  "types": "dist/main.d.ts",
   "files": [
     "dist"
   ],

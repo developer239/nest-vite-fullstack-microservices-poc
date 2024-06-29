@@ -7,9 +7,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/main.tsx',
-      name: 'MyUiLibrary',
+      name: 'UILibrary',
       formats: ['es', 'umd'],
-      fileName: (format) => `my-ui-library.${format}.js`,
+      fileName: (format) => `ui-library.${format}.js`,
     },
     rollupOptions: {
       // Externalize deps that shouldn't be bundled into your library

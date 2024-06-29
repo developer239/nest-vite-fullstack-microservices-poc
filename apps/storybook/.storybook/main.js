@@ -10,8 +10,10 @@ function getAbsolutePath(value) {
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
+  // Note: we want to reference the UI library's folder like this because stories are not transpiled and part of the bundle
   stories: ['../../../packages/ui-library/src/**/*.stories.tsx'],
   staticDirs: [
+    // Note: we can't reference node_modules because Turbo optimizes node_modules - and packages work the same way
     { from: '../../../packages/ui-library/dist/images', to: '/images' },
     { from: '../../../packages/ui-library/dist/fonts', to: '/fonts' },
   ],
