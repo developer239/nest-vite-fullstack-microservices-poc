@@ -1,5 +1,5 @@
 import { Button } from '../Button'
-import { EventDTO } from '../../types.ts'
+import { IEventUI } from '../../types.ts'
 
 export enum AttendanceState {
   default = 'default',
@@ -10,12 +10,12 @@ export enum AttendanceState {
 }
 
 export type IProps = {
-  event: EventDTO
+  event: IEventUI
   isAttending: boolean
   isLeaving: boolean
   onJoin: () => void
   onLeave: () => void
-  onUpdate?: (event: EventDTO) => void
+  onUpdate?: (event: IEventUI) => void
   authenticatedUserId?: string
 }
 

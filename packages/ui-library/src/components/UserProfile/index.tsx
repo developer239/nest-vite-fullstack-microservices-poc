@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import { Card } from '../Card'
 import { EventsList } from '../EventsList'
-import { EventDTO, UserDTO } from '../../types.ts'
+import { IEventUI, IUserIU } from '../../types.ts'
 
 export type UserProfileProps = {
-  user: UserDTO
-  events: EventDTO[]
+  user: IUserIU
+  events: IEventUI[]
   isLoading: boolean
   className?: string
-  onUpdate: (event: EventDTO) => void
+  onUpdate: (event: IEventUI) => void
   error?: any
   authenticatedUserId?: string
 }

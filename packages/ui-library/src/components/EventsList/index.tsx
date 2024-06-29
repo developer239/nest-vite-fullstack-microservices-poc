@@ -2,13 +2,13 @@ import { EventsFilter } from '../EventsFilter'
 import { EventGridCard } from '../EventGridCard'
 import { EventListCard } from '../EventListCard'
 import { useStateWithLocalStorage } from '../../utils/useLocalStorageState.ts'
-import { EventDTO } from '../../types.ts'
+import { IEventUI } from '../../types.ts'
 
 export type EventsListProps = {
-  data: EventDTO[]
+  data: IEventUI[]
   isLoading: boolean
   isProfile?: boolean
-  onUpdate: (event: EventDTO) => void
+  onUpdate: (event: IEventUI) => void
   authenticatedUserId?: string
 }
 
@@ -27,7 +27,7 @@ export const EventsList = ({
     'grid'
   )
 
-  const filter = (events: EventDTO[]) => {
+  const filter = (events: IEventUI[]) => {
     if (isProfile) {
       return events
     }

@@ -1,5 +1,15 @@
 import './index.css'
 
+// Types
+export type { IUserIU, IEventUI } from './types'
+
+// Utils
+export {
+  ISOStringToDate,
+  ISOStringToReadable,
+  ISOStringToTime,
+} from './utils/date'
+
 // Components
 export { AddEventButton } from './components/AddEventButton'
 export { AttendanceButton } from './components/AttendanceButton'

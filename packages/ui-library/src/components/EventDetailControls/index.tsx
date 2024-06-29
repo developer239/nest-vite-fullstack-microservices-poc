@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import DeleteIcon from '../Icons/DeleteIcon.tsx'
-import { EventDTO } from '../../types.ts'
+import { IEventUI } from '../../types.ts'
 
 export type EventDetailControlsProps = {
   className?: string
   isDeletable: boolean
-  event: EventDTO
-  onDelete?: (event: EventDTO) => void
+  event: IEventUI
+  onDelete?: (event: IEventUI) => void
   isLoading: boolean
 }
 

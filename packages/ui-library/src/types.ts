@@ -1,16 +1,16 @@
-export type UserDTO = {
+export interface IUserIU {
   id: string
   email?: string
   firstName: string
   lastName: string
 }
 
-export type EventDTO = {
+export interface IEventUI {
   id: string
   title: string
   description: string
   capacity: number
   startsAt: string
-  owner: UserDTO
-  attendees: UserDTO[]
+  owner: IUserIU
+  attendees: IUserIU[]
 }

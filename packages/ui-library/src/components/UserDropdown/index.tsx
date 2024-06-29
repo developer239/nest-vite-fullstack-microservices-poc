@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import DropdownIcon from '../Icons/DropdownIcon.tsx'
-import { UserDTO } from '../../types.ts'
+import { IUserIU } from '../../types.ts'
 
 export type UserDropdownProps = {
-  user: UserDTO
+  user: IUserIU
   onLogout: () => void
 }
 

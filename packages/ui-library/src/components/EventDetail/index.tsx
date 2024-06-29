@@ -1,12 +1,12 @@
 import { EventGridCard } from '../EventGridCard'
 import { EventAttendeesCard } from '../EventAttendeesCard'
 import { EventDetailControls } from '../EventDetailControls'
-import { EventDTO } from '../../types.ts'
+import { IEventUI } from '../../types.ts'
 
 export type EventDetailProps = {
-  data: EventDTO
-  onUpdate: (event: EventDTO) => void
-  onDelete: (event: EventDTO) => void
+  data: IEventUI
+  onUpdate: (event: IEventUI) => void
+  onDelete: (event: IEventUI) => void
   isLoading: boolean
 }
 

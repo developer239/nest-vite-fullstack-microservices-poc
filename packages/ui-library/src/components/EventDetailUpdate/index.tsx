@@ -1,12 +1,12 @@
 import { EventDetailControls } from '../EventDetailControls'
 import { EventAttendeesCard } from '../EventAttendeesCard'
-import { EventDTO } from '../../types.ts'
+import { IEventUI } from '../../types.ts'
 
 export type EventDetailUpdateProps = {
-  data: EventDTO
+  data: IEventUI
   isUpdating: boolean
   isDeleting: boolean
-  onUpdate: (event: EventDTO) => void
+  onUpdate: (event: IEventUI) => void
 }
 
 export const EventDetailUpdate = ({

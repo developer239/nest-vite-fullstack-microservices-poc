@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { Card } from '../Card'
-import { UserDTO } from '../../types.ts'
+import { IUserIU } from '../../types.ts'
 
 export type EventAttendeesProps = {
-  attendees: UserDTO[]
+  attendees: IUserIU[]
   className?: string
 }
 
