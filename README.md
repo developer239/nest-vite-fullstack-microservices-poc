@@ -9,6 +9,7 @@ This repository is structured as a monorepo containing multiple NestJS microserv
 | [Service Gateway](./apps/service-gateway) | Backend  | The GraphQL gateway for routing queries and mutations between different services. |
 | [Service Events](./apps/service-events)   | Backend  | Manages event-related data and interactions.                                      |
 | [Service Auth](./apps/service-auth)       | Backend  | Handles authentication and user management.                                       |
+| [Storybook](./apps/storybook)             | Frontend | Storybook for UI components.                                                      |
 
 ## Packages
 
@@ -16,6 +17,7 @@ This repository is structured as a monorepo containing multiple NestJS microserv
 | ---------------------------------------------- | ------------------------------------------------------------------------------------ |
 | [Backend Contracts](./packages/amqp-contracts) | TypeScript interfaces and constants used across different backend services.          |
 | [Backend Shared](./packages/nest-helpers)      | Shared configurations, utilities, and modules used across multiple backend services. |
+| [UI Library](./packages/ui-library)            | A collection of reusable React components and utilities for frontend applications.   |
 
 ## Infrastructure
 
