@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { ApolloClient, gql, InMemoryCache, makeVar } from '@apollo/client'
+import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from './firebaseConfig'
 
@@ -8,6 +8,7 @@ export const isLoggedInVar = makeVar(false)
 export const client = new ApolloClient({
   uri: import.meta.env.VITE_GRAPHQL_URI,
   cache: new InMemoryCache(),
+  // TODO: extract resolver and move to auth module
   resolvers: {
     Mutation: {
       loginUser: async (_, { email, password }) => {
@@ -31,14 +32,4 @@ export const client = new ApolloClient({
       },
     },
   },
-  typeDefs: gql`
-    extend type Mutation {
-      loginUser(email: String!, password: String!): AuthResponse!
-    }
-
-    type AuthResponse {
-      code: String!
-      message: String!
-    }
-  `,
 })
