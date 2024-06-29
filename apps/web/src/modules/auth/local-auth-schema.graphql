@@ -1,0 +1,8 @@
+extend type Mutation {
+    loginUser(email: String!, password: String!): AuthResponse!
+}
+
+type AuthResponse {
+    code: String!
+    message: String!
+}

@@ -7,5 +7,7 @@ module.exports = {
   rules: {
     'import/no-extraneous-dependencies': 0,
     'node/no-extraneous-import': 0,
+    '@typescript-eslint/no-misused-promises': 0
   },
+  ignorePatterns: ['src/graphql-generated.ts'],
 }
