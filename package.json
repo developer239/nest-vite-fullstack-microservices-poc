@@ -1,5 +1,5 @@
 {
-  "name": "nest-vite-fullstack-microservices",
+  "name": "nest-vite-fullstack-microservices-poc",
   "private": true,
   "workspaces": [
     "apps/*",
