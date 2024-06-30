@@ -16,6 +16,7 @@ This repository is structured as a monorepo containing multiple NestJS microserv
 | [Service Gateway](./apps/service-gateway) | Backend  | The GraphQL gateway for routing queries and mutations between different services. |
 | [Service Events](./apps/service-events)   | Backend  | Manages event-related data and interactions.                                      |
 | [Service Auth](./apps/service-auth)       | Backend  | Handles authentication and user management.                                       |
+| [Web](./apps/web)                         | Frontend | The main web application.                                                         |
 | [Storybook](./apps/storybook)             | Frontend | Storybook for UI components.                                                      |
 
 ## Packages
