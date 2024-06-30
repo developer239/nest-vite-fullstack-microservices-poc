@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom'
-import { ProfilePage } from './modules/auth/pages/ProfilePage'
-import { SignInPage } from './modules/auth/pages/SignInPage'
-import { SignUpPage } from './modules/auth/pages/SignUpPage'
-import { CreateEventPage } from './modules/events/pages/CreateEventPage'
-import { DashboardPage } from './modules/events/pages/DashboardPage'
-import { EventDetailPage } from './modules/events/pages/EventDetailPage'
-import { EventEditPage } from './modules/events/pages/EventEditPage'
+import { ProfilePage } from 'src/modules/auth/pages/ProfilePage'
+import { SignInPage } from 'src/modules/auth/pages/SignInPage'
+import { SignUpPage } from 'src/modules/auth/pages/SignUpPage'
+import { CreateEventPage } from 'src/modules/events/pages/CreateEventPage'
+import { DashboardPage } from 'src/modules/events/pages/DashboardPage'
+import { EventDetailPage } from 'src/modules/events/pages/EventDetailPage'
+import { EventEditPage } from 'src/modules/events/pages/EventEditPage'
 
 export const App = () => (
   <Routes>

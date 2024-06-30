@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../core/clients/firebaseClient.ts'
-import { storeAccessToken } from '../services/localStorage'
+import { storeAccessToken } from 'src/modules/auth/services/localStorage'
+import { auth } from 'src/modules/core/clients/firebaseClient'
 
 export const loginUser = async (email: string, password: string) => {
   try {

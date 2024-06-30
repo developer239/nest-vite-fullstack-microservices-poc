@@ -1,5 +1,5 @@
 import { UserDropdown, UserProfile } from 'ui-library'
-import { PrivateLayout } from '../../core/components/PrivateLayout'
+import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
 
 export const ProfilePage = () => (
   // TODO: load data

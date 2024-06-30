@@ -1,5 +1,5 @@
 import { NavLink } from 'ui-library'
-import { PublicLayout } from '../../core/components/PublicLayout'
+import { PublicLayout } from 'src/modules/core/components/PublicLayout'
 
 export const SignInPage = () => (
   <PublicLayout

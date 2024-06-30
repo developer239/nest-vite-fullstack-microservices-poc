@@ -1,5 +1,5 @@
 import { EventDetail, HeaderActionButton, UserDropdown } from 'ui-library'
-import { PrivateLayout } from '../../core/components/PrivateLayout'
+import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
 
 export const EventDetailPage = () => (
   // TODO: load data
