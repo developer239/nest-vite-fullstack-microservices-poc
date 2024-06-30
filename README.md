@@ -1,12 +1,13 @@
 # Nest Vite Fullstack Microservices PoC
 
-This repository is structured as a monorepo containing multiple NestJS microservices and will include frontend applications in the future. It utilizes Turborepo for managing builds and TypeORM for database interactions.
+This repository is structured as a monorepo containing multiple NestJS microservices and Vite web application. It utilizes Turborepo for managing builds and TypeORM for database interactions and bunch of other cool stuff.
 
 ## TODO
 
-- [ ] CI
-- [ ] CD
-- [ ] TODOs in code and infinite number of small issues that I did not have time to fix
+- [ ] GitHub Actions
+- [ ] CD (GCP + Terraform)
+- [ ] Create docker-compose for local development (currently only databases and message broker are included)
+- [ ] TODOs in code (and infinite number of small issues that I did not have time to fix)
 
 ## Apps
 
