@@ -12,9 +12,17 @@ export const DashboardPage = () => {
     navigate('/event/create')
   }
 
+  const handleOnUpdate = () => {
+    // TODO: implement
+  }
+
   return (
     <PrivateLayout headerRight={<UserDropdownContainer />}>
-      <EventsList isLoading={isLoading} data={data?.events} />
+      <EventsList
+        isLoading={isLoading}
+        data={data?.events}
+        onUpdate={handleOnUpdate}
+      />
       <AddEventButton onAddEvent={handleOnAddEvent} />
     </PrivateLayout>
   )
