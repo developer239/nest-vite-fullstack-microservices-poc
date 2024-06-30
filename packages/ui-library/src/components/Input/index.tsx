@@ -16,8 +16,6 @@ export const Input = forwardRef<HTMLInputElement, IProps>(
     const [isSecured, setIsSecured] = useState(true)
     const [hasValue, setHasValue] = useState(false)
 
-    console.log('errorMessage', errorMessage)
-
     return (
       <div className={className}>
         <div className="relative">

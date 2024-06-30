@@ -9,7 +9,7 @@ const schema = z.object({
   description: z.string().min(1, 'Description is required'),
   startsAtDay: z.string().min(1, 'Date is required'),
   startsAtTime: z.string().min(1, 'Time is required'),
-  capacity: z.number().min(1, 'Capacity must be at least 1'),
+  capacity: z.coerce.number().int().min(1, 'Capacity must be at least 1'),
 })
 
 export type CreateEventFormData = z.infer<typeof schema>

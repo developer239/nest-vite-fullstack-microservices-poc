@@ -25,7 +25,7 @@ const schema = z.object({
   description: z.string().min(1, 'Description is required'),
   startsAtDay: z.string(),
   startsAtTime: z.string(),
-  capacity: z.number().min(1, 'Capacity must be at least 1'),
+  capacity: z.coerce.number().min(1, 'Capacity must be at least 1'),
 })
 
 export type UpsertEventDto = z.infer<typeof schema>
