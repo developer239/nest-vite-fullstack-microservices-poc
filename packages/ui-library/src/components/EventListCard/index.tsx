@@ -11,6 +11,8 @@ export type EventListCardProps = {
   onLeave?: (event: IEventUI, authenticatedUserId: string) => void
 }
 
+// TODO: replace "a" with "Link" from "react-router-dom"
+
 export const EventListCard = ({
   event,
   onUpdate,

@@ -7,6 +7,8 @@ export type IProps = {
   right: string
 } & JSX.IntrinsicElements['a']
 
+// TODO: replace "a" with "Link" from "react-router-dom"
+
 export const NavLink = ({ left, right, slot, href, className }: IProps) => (
   <a
     href={href}

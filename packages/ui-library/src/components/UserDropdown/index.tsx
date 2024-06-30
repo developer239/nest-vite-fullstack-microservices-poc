@@ -7,6 +7,8 @@ export type UserDropdownProps = {
   onLogout: () => void
 }
 
+// TODO: replace "a" with "Link" from "react-router-dom"
+
 export const UserDropdown = ({
   user,
   onLogout: handleLogout,

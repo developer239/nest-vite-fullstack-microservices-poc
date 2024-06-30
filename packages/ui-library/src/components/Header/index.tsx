@@ -8,6 +8,8 @@ export type Props = {
   center?: ReactNode
 }
 
+// TODO: replace "a" with "Link" from "react-router-dom"
+
 export const Header = ({ logoFill, center, right }: Props) => (
   <header className="absolute top-0 left-0 w-full z-10">
     <nav className="p-[4rem] flex justify-between">

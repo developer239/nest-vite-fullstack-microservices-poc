@@ -7,6 +7,8 @@ export type IProps = {
   actionType: 'close' | 'back'
 } & JSX.IntrinsicElements['a']
 
+// TODO: replace "a" with "Link" from "react-router-dom"
+
 export const HeaderActionButton = ({
   actionType,
   children,
