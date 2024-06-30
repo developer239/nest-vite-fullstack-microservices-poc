@@ -1,5 +1,5 @@
-query ListEvents {
-    events {
+query EventDetail($id: ID!) {
+    event(id: $id) {
         id
         title
         description

@@ -61,10 +61,11 @@ export type Mutation = {
   attendEvent: Event
   createEvent: Event
   deleteEvent: Scalars['Boolean']['output']
-  loginUser: AuthResponse
-  signUpUser: AuthResponse
+  signIn: AuthResponse
+  signUp: AuthResponse
   unattendEvent: Event
   updateEvent: Event
+  updateProfile: User
 }
 
 export type MutationAttendEventArgs = {
@@ -79,13 +80,15 @@ export type MutationDeleteEventArgs = {
   id: Scalars['ID']['input']
 }
 
-export type MutationLoginUserArgs = {
+export type MutationSignInArgs = {
   email: Scalars['String']['input']
   password: Scalars['String']['input']
 }
 
-export type MutationSignUpUserArgs = {
+export type MutationSignUpArgs = {
   email: Scalars['String']['input']
+  firstName: Scalars['String']['input']
+  lastName: Scalars['String']['input']
   password: Scalars['String']['input']
 }
 
@@ -98,18 +101,18 @@ export type MutationUpdateEventArgs = {
   input: UpdateEventInput
 }
 
+export type MutationUpdateProfileArgs = {
+  input: UpdateProfileInput
+}
+
 export type Query = {
   __typename?: 'Query'
   event: Event
   events: Array<Event>
-  user: User
+  me: User
 }
 
 export type QueryEventArgs = {
-  id: Scalars['ID']['input']
-}
-
-export type QueryUserArgs = {
   id: Scalars['ID']['input']
 }
 
@@ -120,6 +123,11 @@ export type UpdateEventInput = {
   title?: InputMaybe<Scalars['String']['input']>
 }
 
+export type UpdateProfileInput = {
+  firstName?: InputMaybe<Scalars['String']['input']>
+  lastName?: InputMaybe<Scalars['String']['input']>
+}
+
 export type User = {
   __typename?: 'User'
   email: Scalars['String']['output']
@@ -128,14 +136,91 @@ export type User = {
   lastName: Scalars['String']['output']
 }
 
-export type LoginUserMutationVariables = Exact<{
+export type SignInMutationVariables = Exact<{
   email: Scalars['String']['input']
   password: Scalars['String']['input']
 }>
 
-export type LoginUserMutation = {
+export type SignInMutation = {
   __typename?: 'Mutation'
-  loginUser: { __typename?: 'AuthResponse'; code: string; message: string }
+  signIn: { __typename?: 'AuthResponse'; code: string; message: string }
+}
+
+export type SignUpMutationVariables = Exact<{
+  email: Scalars['String']['input']
+  password: Scalars['String']['input']
+  firstName: Scalars['String']['input']
+  lastName: Scalars['String']['input']
+}>
+
+export type SignUpMutation = {
+  __typename?: 'Mutation'
+  signUp: { __typename?: 'AuthResponse'; code: string; message: string }
+}
+
+export type UpdateProfileMutationVariables = Exact<{
+  input: UpdateProfileInput
+}>
+
+export type UpdateProfileMutation = {
+  __typename?: 'Mutation'
+  updateProfile: { __typename?: 'User'; firstName: string; lastName: string }
+}
+
+export type CreateEventMutationVariables = Exact<{
+  input: CreateEventInput
+}>
+
+export type CreateEventMutation = {
+  __typename?: 'Mutation'
+  createEvent: {
+    __typename?: 'Event'
+    id: string
+    title: string
+    description: string
+    startsAt: any
+    capacity: number
+    owner: {
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }
+    attendees: Array<{
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }>
+  }
+}
+
+export type EventDetailQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type EventDetailQuery = {
+  __typename?: 'Query'
+  event: {
+    __typename?: 'Event'
+    id: string
+    title: string
+    description: string
+    startsAt: any
+    capacity: number
+    owner: {
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }
+    attendees: Array<{
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }>
+  }
 }
 
 export type ListEventsQueryVariables = Exact<{ [key: string]: never }>
@@ -154,68 +239,358 @@ export type ListEventsQuery = {
       id: string
       firstName: string
       lastName: string
-      email: string
     }
     attendees: Array<{
       __typename?: 'User'
       id: string
       firstName: string
       lastName: string
-      email: string
     }>
   }>
 }
 
-export const LoginUserDocument = gql`
-  mutation LoginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) @client {
+export type UpdateEventMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+  input: UpdateEventInput
+}>
+
+export type UpdateEventMutation = {
+  __typename?: 'Mutation'
+  updateEvent: {
+    __typename?: 'Event'
+    id: string
+    title: string
+    description: string
+    startsAt: any
+    capacity: number
+    owner: {
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }
+    attendees: Array<{
+      __typename?: 'User'
+      id: string
+      firstName: string
+      lastName: string
+    }>
+  }
+}
+
+export const SignInDocument = gql`
+  mutation SignIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) @client {
       code
       message
     }
   }
 `
-export type LoginUserMutationFn = Apollo.MutationFunction<
-  LoginUserMutation,
-  LoginUserMutationVariables
+export type SignInMutationFn = Apollo.MutationFunction<
+  SignInMutation,
+  SignInMutationVariables
 >
 
 /**
- * __useLoginUserMutation__
+ * __useSignInMutation__
  *
- * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSignInMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignInMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ * const [signInMutation, { data, loading, error }] = useSignInMutation({
  *   variables: {
  *      email: // value for 'email'
  *      password: // value for 'password'
  *   },
  * });
  */
-export function useLoginUserMutation(
+export function useSignInMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    LoginUserMutation,
-    LoginUserMutationVariables
+    SignInMutation,
+    SignInMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(
-    LoginUserDocument,
+  return Apollo.useMutation<SignInMutation, SignInMutationVariables>(
+    SignInDocument,
     options
   )
 }
-export type LoginUserMutationHookResult = ReturnType<
-  typeof useLoginUserMutation
+export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>
+export type SignInMutationResult = Apollo.MutationResult<SignInMutation>
+export type SignInMutationOptions = Apollo.BaseMutationOptions<
+  SignInMutation,
+  SignInMutationVariables
 >
-export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>
-export type LoginUserMutationOptions = Apollo.BaseMutationOptions<
-  LoginUserMutation,
-  LoginUserMutationVariables
+export const SignUpDocument = gql`
+  mutation SignUp(
+    $email: String!
+    $password: String!
+    $firstName: String!
+    $lastName: String!
+  ) {
+    signUp(
+      email: $email
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+    ) @client {
+      code
+      message
+    }
+  }
+`
+export type SignUpMutationFn = Apollo.MutationFunction<
+  SignUpMutation,
+  SignUpMutationVariables
+>
+
+/**
+ * __useSignUpMutation__
+ *
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *   },
+ * });
+ */
+export function useSignUpMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignUpMutation,
+    SignUpMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<SignUpMutation, SignUpMutationVariables>(
+    SignUpDocument,
+    options
+  )
+}
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>
+export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>
+export type SignUpMutationOptions = Apollo.BaseMutationOptions<
+  SignUpMutation,
+  SignUpMutationVariables
+>
+export const UpdateProfileDocument = gql`
+  mutation updateProfile($input: UpdateProfileInput!) {
+    updateProfile(input: $input) {
+      firstName
+      lastName
+    }
+  }
+`
+export type UpdateProfileMutationFn = Apollo.MutationFunction<
+  UpdateProfileMutation,
+  UpdateProfileMutationVariables
+>
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables
+  >(UpdateProfileDocument, options)
+}
+export type UpdateProfileMutationHookResult = ReturnType<
+  typeof useUpdateProfileMutation
+>
+export type UpdateProfileMutationResult =
+  Apollo.MutationResult<UpdateProfileMutation>
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProfileMutation,
+  UpdateProfileMutationVariables
+>
+export const CreateEventDocument = gql`
+  mutation CreateEvent($input: CreateEventInput!) {
+    createEvent(input: $input) {
+      id
+      title
+      description
+      startsAt
+      capacity
+      owner {
+        id
+        firstName
+        lastName
+      }
+      attendees {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+`
+export type CreateEventMutationFn = Apollo.MutationFunction<
+  CreateEventMutation,
+  CreateEventMutationVariables
+>
+
+/**
+ * __useCreateEventMutation__
+ *
+ * To run a mutation, you first call `useCreateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateEventMutation,
+    CreateEventMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(
+    CreateEventDocument,
+    options
+  )
+}
+export type CreateEventMutationHookResult = ReturnType<
+  typeof useCreateEventMutation
+>
+export type CreateEventMutationResult =
+  Apollo.MutationResult<CreateEventMutation>
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<
+  CreateEventMutation,
+  CreateEventMutationVariables
+>
+export const EventDetailDocument = gql`
+  query EventDetail($id: ID!) {
+    event(id: $id) {
+      id
+      title
+      description
+      startsAt
+      capacity
+      owner {
+        id
+        firstName
+        lastName
+      }
+      attendees {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+`
+
+/**
+ * __useEventDetailQuery__
+ *
+ * To run a query within a React component, call `useEventDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEventDetailQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    EventDetailQuery,
+    EventDetailQueryVariables
+  > &
+    (
+      | { variables: EventDetailQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<EventDetailQuery, EventDetailQueryVariables>(
+    EventDetailDocument,
+    options
+  )
+}
+export function useEventDetailLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    EventDetailQuery,
+    EventDetailQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<EventDetailQuery, EventDetailQueryVariables>(
+    EventDetailDocument,
+    options
+  )
+}
+export function useEventDetailSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    EventDetailQuery,
+    EventDetailQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<EventDetailQuery, EventDetailQueryVariables>(
+    EventDetailDocument,
+    options
+  )
+}
+export type EventDetailQueryHookResult = ReturnType<typeof useEventDetailQuery>
+export type EventDetailLazyQueryHookResult = ReturnType<
+  typeof useEventDetailLazyQuery
+>
+export type EventDetailSuspenseQueryHookResult = ReturnType<
+  typeof useEventDetailSuspenseQuery
+>
+export type EventDetailQueryResult = Apollo.QueryResult<
+  EventDetailQuery,
+  EventDetailQueryVariables
 >
 export const ListEventsDocument = gql`
   query ListEvents {
@@ -229,13 +604,11 @@ export const ListEventsDocument = gql`
         id
         firstName
         lastName
-        email
       }
       attendees {
         id
         firstName
         lastName
-        email
       }
     }
   }
@@ -302,4 +675,69 @@ export type ListEventsSuspenseQueryHookResult = ReturnType<
 export type ListEventsQueryResult = Apollo.QueryResult<
   ListEventsQuery,
   ListEventsQueryVariables
+>
+export const UpdateEventDocument = gql`
+  mutation UpdateEvent($id: ID!, $input: UpdateEventInput!) {
+    updateEvent(id: $id, input: $input) {
+      id
+      title
+      description
+      startsAt
+      capacity
+      owner {
+        id
+        firstName
+        lastName
+      }
+      attendees {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+`
+export type UpdateEventMutationFn = Apollo.MutationFunction<
+  UpdateEventMutation,
+  UpdateEventMutationVariables
+>
+
+/**
+ * __useUpdateEventMutation__
+ *
+ * To run a mutation, you first call `useUpdateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEventMutation, { data, loading, error }] = useUpdateEventMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateEventMutation,
+    UpdateEventMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateEventMutation, UpdateEventMutationVariables>(
+    UpdateEventDocument,
+    options
+  )
+}
+export type UpdateEventMutationHookResult = ReturnType<
+  typeof useUpdateEventMutation
+>
+export type UpdateEventMutationResult =
+  Apollo.MutationResult<UpdateEventMutation>
+export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<
+  UpdateEventMutation,
+  UpdateEventMutationVariables
 >

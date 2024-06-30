@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { loginUser } from 'src/modules/auth/resolvers/loginUser'
-import { signUpUser } from 'src/modules/auth/resolvers/signUpUser'
+import { signIn } from 'src/modules/auth/resolvers/signIn'
+import { signUp } from 'src/modules/auth/resolvers/signUp'
 import { getAccessToken } from 'src/modules/auth/services/localStorage'
 
 // TODO: implement refresh token
@@ -29,8 +29,8 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
   resolvers: {
     Mutation: {
-      loginUser: (_, { email, password }) => loginUser(email, password),
-      signUpUser: (_, { email, password }) => signUpUser(email, password),
+      signIn: (_, { email, password }) => signIn(email, password),
+      signUp: (_, { email, password }) => signUp(email, password),
     },
   },
 })
