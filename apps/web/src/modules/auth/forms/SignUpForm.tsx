@@ -18,7 +18,6 @@ const schema = z
 
 type SignUpFormValues = z.infer<typeof schema>
 
-// Component props type
 export interface ISignUpFormProps {
   readonly onSubmit: (data: SignUpFormValues) => void
   readonly isLoading: boolean

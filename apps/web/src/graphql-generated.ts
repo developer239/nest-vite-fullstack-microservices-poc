@@ -62,6 +62,7 @@ export type Mutation = {
   createEvent: Event
   deleteEvent: Scalars['Boolean']['output']
   loginUser: AuthResponse
+  signUpUser: AuthResponse
   unattendEvent: Event
   updateEvent: Event
 }
@@ -79,6 +80,11 @@ export type MutationDeleteEventArgs = {
 }
 
 export type MutationLoginUserArgs = {
+  email: Scalars['String']['input']
+  password: Scalars['String']['input']
+}
+
+export type MutationSignUpUserArgs = {
   email: Scalars['String']['input']
   password: Scalars['String']['input']
 }

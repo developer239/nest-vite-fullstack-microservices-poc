@@ -2,6 +2,7 @@
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { loginUser } from 'src/modules/auth/resolvers/loginUser'
+import { signUpUser } from 'src/modules/auth/resolvers/signUpUser'
 import { getAccessToken } from 'src/modules/auth/services/localStorage'
 
 // TODO: implement refresh token
@@ -29,6 +30,7 @@ export const client = new ApolloClient({
   resolvers: {
     Mutation: {
       loginUser: (_, { email, password }) => loginUser(email, password),
+      signUpUser: (_, { email, password }) => signUpUser(email, password),
     },
   },
 })

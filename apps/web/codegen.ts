@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: [
     'http://localhost:8080/graphql',
-    'src/modules/auth/local-auth-schema.graphql',
+    './src/modules/auth/local-auth-schema.graphql',
   ],
   documents: 'src/modules/**/*.graphql',
   generates: {
