@@ -28,8 +28,6 @@ export class FirebaseStrategy extends PassportStrategy(
         .auth()
         .verifyIdToken(token)
 
-      console.log('firebaseUser', firebaseUser)
-
       const user = await this.userVerificationService.syncUser({
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
@@ -41,7 +39,6 @@ export class FirebaseStrategy extends PassportStrategy(
 
       return this.success(user)
     } catch (error) {
-      console.log('firebaseUser failed', error)
       return this.fail(new UnauthorizedException(error.message), 401)
     }
   }
