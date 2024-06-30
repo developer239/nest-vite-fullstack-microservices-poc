@@ -4,14 +4,6 @@ import { LoginForm, ILoginFormProps } from './LoginForm'
 const meta: Meta<ILoginFormProps> = {
   title: 'Forms/LoginForm',
   component: LoginForm,
-  parameters: {
-    controls: {
-      include: ['onSubmit', 'isLoading'],
-    },
-    actions: {
-      handles: ['onSubmit'],
-    },
-  },
   argTypes: {
     onSubmit: { action: 'submitted' },
   },
