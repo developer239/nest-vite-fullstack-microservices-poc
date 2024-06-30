@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { AttendanceButton, IEventUI } from 'ui-library'
 import {
+  EventDetailDocument,
+  ListEventsDocument,
   useAttendEventMutation,
   useMeQuery,
   useUnattendEventMutation,
@@ -14,8 +16,28 @@ export const ContainerAttendanceButton = ({
   event,
 }: IAttendanceButtonProps) => {
   const navigate = useNavigate()
-  const [attendEvent, { loading: isAttending }] = useAttendEventMutation()
-  const [unattendEvent, { loading: isLeaving }] = useUnattendEventMutation()
+  const [attendEvent, { loading: isAttending }] = useAttendEventMutation({
+    refetchQueries: [
+      {
+        query: EventDetailDocument,
+        variables: { eventId: event.id },
+      },
+      {
+        query: ListEventsDocument,
+      },
+    ],
+  })
+  const [unattendEvent, { loading: isLeaving }] = useUnattendEventMutation({
+    refetchQueries: [
+      {
+        query: EventDetailDocument,
+        variables: { eventId: event.id },
+      },
+      {
+        query: ListEventsDocument,
+      },
+    ],
+  })
   const { data: dataMe } = useMeQuery()
 
   const handleJoin = async () => {
