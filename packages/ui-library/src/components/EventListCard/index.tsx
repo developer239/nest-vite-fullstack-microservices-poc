@@ -1,24 +1,18 @@
+import { ReactNode } from 'react'
 import { Card } from '../Card'
 import { ISOStringToReadable } from '../../utils/date.ts'
-import { AttendanceButton } from '../AttendanceButton'
 import { IEventUI } from '../../types.ts'
 
 export type EventListCardProps = {
-  onUpdate?: (event: IEventUI) => void
   event: IEventUI
-  authenticatedUserId?: string
-  onJoin?: (event: IEventUI, authenticatedUserId: string) => void
-  onLeave?: (event: IEventUI, authenticatedUserId: string) => void
+  renderAttendanceButton?: (event: IEventUI) => ReactNode
 }
 
 // TODO: replace "a" with "Link" from "react-router-dom"
 
 export const EventListCard = ({
   event,
-  onUpdate,
-  authenticatedUserId,
-  onJoin,
-  onLeave,
+  renderAttendanceButton,
 }: EventListCardProps) => (
   <Card
     uri={`/event/${event.id}`}
@@ -56,25 +50,7 @@ export const EventListCard = ({
       <span className="flex items-center justify-center text-sm text-regent-gray font-primary">
         {event.attendees.length} of {event.capacity}
       </span>
-      {authenticatedUserId && (
-        <AttendanceButton
-          onUpdate={onUpdate}
-          event={event}
-          isAttending={false}
-          isLeaving={false}
-          onJoin={() => {
-            if (onJoin) {
-              onJoin(event, authenticatedUserId)
-            }
-          }}
-          onLeave={() => {
-            if (onLeave) {
-              onLeave(event, authenticatedUserId)
-            }
-          }}
-          authenticatedUserId={authenticatedUserId}
-        />
-      )}
+      {renderAttendanceButton && renderAttendanceButton(event)}
     </div>
   </Card>
 )

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { EventsFilter } from '../EventsFilter'
 import { EventGridCard } from '../EventGridCard'
 import { EventListCard } from '../EventListCard'
@@ -8,16 +9,14 @@ export type EventsListProps = {
   data?: IEventUI[]
   isLoading: boolean
   isProfile?: boolean
-  onUpdate?: (event: IEventUI) => void
-  authenticatedUserId?: string
+  renderAttendanceButton?: (event: IEventUI) => ReactNode
 }
 
 export const EventsList = ({
   data = [],
   isLoading,
   isProfile,
-  onUpdate,
-  authenticatedUserId,
+  renderAttendanceButton,
 }: EventsListProps) => {
   const [filterType, setFilterType] = useStateWithLocalStorage<
     'all' | 'future' | 'past'
@@ -71,9 +70,8 @@ export const EventsList = ({
           {filter(data).map((event) => (
             <EventGridCard
               key={event.id}
-              onUpdate={onUpdate}
               event={event}
-              authenticatedUserId={authenticatedUserId}
+              renderAttendanceButton={renderAttendanceButton}
             />
           ))}
         </div>
@@ -96,9 +94,8 @@ export const EventsList = ({
           {filter(data).map((event) => (
             <EventListCard
               key={event.id}
-              onUpdate={onUpdate}
               event={event}
-              authenticatedUserId={authenticatedUserId}
+              renderAttendanceButton={renderAttendanceButton}
             />
           ))}
         </div>

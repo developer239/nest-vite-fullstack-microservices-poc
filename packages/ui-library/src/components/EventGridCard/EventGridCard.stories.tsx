@@ -5,7 +5,6 @@ const meta: Meta<EventGridCardProps> = {
   title: 'Components/EventGridCard',
   component: EventGridCard,
   args: {
-    authenticatedUserId: '99',
     event: {
       id: '1',
       title: 'Annual Tech Conference',
@@ -15,11 +14,6 @@ const meta: Meta<EventGridCardProps> = {
       owner: { id: '2', firstName: 'Alice', lastName: 'Smith' },
       capacity: 300,
     },
-  },
-  argTypes: {
-    onJoin: { action: 'join' },
-    onLeave: { action: 'leave' },
-    onUpdate: { action: 'update' },
   },
 }
 

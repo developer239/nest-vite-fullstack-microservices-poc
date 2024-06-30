@@ -180,6 +180,15 @@ export type UpdateProfileMutation = {
   updateProfile: { __typename?: 'User'; firstName: string; lastName: string }
 }
 
+export type AttendEventMutationVariables = Exact<{
+  eventId: Scalars['ID']['input']
+}>
+
+export type AttendEventMutation = {
+  __typename?: 'Mutation'
+  attendEvent: { __typename?: 'Event'; id: string }
+}
+
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput
 }>
@@ -269,6 +278,15 @@ export type ListEventsQuery = {
       lastName: string
     }>
   }>
+}
+
+export type UnattendEventMutationVariables = Exact<{
+  eventId: Scalars['ID']['input']
+}>
+
+export type UnattendEventMutation = {
+  __typename?: 'Mutation'
+  unattendEvent: { __typename?: 'Event'; id: string }
 }
 
 export type UpdateEventMutationVariables = Exact<{
@@ -508,6 +526,56 @@ export type UpdateProfileMutationResult =
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<
   UpdateProfileMutation,
   UpdateProfileMutationVariables
+>
+export const AttendEventDocument = gql`
+  mutation AttendEvent($eventId: ID!) {
+    attendEvent(id: $eventId) {
+      id
+    }
+  }
+`
+export type AttendEventMutationFn = Apollo.MutationFunction<
+  AttendEventMutation,
+  AttendEventMutationVariables
+>
+
+/**
+ * __useAttendEventMutation__
+ *
+ * To run a mutation, you first call `useAttendEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAttendEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [attendEventMutation, { data, loading, error }] = useAttendEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useAttendEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AttendEventMutation,
+    AttendEventMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AttendEventMutation, AttendEventMutationVariables>(
+    AttendEventDocument,
+    options
+  )
+}
+export type AttendEventMutationHookResult = ReturnType<
+  typeof useAttendEventMutation
+>
+export type AttendEventMutationResult =
+  Apollo.MutationResult<AttendEventMutation>
+export type AttendEventMutationOptions = Apollo.BaseMutationOptions<
+  AttendEventMutation,
+  AttendEventMutationVariables
 >
 export const CreateEventDocument = gql`
   mutation CreateEvent($input: CreateEventInput!) {
@@ -793,6 +861,56 @@ export type ListEventsSuspenseQueryHookResult = ReturnType<
 export type ListEventsQueryResult = Apollo.QueryResult<
   ListEventsQuery,
   ListEventsQueryVariables
+>
+export const UnattendEventDocument = gql`
+  mutation UnattendEvent($eventId: ID!) {
+    unattendEvent(id: $eventId) {
+      id
+    }
+  }
+`
+export type UnattendEventMutationFn = Apollo.MutationFunction<
+  UnattendEventMutation,
+  UnattendEventMutationVariables
+>
+
+/**
+ * __useUnattendEventMutation__
+ *
+ * To run a mutation, you first call `useUnattendEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnattendEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unattendEventMutation, { data, loading, error }] = useUnattendEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useUnattendEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnattendEventMutation,
+    UnattendEventMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UnattendEventMutation,
+    UnattendEventMutationVariables
+  >(UnattendEventDocument, options)
+}
+export type UnattendEventMutationHookResult = ReturnType<
+  typeof useUnattendEventMutation
+>
+export type UnattendEventMutationResult =
+  Apollo.MutationResult<UnattendEventMutation>
+export type UnattendEventMutationOptions = Apollo.BaseMutationOptions<
+  UnattendEventMutation,
+  UnattendEventMutationVariables
 >
 export const UpdateEventDocument = gql`
   mutation UpdateEvent($id: ID!, $input: UpdateEventInput!) {

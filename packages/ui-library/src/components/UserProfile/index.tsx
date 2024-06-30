@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { ReactNode } from 'react'
 import { Card } from '../Card'
 import { EventsList } from '../EventsList'
 import { IEventUI, IUserIU } from '../../types.ts'
@@ -8,9 +9,8 @@ export type UserProfileProps = {
   events: IEventUI[]
   isLoading: boolean
   className?: string
-  onUpdate: (event: IEventUI) => void
   error?: any
-  authenticatedUserId?: string
+  renderAttendanceButton?: (event: IEventUI) => ReactNode
 }
 
 export const UserProfile = ({
@@ -19,8 +19,7 @@ export const UserProfile = ({
   isLoading,
   className,
   error,
-  onUpdate,
-  authenticatedUserId,
+  renderAttendanceButton,
 }: UserProfileProps) => {
   if (isLoading || !user || error) {
     return null
@@ -47,8 +46,7 @@ export const UserProfile = ({
           isProfile={true}
           isLoading={isLoading}
           data={events}
-          onUpdate={onUpdate}
-          authenticatedUserId={authenticatedUserId}
+          renderAttendanceButton={renderAttendanceButton}
         />
       )}
     </>

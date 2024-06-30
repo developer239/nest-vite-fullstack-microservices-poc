@@ -6,6 +6,7 @@ import {
 } from 'src/graphql-generated'
 import { UserDropdownContainer } from 'src/modules/auth/components/UserDropdownContainer'
 import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
+import { ContainerAttendanceButton } from 'src/modules/events/components/ContainerAttendanceButton'
 
 export const EventDetailPage = () => {
   const navigate = useNavigate()
@@ -14,10 +15,6 @@ export const EventDetailPage = () => {
     variables: { id: id! },
   })
   const [deleteEvent, { loading: isDeleting }] = useDeleteEventMutation()
-
-  const handleOnUpdate = () => {
-    // TODO: implement
-  }
 
   const handleDelete = async () => {
     await deleteEvent({
@@ -39,8 +36,10 @@ export const EventDetailPage = () => {
         <EventDetail
           data={data.event}
           isDeleting={isDeleting}
-          onUpdate={handleOnUpdate}
           onDelete={handleDelete}
+          renderAttendanceButton={(eventUI) => (
+            <ContainerAttendanceButton event={eventUI} />
+          )}
         />
       )}
     </PrivateLayout>

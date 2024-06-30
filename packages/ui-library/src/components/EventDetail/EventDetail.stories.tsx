@@ -21,9 +21,6 @@ const meta: Meta<EventDetailProps> = {
     },
   },
   argTypes: {
-    onUpdate: {
-      action: 'updatedEvent',
-    },
     onDelete: {
       action: 'deletedEvent',
     },

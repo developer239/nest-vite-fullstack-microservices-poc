@@ -19,7 +19,6 @@ export type IProps = {
   authenticatedUserId?: string
 }
 
-// TODO: should be disabled when event is in the past
 export const AttendanceButton = ({
   event,
   isAttending,

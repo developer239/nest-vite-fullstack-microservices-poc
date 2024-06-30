@@ -28,9 +28,6 @@ const meta: Meta<UserProfileProps> = {
       },
     ],
   },
-  argTypes: {
-    onUpdate: { action: 'onUpdate' },
-  },
 }
 
 export default meta

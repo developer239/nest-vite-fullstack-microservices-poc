@@ -1,18 +1,15 @@
+import { ReactNode } from 'react'
 import clsx from 'clsx'
 import { Card } from '../Card'
 import { ISOStringToReadable } from '../../utils/date.ts'
 import UserIcon from '../Icons/UserIcon.tsx'
-import { AttendanceButton } from '../AttendanceButton'
 import { IEventUI } from '../../types.ts'
 
 export type EventGridCardProps = {
-  onUpdate?: (event: IEventUI) => void
   isDetail?: boolean
   event: IEventUI
   className?: string
-  authenticatedUserId?: string
-  onJoin?: (event: IEventUI, authenticatedUserId: string) => void
-  onLeave?: (event: IEventUI, authenticatedUserId: string) => void
+  renderAttendanceButton?: (event: IEventUI) => ReactNode
 }
 
 // TODO: replace "a" with "Link" from "react-router-dom"
@@ -21,10 +18,7 @@ export const EventGridCard = ({
   isDetail,
   event,
   className,
-  onUpdate,
-  authenticatedUserId,
-  onJoin,
-  onLeave,
+  renderAttendanceButton,
 }: EventGridCardProps) => (
   <Card
     className={clsx('flex flex-col h-full p-[2.4rem] md:p-[3.2rem]', className)}
@@ -53,25 +47,7 @@ export const EventGridCard = ({
           {event.attendees.length} of {event.capacity}
         </span>
       </div>
-      {authenticatedUserId && (
-        <AttendanceButton
-          onUpdate={onUpdate}
-          event={event}
-          isAttending={false}
-          isLeaving={false}
-          onJoin={() => {
-            if (onJoin) {
-              onJoin(event, authenticatedUserId)
-            }
-          }}
-          onLeave={() => {
-            if (onLeave) {
-              onLeave(event, authenticatedUserId)
-            }
-          }}
-          authenticatedUserId={authenticatedUserId}
-        />
-      )}
+      {renderAttendanceButton && renderAttendanceButton(event)}
     </div>
   </Card>
 )

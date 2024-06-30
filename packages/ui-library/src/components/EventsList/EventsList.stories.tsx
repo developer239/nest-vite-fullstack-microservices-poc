@@ -5,7 +5,6 @@ const meta: Meta<EventsListProps> = {
   title: 'Components/EventsList',
   component: EventsList,
   args: {
-    authenticatedUserId: '2',
     data: [
       {
         id: '1',

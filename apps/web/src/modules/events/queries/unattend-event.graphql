@@ -1,0 +1,5 @@
+mutation UnattendEvent($eventId: ID!) {
+  unattendEvent(id: $eventId) {
+    id
+  }
+}
