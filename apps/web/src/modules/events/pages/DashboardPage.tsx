@@ -9,15 +9,12 @@ export const DashboardPage = () => {
   const navigate = useNavigate()
 
   const handleOnAddEvent = () => {
-    navigate('/events/create')
+    navigate('/event/create')
   }
-
-  console.log(isLoading)
-  console.log(data)
 
   return (
     <PrivateLayout headerRight={<UserDropdownContainer />}>
-      <EventsList isLoading={isLoading} data={data} />
+      <EventsList isLoading={isLoading} data={data?.events} />
       <AddEventButton onAddEvent={handleOnAddEvent} />
     </PrivateLayout>
   )

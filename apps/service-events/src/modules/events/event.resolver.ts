@@ -56,8 +56,7 @@ export class EventResolver {
     return { __typename: 'User', id: owner }
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(GqlAuthGuard, RolesGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async createEvent(
     @Args('input') input: CreateEventInput,

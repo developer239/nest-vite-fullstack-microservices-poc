@@ -19,7 +19,6 @@ const meta: Meta<EventDetailProps> = {
       description: 'This is a sample event',
       startsAt: '2021-01-01T00:00:00Z',
     },
-    isLoading: false,
   },
   argTypes: {
     onUpdate: {

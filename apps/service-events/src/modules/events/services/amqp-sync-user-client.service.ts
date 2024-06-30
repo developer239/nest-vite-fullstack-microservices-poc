@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import {
-  CHECK_USER_EXISTS_CMD,
+  AUTH_SYNC_USER_CMD,
   ISyncUserAuthorizedInput,
   ISyncUserResult,
 } from 'amqp-contracts'
@@ -26,7 +26,7 @@ export class AmqpSyncUserClientService implements IUserVerificationService {
     try {
       const response = await firstValueFrom(
         this.rabbitClient.send<ISyncUserResult, ISyncUserAuthorizedInput>(
-          { cmd: CHECK_USER_EXISTS_CMD },
+          { cmd: AUTH_SYNC_USER_CMD },
           {
             decodedIdToken: {
               uid: decodedToken.uid,

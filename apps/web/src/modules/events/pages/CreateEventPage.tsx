@@ -27,7 +27,7 @@ export const CreateEventPage = () => {
         },
       },
     })
-    navigate(`/events/${result.data?.createEvent.id}`)
+    navigate(`/event/${result.data?.createEvent.id}`)
   }
 
   return (

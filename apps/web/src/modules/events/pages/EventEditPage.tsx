@@ -43,14 +43,14 @@ export const EventEditPage = () => {
         },
       },
     })
-    navigate(`/events/${id}`)
+    navigate(`/event/${id}`)
   }
 
   return (
     <PrivateLayout headerRight={<UserDropdownContainer />}>
       {data && (
         <EventDetailUpdate
-          data={data}
+          data={data.event}
           isDeleting={isDeleting}
           onDelete={handleDelete}
         >

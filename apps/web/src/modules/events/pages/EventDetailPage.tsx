@@ -35,9 +35,9 @@ export const EventDetailPage = () => {
         </HeaderActionButton>
       }
     >
-      {!isLoading && (
+      {!isLoading && data?.event && (
         <EventDetail
-          data={data}
+          data={data.event}
           isDeleting={isDeleting}
           onUpdate={handleOnUpdate}
           onDelete={handleDelete}

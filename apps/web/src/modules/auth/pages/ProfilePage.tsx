@@ -16,7 +16,7 @@ export const ProfilePage = () => {
   return (
     <PrivateLayout headerRight={<UserDropdownContainer />}>
       <UserProfile
-        user={data}
+        user={data?.me}
         isLoading={isLoading}
         events={events}
         onUpdate={handleOnUpdate}

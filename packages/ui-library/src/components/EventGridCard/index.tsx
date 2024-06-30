@@ -30,7 +30,7 @@ export const EventGridCard = ({
     className={clsx('flex flex-col h-full p-[2.4rem] md:p-[3.2rem]', className)}
   >
     <a
-      href={isDetail ? undefined : `/event/detail?id=${event.id}`}
+      href={isDetail ? undefined : `/event/${event.id}`}
       className="flex flex-col"
     >
       <span className="text-gray-chateau text-xs font-primary">
