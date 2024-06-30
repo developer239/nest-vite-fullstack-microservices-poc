@@ -7,6 +7,7 @@ export type EventDetailUpdateProps = {
   isUpdating: boolean
   isDeleting: boolean
   onUpdate: (event: IEventUI) => void
+  children?: React.ReactNode
 }
 
 export const EventDetailUpdate = ({
@@ -14,6 +15,7 @@ export const EventDetailUpdate = ({
   isDeleting,
   isUpdating,
   onUpdate,
+  children,
 }: EventDetailUpdateProps) => {
   if (isUpdating || !data) {
     return null
@@ -29,8 +31,7 @@ export const EventDetailUpdate = ({
         className="mb-[4rem]"
       />
       <div className="flex gap-[1.7rem] flex-col md:flex-row">
-        {/*TODO add form*/}
-        {/*<UpdateEventForm data={data} className="w-3/5 max-w-[9999rem]" />*/}
+        {children}
         <EventAttendeesCard attendees={data.attendees} className="w-2/5" />
       </div>
     </>

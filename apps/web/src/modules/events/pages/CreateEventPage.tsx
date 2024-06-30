@@ -1,5 +1,6 @@
 import { HeaderActionButton } from 'ui-library'
 import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
+import { CreateEventForm } from 'src/modules/events/forms/CreateEventForm'
 
 export const CreateEventPage = () => (
   <PrivateLayout
@@ -9,6 +10,11 @@ export const CreateEventPage = () => (
       </HeaderActionButton>
     }
   >
-    {/*<CreateEventForm />*/}
+    <CreateEventForm
+      isLoading={false}
+      onSubmit={(__) => {
+        throw new Error('Function not implemented.')
+      }}
+    />
   </PrivateLayout>
 )

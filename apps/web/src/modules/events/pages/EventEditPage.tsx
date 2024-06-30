@@ -1,5 +1,6 @@
 import { EventDetailUpdate, UserDropdown } from 'ui-library'
 import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
+import { UpdateEventForm } from 'src/modules/events/forms/UpdateEventForm'
 
 export const EventEditPage = () => (
   // TODO: load data
@@ -34,6 +35,20 @@ export const EventEditPage = () => (
       isUpdating={false}
       isDeleting={false}
       onUpdate={() => undefined}
-    />
+    >
+      <UpdateEventForm
+        data={{
+          id: '1',
+          title: 'Sample Event',
+          capacity: 100,
+          description: 'This is a sample event',
+          startsAt: '2021-01-01T00:00:00Z',
+        }}
+        onUpdateEvent={(__) => {
+          throw new Error('Not implemented')
+        }}
+        isLoading={false}
+      />
+    </EventDetailUpdate>
   </PrivateLayout>
 )
