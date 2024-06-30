@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { getAccessToken } from '../../auth/localStorage'
 import { loginUser } from '../../auth/resolvers/loginUser'
+import { getAccessToken } from '../../auth/services/localStorage'
 
 // TODO: implement refresh token
 
