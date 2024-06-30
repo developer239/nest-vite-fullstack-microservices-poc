@@ -12,11 +12,14 @@
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
+    "@hookform/resolvers": "^3.6.0",
     "firebase": "^10.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.0",
     "react-router-dom": "^6.24.0",
-    "ui-library": "*"
+    "ui-library": "*",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",

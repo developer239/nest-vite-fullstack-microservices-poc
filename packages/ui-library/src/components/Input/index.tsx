@@ -3,16 +3,20 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import ShowIcon from '../Icons/ShowIcon'
 
+export type ErrorMessage = any
+
 export type IProps = {
   id?: string
   isSecured?: boolean
-  errorMessage?: string
+  errorMessage?: ErrorMessage
 } & JSX.IntrinsicElements['input']
 
 export const Input = forwardRef<HTMLInputElement, IProps>(
   ({ id, type, errorMessage, className, ...inputProps }, ref) => {
     const [isSecured, setIsSecured] = useState(true)
     const [hasValue, setHasValue] = useState(false)
+
+    console.log('errorMessage', errorMessage)
 
     return (
       <div className={className}>
