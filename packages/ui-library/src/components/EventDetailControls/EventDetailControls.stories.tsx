@@ -20,7 +20,7 @@ const meta: Meta<EventDetailControlsProps> = {
       startsAt: '2021-01-01T00:00:00Z',
     },
     isDeletable: true,
-    isLoading: false,
+    isDeleting: false,
   },
   argTypes: {
     onDelete: { action: 'deletedEvent' },
@@ -33,6 +33,6 @@ export const Default: StoryObj<EventDetailControlsProps> = {}
 
 export const Loading: StoryObj<EventDetailControlsProps> = {
   args: {
-    isLoading: true,
+    isDeleting: true,
   },
 }

@@ -7,18 +7,18 @@ export type EventDetailProps = {
   data: IEventUI
   onUpdate: (event: IEventUI) => void
   onDelete: (event: IEventUI) => void
-  isLoading: boolean
+  isDeleting: boolean
 }
 
 export const EventDetail = ({
   data,
   onUpdate,
   onDelete,
-  isLoading,
+  isDeleting,
 }: EventDetailProps) => (
   <>
     <EventDetailControls
-      isLoading={isLoading}
+      isDeleting={isDeleting}
       event={data}
       isDeletable
       className="mb-[4rem]"

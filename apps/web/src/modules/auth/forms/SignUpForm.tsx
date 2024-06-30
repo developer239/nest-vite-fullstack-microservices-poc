@@ -16,7 +16,7 @@ const schema = z
     path: ['confirmPassword'],
   })
 
-type SignUpFormValues = z.infer<typeof schema>
+export type SignUpFormValues = z.infer<typeof schema>
 
 export interface ISignUpFormProps {
   readonly onSubmit: (data: SignUpFormValues) => void

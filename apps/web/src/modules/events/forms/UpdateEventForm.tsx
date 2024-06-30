@@ -1,24 +1,8 @@
 /* eslint-disable react/forbid-dom-props */
 import { zodResolver } from '@hookform/resolvers/zod'
-import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 import { Card, Input, SaveEventButton } from 'ui-library'
 import { z } from 'zod'
-
-export interface IEventDTO {
-  id: string
-  title: string
-  description: string
-  startsAt: string
-  capacity: number
-}
-
-export interface IUpdateEventFormProps {
-  readonly data: IEventDTO
-  readonly className?: string
-  readonly onUpdateEvent: (data: UpsertEventDto) => Promise<void>
-  readonly isLoading: boolean
-}
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -28,7 +12,14 @@ const schema = z.object({
   capacity: z.coerce.number().min(1, 'Capacity must be at least 1'),
 })
 
-export type UpsertEventDto = z.infer<typeof schema>
+export type UpdateEventFormData = z.infer<typeof schema>
+
+export interface IUpdateEventFormProps {
+  readonly data: UpdateEventFormData
+  readonly className?: string
+  readonly onUpdateEvent: (data: UpdateEventFormData) => Promise<void>
+  readonly isLoading: boolean
+}
 
 export const UpdateEventForm = ({
   className,
@@ -40,13 +31,13 @@ export const UpdateEventForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UpsertEventDto>({
+  } = useForm<UpdateEventFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: data.title,
       description: data.description,
-      startsAtDay: dayjs(data.startsAt).format('YYYY-MM-DD'),
-      startsAtTime: dayjs(data.startsAt).format('HH:mm'),
+      startsAtDay: data.startsAtDay,
+      startsAtTime: data.startsAtTime,
       capacity: data.capacity,
     },
   })

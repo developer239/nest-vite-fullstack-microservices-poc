@@ -1,31 +1,26 @@
-import { UserDropdown, UserProfile } from 'ui-library'
+import { UserProfile } from 'ui-library'
+import { useMeQuery } from 'src/graphql-generated'
+import { UserDropdownContainer } from 'src/modules/auth/components/UserDropdownContainer'
 import { PrivateLayout } from 'src/modules/core/components/PrivateLayout'
 
-export const ProfilePage = () => (
-  // TODO: load data
-  <PrivateLayout
-    headerRight={
-      <UserDropdown
-        user={{
-          id: '1',
-          email: 'asf@asd.cm',
-          firstName: 'John',
-          lastName: 'Doe',
-        }}
-        onLogout={() => undefined}
+export const ProfilePage = () => {
+  const { data, loading: isLoading } = useMeQuery()
+
+  // TODO: update me query to include events
+  const events: any = []
+
+  const handleOnUpdate = () => {
+    // TODO: implement
+  }
+
+  return (
+    <PrivateLayout headerRight={<UserDropdownContainer />}>
+      <UserProfile
+        user={data}
+        isLoading={isLoading}
+        events={events}
+        onUpdate={handleOnUpdate}
       />
-    }
-  >
-    <UserProfile
-      user={{
-        id: '1',
-        email: 'asdf@asdf.cm',
-        firstName: 'John',
-        lastName: 'Doe',
-      }}
-      isLoading={false}
-      events={[]}
-      onUpdate={() => undefined}
-    />
-  </PrivateLayout>
-)
+    </PrivateLayout>
+  )
+}

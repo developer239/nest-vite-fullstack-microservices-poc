@@ -4,7 +4,7 @@ import { EventsList } from '../EventsList'
 import { IEventUI, IUserIU } from '../../types.ts'
 
 export type UserProfileProps = {
-  user: IUserIU
+  user?: IUserIU
   events: IEventUI[]
   isLoading: boolean
   className?: string

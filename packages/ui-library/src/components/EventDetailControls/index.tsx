@@ -7,7 +7,7 @@ export type EventDetailControlsProps = {
   isDeletable: boolean
   event: IEventUI
   onDelete?: (event: IEventUI) => void
-  isLoading: boolean
+  isDeleting: boolean
 }
 
 export const EventDetailControls = ({
@@ -15,7 +15,7 @@ export const EventDetailControls = ({
   isDeletable,
   event,
   onDelete,
-  isLoading,
+  isDeleting,
 }: EventDetailControlsProps) => (
   <div className={clsx('flex justify-between', className)}>
     <span className="items-center text-gray-chateau font-bold text-sm leading-1xl tracking-wide uppercase">
@@ -29,14 +29,14 @@ export const EventDetailControls = ({
           }
         }}
         className={clsx('flex bg-transparent items-center', {
-          'cursor-not-allowed': isLoading,
-          'cursor-pointer': !isLoading,
+          'cursor-not-allowed': isDeleting,
+          'cursor-pointer': !isDeleting,
         })}
-        disabled={isLoading}
+        disabled={isDeleting}
       >
         <DeleteIcon className="w-[1.6rem] h-[1.6rem] fill-wild-strawberry mr-[1.2rem]" />
         <span className="hidden md:block text-wild-strawberry font-bold h-[1rem] text-xs font-primary leading-xs tracking-wider uppercase">
-          {isLoading ? 'Deleting...' : 'Delete'}
+          {isDeleting ? 'Deleting...' : 'Delete'}
         </span>
       </button>
     )}
