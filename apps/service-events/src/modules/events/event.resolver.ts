@@ -67,8 +67,7 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(GqlAuthGuard, RolesGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Event)
   async updateEvent(
     @Args('id', { type: () => ID }) id: string,
@@ -79,8 +78,7 @@ export class EventResolver {
     return this.entityModelMapService.mapEventToModel(event)
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(GqlAuthGuard, RolesGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   deleteEvent(@Args('id', { type: () => ID }) id: string) {
     return this.eventService.delete(id)
