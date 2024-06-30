@@ -13,8 +13,8 @@ const meta: Meta<InputProps> = {
       control: { type: 'select', options: ['text', 'password', 'email'] },
       description: 'Type of the input field',
     },
-    hasError: {
-      control: 'boolean',
+    errorMessage: {
+      control: 'text',
       description: 'Indicates if the input field has an error',
     },
   },
@@ -40,6 +40,6 @@ export const WithError: StoryObj<InputProps> = {
   args: {
     id: 'error-id',
     type: 'email',
-    hasError: true,
+    errorMessage: 'Invalid email',
   },
 }
