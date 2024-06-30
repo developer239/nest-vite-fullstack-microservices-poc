@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserEntity } from 'src/modules/users/entities/user.entity'
+import { UpdateProfileInput } from 'src/modules/users/inputs/update-profile.input'
 
 @Injectable()
 export class UserRepository {
@@ -47,5 +48,11 @@ export class UserRepository {
         uid,
       })
     )
+  }
+
+  async updateProfile(userId: string, updateData: UpdateProfileInput) {
+    await this.usersRepository.update(userId, updateData)
+
+    return this.usersRepository.findOneBy({ id: userId })
   }
 }

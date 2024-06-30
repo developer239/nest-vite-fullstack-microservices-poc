@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { UserRepository } from 'src/modules/users/entities/user.repository'
+import { UpdateProfileInput } from 'src/modules/users/inputs/update-profile.input'
 
 @Injectable()
 export class UserService {
@@ -26,5 +27,15 @@ export class UserService {
 
   createUserFromFirebasePayload(email: string, uid: string) {
     return this.userRepository.createUserFromFirebasePayload(email, uid)
+  }
+
+  async updateUserProfile(userId: string, updateData: UpdateProfileInput) {
+    if (!(await this.checkUserExists(userId))) {
+      throw new NotFoundException(`User with id ${userId} not found`)
+    }
+
+    const user = (await this.userRepository.updateProfile(userId, updateData))!
+
+    return user
   }
 }

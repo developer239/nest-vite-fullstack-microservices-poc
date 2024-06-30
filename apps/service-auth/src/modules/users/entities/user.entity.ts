@@ -5,9 +5,15 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
 export class UserEntity extends EntityHelper {
   @PrimaryGeneratedColumn('uuid') id: string
 
-  @Column() firstName: string
+  @Column({
+    nullable: true,
+  })
+  firstName: string
 
-  @Column() lastName: string
+  @Column({
+    nullable: true,
+  })
+  lastName: string
 
   @Index()
   @Column({ unique: true })
