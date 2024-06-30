@@ -1,0 +1,12 @@
+`--- node_modules/@apollo/federation-internals/dist/schemaUpgrader.js.bak	2024-06-03 14:05:31
++++ node_modules/@apollo/federation-internals/dist/schemaUpgrader.js	2024-06-03 14:05:54
+@@ -286,7 +286,7 @@
+                 return;
+             }
+         }
+-        this.addError(error_1.ERRORS.EXTENSION_WITH_NO_BASE.err(`Type "${type}" is an extension type, but there is no type definition for "${type}" in any subgraph.`, { nodes: extensionAST }));
++        // this.addError(error_1.ERRORS.EXTENSION_WITH_NO_BASE.err(`Type "${type}" is an extension type, but there is no type definition for "${type}" in any subgraph.`, { nodes: extensionAST }));
+     }
+     preUpgradeValidations() {
+         for (const type of this.schema.types()) {
+`

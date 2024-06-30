@@ -1,0 +1,19 @@
+query EventDetail($id: ID!) {
+    event(id: $id) {
+        id
+        title
+        description
+        startsAt
+        capacity
+        owner {
+            id
+            firstName
+            lastName
+        }
+        attendees {
+            id
+            firstName
+            lastName
+        }
+    }
+}

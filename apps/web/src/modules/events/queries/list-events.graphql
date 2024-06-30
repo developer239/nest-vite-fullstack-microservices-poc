@@ -1,0 +1,19 @@
+query ListEvents {
+    events {
+        id
+        title
+        description
+        startsAt
+        capacity
+        owner {
+            id
+            firstName
+            lastName
+        }
+        attendees {
+            id
+            firstName
+            lastName
+        }
+    }
+}

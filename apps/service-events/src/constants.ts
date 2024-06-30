@@ -1,0 +1,1 @@
+export const AMQP_SERVICE_AUTH = 'AMQP_SERVICE_AUTH'

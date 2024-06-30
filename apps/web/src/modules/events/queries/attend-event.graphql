@@ -1,0 +1,5 @@
+mutation AttendEvent($eventId: ID!) {
+  attendEvent(id: $eventId) {
+    id
+  }
+}

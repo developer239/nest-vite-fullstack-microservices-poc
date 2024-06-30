@@ -1,0 +1,9 @@
+extend type Mutation {
+    signIn(email: String!, password: String!): AuthResponse!
+    signUp(email: String!, password: String!, firstName: String!, lastName: String!): AuthResponse!
+}
+
+type AuthResponse {
+    code: String!
+    message: String!
+}
