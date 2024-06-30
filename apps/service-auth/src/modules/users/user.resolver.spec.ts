@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { INestApplication } from '@nestjs/common'
 import {
   bootstrapTest,
@@ -20,13 +21,14 @@ describe('[users] resolver', () => {
   let databaseService: TestingDatabaseService
   let userTestingEntityService: UserTestingService
 
-  describe('[query] user', () => {
-    it('should return user by id', async () => {
+  describe('[query] me', () => {
+    it('should return the authenticated user', async () => {
       // Arrange
       const { user } = await userTestingEntityService.createAuthenticatedUser()
 
       MockFirebaseStrategy.setMockUser({
-        role: UserRole.ADMIN,
+        id: user.id,
+        role: UserRole.USER,
       })
 
       // Act
@@ -35,8 +37,8 @@ describe('[users] resolver', () => {
         .post('/graphql')
         .send({
           query: `
-            query GetUser($id: ID!) {
-              user(id: $id) {
+            query {
+              me {
                 id
                 firstName
                 lastName
@@ -44,8 +46,55 @@ describe('[users] resolver', () => {
               }
             }
           `,
-          variables: {
+        })
+        .set('Content-Type', 'application/json')
+
+      // Assert
+      expect(response.body).toStrictEqual({
+        data: {
+          me: {
             id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+          },
+        },
+      })
+    })
+  })
+
+  describe('[mutation] updateProfile', () => {
+    it('should update the user profile', async () => {
+      // Arrange
+      const { user } = await userTestingEntityService.createAuthenticatedUser()
+
+      MockFirebaseStrategy.setMockUser({
+        id: user.id,
+        role: UserRole.USER,
+      })
+
+      const newFirstName = 'UpdatedFirstName'
+      const newLastName = 'UpdatedLastName'
+
+      // Act
+      const server = app.getHttpServer()
+      const response = await request(server)
+        .post('/graphql')
+        .send({
+          query: `
+            mutation UpdateProfile($input: UpdateProfileInput!) {
+              updateProfile(input: $input) {
+                id
+                firstName
+                lastName
+              }
+            }
+          `,
+          variables: {
+            input: {
+              firstName: newFirstName,
+              lastName: newLastName,
+            },
           },
         })
         .set('Content-Type', 'application/json')
@@ -53,17 +102,14 @@ describe('[users] resolver', () => {
       // Assert
       expect(response.body).toStrictEqual({
         data: {
-          user: {
-            id: String(user.id),
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+          updateProfile: {
+            id: user.id,
+            firstName: newFirstName,
+            lastName: newLastName,
           },
         },
       })
     })
-
-    // TODO: test authentication when error messages are standardized
   })
 
   //
