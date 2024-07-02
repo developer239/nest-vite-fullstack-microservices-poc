@@ -54,7 +54,8 @@ module "cloud_run_auth" {
   region           = var.region
   environment      = var.environment
   service_name     = "auth-service"
-  container_image  = "${var.region}-docker.pkg.dev/${var.project_id}/${module.artifact_registry.repository_id}/${var.environment}-auth-service:latest"
+  docker_image_name = "auth-service"
+  repository_id    = module.artifact_registry.repository_id
   vpc_connector    = module.vpc.vpc_connector_name
   cloudsql_instance = module.cloud_sql.connection_name
 
@@ -91,7 +92,8 @@ module "cloud_run_events" {
   region           = var.region
   environment      = var.environment
   service_name     = "events-service"
-  container_image  = "${var.region}-docker.pkg.dev/${var.project_id}/${module.artifact_registry.repository_id}/${var.environment}-events-service:latest"
+  docker_image_name = "events-service"
+  repository_id    = module.artifact_registry.repository_id
   vpc_connector    = module.vpc.vpc_connector_name
   cloudsql_instance = module.cloud_sql.connection_name
 
@@ -129,7 +131,8 @@ module "cloud_run_gateway" {
   region           = var.region
   environment      = var.environment
   service_name     = "gateway-service"
-  container_image  = "${var.region}-docker.pkg.dev/${var.project_id}/${module.artifact_registry.repository_id}/${var.environment}-gateway-service:latest"
+  docker_image_name = "gateway-service"
+  repository_id    = module.artifact_registry.repository_id
   vpc_connector    = module.vpc.vpc_connector_name
 
   env_vars = {

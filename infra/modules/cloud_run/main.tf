@@ -20,8 +20,13 @@ variable "service_name" {
   type        = string
 }
 
-variable "container_image" {
-  description = "The container image to deploy"
+variable "repository_id" {
+  description = "Repository ID for the Docker image in Artifact Registry"
+  type        = string
+}
+
+variable "docker_image_name" {
+  description = "The name of the Docker image for the service"
   type        = string
 }
 
@@ -60,7 +65,7 @@ resource "google_cloud_run_service" "service" {
   template {
     spec {
       containers {
-        image = var.container_image
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.environment}-${var.docker_image_name}:latest"
 
         dynamic "env" {
           for_each = var.env_vars
@@ -115,12 +120,29 @@ resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
 
 // IAM
 
-resource "google_cloud_run_service_iam_member" "run_invoker" {
-  location = google_cloud_run_service.service.location
-  project  = var.project_id
-  service  = google_cloud_run_service.service.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
+data "google_compute_default_service_account" "default" {
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "secret_manager_access" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+}
+
+resource "google_cloud_run_service_iam_policy" "app_service_iam" {
+  location    = google_cloud_run_service.service.location
+  project     = var.project_id
+  service     = google_cloud_run_service.service.name
+
+  policy_data = jsonencode({
+    bindings = [
+      {
+        role    = "roles/run.invoker"
+        members = ["allUsers"]
+      }
+    ]
+  })
 }
 
 // Output
