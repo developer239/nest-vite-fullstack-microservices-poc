@@ -8,7 +8,6 @@ import {
   gpcConfigSchema,
   WrappedConfigModule as BaseConfigModule,
 } from 'nest-helpers'
-import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
 
 @Module({
   imports: [
@@ -22,10 +21,6 @@ import { eventsConfig, eventsConfigSchema } from 'src/config/events.config'
         {
           values: databaseConfig,
           schema: databaseConfigSchema,
-        },
-        {
-          values: eventsConfig,
-          schema: eventsConfigSchema,
         },
         {
           values: gpcConfig,
