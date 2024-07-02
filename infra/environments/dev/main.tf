@@ -62,7 +62,6 @@ module "cloud_run_auth" {
   env_vars = {
     NODE_ENV         = var.environment
     APP_NAME         = "Auth Microservice"
-    HTTP_PORT        = "8081"
     DATABASE_HOST    = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME    = module.cloud_sql.database_names["auth"]
     AMQP_HOST    = module.rabbitmq.rabbitmq_internal_ip
@@ -100,7 +99,6 @@ module "cloud_run_events" {
   env_vars = {
     NODE_ENV         = var.environment
     APP_NAME         = "Events Microservice"
-    HTTP_PORT        = "8082"
     DATABASE_HOST    = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME    = module.cloud_sql.database_names["events"]
     AMQP_HOST    = module.rabbitmq.rabbitmq_internal_ip
@@ -138,10 +136,7 @@ module "cloud_run_gateway" {
   env_vars = {
     NODE_ENV         = var.environment
     APP_NAME         = "Gateway Microservice"
-    HTTP_PORT        = "8080"
-    AUTH_HTTP_PORT   = "8081"
-    AUTH_HOST        = module.cloud_run_auth.service_url
-    EVENTS_HTTP_PORT = "8082"
-    EVENTS_HOST      = module.cloud_run_events.service_url
+    AUTH_URL         = module.cloud_run_auth.service_url
+    EVENTS_URL       = module.cloud_run_events.service_url
   }
 }
