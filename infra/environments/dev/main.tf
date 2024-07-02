@@ -63,11 +63,11 @@ module "cloud_run_auth" {
     NODE_ENV         = var.environment
     APP_NAME         = "Auth Microservice"
     HTTP_PORT        = "8081"
-    AMQP_PORT        = "5672"
-    AMQP_QUEUE_NAME  = "auth_queue"
     DATABASE_HOST    = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME    = module.cloud_sql.database_names["auth"]
     RABBITMQ_HOST    = module.rabbitmq.rabbitmq_internal_ip
+    RABBITMQ_PORT    = "5672"
+    AMQP_QUEUE_NAME  = "auth_queue"
   }
 
   secrets = [
@@ -101,11 +101,11 @@ module "cloud_run_events" {
     NODE_ENV         = var.environment
     APP_NAME         = "Events Microservice"
     HTTP_PORT        = "8082"
-    AMQP_PORT        = "5672"
-    AMQP_QUEUE_NAME  = "events_queue"
     DATABASE_HOST    = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME    = module.cloud_sql.database_names["events"]
     RABBITMQ_HOST    = module.rabbitmq.rabbitmq_internal_ip
+    RABBITMQ_PORT    = "5672"
+    AMQP_QUEUE_NAME  = "events_queue"
     AUTH_AMQP_QUEUE  = "auth_queue"
   }
 
