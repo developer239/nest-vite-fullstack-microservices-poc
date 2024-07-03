@@ -28,8 +28,8 @@ variable "db_tier" {
 variable "databases" {
   description = "Map of database names and their configurations"
   type = map(object({
-    name            = string
-    user_secret_id  = string
+    name               = string
+    user_secret_id     = string
     password_secret_id = string
   }))
 }
@@ -58,7 +58,7 @@ resource "google_sql_database_instance" "postgres_instance" {
     tier = var.db_tier
 
     ip_configuration {
-      ipv4_enabled    = true  // Enable public IP
+      ipv4_enabled    = true // Enable public IP
       private_network = var.vpc_network
 
       dynamic "authorized_networks" {

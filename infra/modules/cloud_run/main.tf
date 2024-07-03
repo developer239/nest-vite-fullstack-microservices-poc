@@ -50,9 +50,9 @@ variable "env_vars" {
 variable "secrets" {
   description = "Secrets to mount in the service"
   type = list(object({
-    secretName = string
+    secretName   = string
     variableName = string
-    key  = string
+    key          = string
   }))
   default = []
 }
@@ -96,7 +96,7 @@ resource "google_cloud_run_service" "service" {
         {
           "run.googleapis.com/vpc-access-connector" = var.vpc_connector
         },
-          var.cloudsql_instance != "" ? {
+        var.cloudsql_instance != "" ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance
         } : {}
       )
@@ -132,9 +132,9 @@ resource "google_project_iam_member" "secret_manager_access" {
 }
 
 resource "google_cloud_run_service_iam_policy" "app_service_iam" {
-  location    = google_cloud_run_service.service.location
-  project     = var.project_id
-  service     = google_cloud_run_service.service.name
+  location = google_cloud_run_service.service.location
+  project  = var.project_id
+  service  = google_cloud_run_service.service.name
 
   policy_data = jsonencode({
     bindings = [

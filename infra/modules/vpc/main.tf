@@ -30,7 +30,7 @@ resource "google_compute_network" "vpc" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  project                 = var.project_id
+  project       = var.project_id
   name          = "${var.project_id}-vpc-subnet"
   region        = var.region
   network       = google_compute_network.vpc.name
@@ -38,11 +38,11 @@ resource "google_compute_subnetwork" "subnet" {
 }
 
 resource "google_vpc_access_connector" "connector" {
-  project                 = var.project_id
-  region                  = var.region
-  name                    = "${var.project_id}-vpc-connector"
-  network                 = google_compute_network.vpc.name
-  ip_cidr_range           = var.connector_cidr
+  project       = var.project_id
+  region        = var.region
+  name          = "${var.project_id}-vpc-connector"
+  network       = google_compute_network.vpc.name
+  ip_cidr_range = var.connector_cidr
 }
 
 resource "google_compute_firewall" "allow_internal" {

@@ -10,7 +10,7 @@ variable "environment" {
 }
 
 variable "secrets" {
-  type = map(string)
+  type        = map(string)
   description = "Map of secret names and their generated values"
 }
 

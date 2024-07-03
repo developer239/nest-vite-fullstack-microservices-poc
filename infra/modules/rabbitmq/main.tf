@@ -29,7 +29,7 @@ variable "machine_type" {
 variable "zone" {
   description = "The zone for the RabbitMQ instance"
   type        = string
-  default     = ""  // If left empty, will use the first zone of the provided region
+  default     = "" // If left empty, will use the first zone of the provided region
 }
 
 // Main
