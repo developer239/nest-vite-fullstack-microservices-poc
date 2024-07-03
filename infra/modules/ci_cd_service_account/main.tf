@@ -35,3 +35,35 @@ resource "google_project_iam_member" "cloudsql_client" {
   role    = "roles/cloudsql.client"
   member  = "serviceAccount:${google_service_account.ci_cd.email}"
 }
+
+// Service Account Key and Secret
+
+resource "google_service_account_key" "ci_cd_key" {
+  service_account_id = google_service_account.ci_cd.name
+}
+
+resource "google_secret_manager_secret" "ci_cd_key_secret" {
+  secret_id = "${var.environment}-gcp-auth-sa-key"
+  project   = var.project_id
+
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "ci_cd_key_secret_version" {
+  secret      = google_secret_manager_secret.ci_cd_key_secret.id
+  secret_data = base64decode(google_service_account_key.ci_cd_key.private_key)
+}
+
+// Output
+
+output "service_account_email" {
+  value       = google_service_account.ci_cd.email
+  description = "The email address of the service account"
+}
+
+output "ci_cd_key_secret_id" {
+  value       = google_secret_manager_secret.ci_cd_key_secret.id
+  description = "The ID of the secret containing the service account key"
+}

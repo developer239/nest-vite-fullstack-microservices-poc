@@ -28,7 +28,9 @@ variable "db_tier" {
 variable "databases" {
   description = "Map of database names and their configurations"
   type = map(object({
-    name = string
+    name            = string
+    user_secret_id  = string
+    password_secret_id = string
   }))
 }
 
@@ -46,16 +48,6 @@ variable "authorized_networks" {
 }
 
 // Main
-
-data "google_secret_manager_secret_version" "db_username" {
-  secret  = "${var.environment}-db-username"
-  version = "latest"
-}
-
-data "google_secret_manager_secret_version" "db_password" {
-  secret  = "${var.environment}-db-password"
-  version = "latest"
-}
 
 resource "google_sql_database_instance" "postgres_instance" {
   name             = "${var.project_id}-${var.environment}-db-instance"
@@ -88,10 +80,21 @@ resource "google_sql_database" "databases" {
   instance = google_sql_database_instance.postgres_instance.name
 }
 
-resource "google_sql_user" "postgres_user" {
+data "google_secret_manager_secret_version" "db_usernames" {
+  for_each = var.databases
+  secret   = each.value.user_secret_id
+}
+
+data "google_secret_manager_secret_version" "db_passwords" {
+  for_each = var.databases
+  secret   = each.value.password_secret_id
+}
+
+resource "google_sql_user" "database_users" {
+  for_each = var.databases
   instance = google_sql_database_instance.postgres_instance.name
-  name     = data.google_secret_manager_secret_version.db_username.secret_data
-  password = data.google_secret_manager_secret_version.db_password.secret_data
+  name     = data.google_secret_manager_secret_version.db_usernames.secret_data
+  password = data.google_secret_manager_secret_version.db_passwords[each.key].secret_data
 }
 
 // IAM

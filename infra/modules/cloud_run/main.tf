@@ -50,7 +50,8 @@ variable "env_vars" {
 variable "secrets" {
   description = "Secrets to mount in the service"
   type = list(object({
-    name = string
+    secretName = string
+    variableName = string
     key  = string
   }))
   default = []
@@ -78,10 +79,10 @@ resource "google_cloud_run_service" "service" {
         dynamic "env" {
           for_each = var.secrets
           content {
-            name = env.value.name
+            name = env.value.variableName
             value_from {
               secret_key_ref {
-                name = env.value.name
+                name = env.value.secretName
                 key  = env.value.key
               }
             }

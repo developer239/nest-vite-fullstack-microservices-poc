@@ -16,6 +16,18 @@ module "ci_cd_service_account" {
   environment = var.environment
 }
 
+module "secrets" {
+  source     = "../../modules/secrets"
+  project_id = var.project_id
+  environment = var.environment
+  secrets = {
+    auth_db_user     = "auth-db-user"
+    auth_db_password = "auth-db-password"
+    events_db_user   = "events-db-user"
+    events_db_password = "events-db-password"
+  }
+}
+
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -32,8 +44,16 @@ module "cloud_sql" {
   db_version = var.db_version
   db_tier    = var.db_tier
   databases  = {
-    auth   = { name = "auth_db" },
-    events = { name = "events_db" }
+    auth   = {
+      name = "auth_db"
+      user_secret_id     = module.secrets.secret_ids["auth_db_user"]
+      password_secret_id = module.secrets.secret_ids["auth_db_password"]
+    },
+    events = {
+      name = "events_db"
+      user_secret_id     = module.secrets.secret_ids["events_db_user"]
+      password_secret_id = module.secrets.secret_ids["events_db_password"]
+    }
   }
   environment = var.environment
   vpc_network = module.vpc.vpc_name
@@ -71,15 +91,18 @@ module "cloud_run_auth" {
 
   secrets = [
     {
-      name = "${var.environment}-db-user"
+      secretName = module.secrets.secret_ids["auth_db_user"]
+      variableName = "DATABASE_USER"
       key  = "latest"
     },
     {
-      name = "${var.environment}-db-password"
+      secretName = module.secrets.secret_ids["auth_db_password"]
+      variableName = "DATABASE_PASSWORD"
       key  = "latest"
     },
     {
-      name = "${var.environment}-gcp-auth-sa-key"
+      secretName = module.ci_cd_service_account.ci_cd_key_secret_id
+      variableName = "GCP_AUTH_SA_KEY"
       key  = "latest"
     }
   ]
@@ -109,15 +132,13 @@ module "cloud_run_events" {
 
   secrets = [
     {
-      name = "${var.environment}-db-user"
+      secretName = module.secrets.secret_ids["events_db_user"]
+      variableName = "DATABASE_USER"
       key  = "latest"
     },
     {
-      name = "${var.environment}-db-password"
-      key  = "latest"
-    },
-    {
-      name = "${var.environment}-gcp-auth-sa-key"
+      secretName = module.secrets.secret_ids["events_db_password"]
+      variableName = "DATABASE_PASSWORD"
       key  = "latest"
     }
   ]
