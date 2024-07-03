@@ -140,3 +140,10 @@ module "cloud_run_gateway" {
     EVENTS_URL       = module.cloud_run_events.service_url
   }
 }
+
+module "load_balancer" {
+  source          = "../../modules/load_balancer"
+  project_id      = var.project_id
+  environment     = var.environment
+  cloudrun_neg_id = module.cloud_run_gateway.neg_id
+}

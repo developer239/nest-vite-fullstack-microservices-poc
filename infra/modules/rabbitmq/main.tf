@@ -43,6 +43,7 @@ locals {
 }
 
 resource "google_compute_instance" "rabbitmq" {
+  version      = "~> 3.0"
   name         = "${var.project_id}-${var.environment}-rabbitmq"
   machine_type = var.machine_type
   zone         = local.zone
