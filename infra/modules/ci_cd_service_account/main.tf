@@ -47,7 +47,7 @@ resource "google_secret_manager_secret" "ci_cd_key_secret" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 

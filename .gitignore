@@ -29,3 +29,10 @@ yarn-error.log*
 **/*service-account-key.json
 
 *storybook.log
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*

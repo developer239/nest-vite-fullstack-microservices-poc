@@ -65,6 +65,11 @@ resource "google_compute_firewall" "allow_internal" {
 
 // Output
 
+output "vpc_self_link" {
+  value       = google_compute_network.vpc.self_link
+  description = "The URI of the VPC network"
+}
+
 output "vpc_id" {
   description = "The ID of the VPC"
   value       = google_compute_network.vpc.id

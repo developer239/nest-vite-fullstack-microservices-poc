@@ -36,7 +36,7 @@ resource "google_secret_manager_secret" "secrets" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 

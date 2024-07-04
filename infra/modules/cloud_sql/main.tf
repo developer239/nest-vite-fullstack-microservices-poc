@@ -35,7 +35,7 @@ variable "databases" {
 }
 
 variable "vpc_network" {
-  description = "The VPC network to use for the database instance"
+  description = "The self_link of the VPC network to use for the database instance"
   type        = string
 }
 
@@ -93,7 +93,7 @@ data "google_secret_manager_secret_version" "db_passwords" {
 resource "google_sql_user" "database_users" {
   for_each = var.databases
   instance = google_sql_database_instance.postgres_instance.name
-  name     = data.google_secret_manager_secret_version.db_usernames.secret_data
+  name     = data.google_secret_manager_secret_version.db_usernames[each.key].secret_data
   password = data.google_secret_manager_secret_version.db_passwords[each.key].secret_data
 }
 
@@ -125,14 +125,6 @@ output "connection_name" {
   value = google_sql_database_instance.postgres_instance.connection_name
 }
 
-output "db_user_secret" {
-  value = data.google_secret_manager_secret_version.db_username.secret
-}
-
-output "db_password_secret" {
-  value = data.google_secret_manager_secret_version.db_password.secret
-}
-
 output "database_names" {
   value = { for k, v in google_sql_database.databases : k => v.name }
 }
@@ -147,8 +139,8 @@ output "postgres_connection_strings" {
   value = {
     for k, v in google_sql_database.databases : k => format(
       "postgresql://%s:%s@%s:5432/%s",
-      data.google_secret_manager_secret_version.db_username.secret_data,
-      data.google_secret_manager_secret_version.db_password.secret_data,
+      data.google_secret_manager_secret_version.db_usernames[k].secret_data,
+      data.google_secret_manager_secret_version.db_passwords[k].secret_data,
       google_sql_database_instance.postgres_instance.public_ip_address,
       v.name
     )

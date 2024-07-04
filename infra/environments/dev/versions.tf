@@ -9,6 +9,6 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "api-terraform-state-dev"
+    bucket = "nest-vite-fs-microservices-terraform-state-dev"
   }
 }

@@ -56,7 +56,7 @@ module "cloud_sql" {
     }
   }
   environment         = var.environment
-  vpc_network         = module.vpc.vpc_name
+  vpc_network         = module.vpc.vpc_self_link
   authorized_networks = var.authorized_networks
 }
 
