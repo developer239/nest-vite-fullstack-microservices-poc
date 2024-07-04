@@ -62,6 +62,7 @@ variable "secrets" {
 resource "google_cloud_run_service" "service" {
   name     = "${var.project_id}-${var.environment}-${var.service_name}"
   location = var.region
+  project  = var.project_id
 
   template {
     spec {
@@ -96,7 +97,7 @@ resource "google_cloud_run_service" "service" {
         {
           "run.googleapis.com/vpc-access-connector" = var.vpc_connector
         },
-        var.cloudsql_instance != "" ? {
+          var.cloudsql_instance != "" ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance
         } : {}
       )

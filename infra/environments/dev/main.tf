@@ -16,18 +16,6 @@ module "ci_cd_service_account" {
   environment = var.environment
 }
 
-module "secrets" {
-  source      = "../../modules/secrets"
-  project_id  = var.project_id
-  environment = var.environment
-  secrets = {
-    auth_db_user       = "auth-db-user"
-    auth_db_password   = "auth-db-password"
-    events_db_user     = "events-db-user"
-    events_db_password = "events-db-password"
-  }
-}
-
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -46,13 +34,13 @@ module "cloud_sql" {
   databases = {
     auth = {
       name               = "auth_db"
-      user_secret_id     = module.secrets.secret_ids["auth_db_user"]
-      password_secret_id = module.secrets.secret_ids["auth_db_password"]
+      user_secret_id     = "dev-auth-db-user"
+      password_secret_id = "dev-auth-db-password"
     },
     events = {
       name               = "events_db"
-      user_secret_id     = module.secrets.secret_ids["events_db_user"]
-      password_secret_id = module.secrets.secret_ids["events_db_password"]
+      user_secret_id     = "dev-events-db-user"
+      password_secret_id = "dev-events-db-password"
     }
   }
   environment         = var.environment
@@ -91,12 +79,12 @@ module "cloud_run_auth" {
 
   secrets = [
     {
-      secretName   = module.secrets.secret_ids["auth_db_user"]
+      secretName   = "dev-auth-db-user"
       variableName = "DATABASE_USER"
       key          = "latest"
     },
     {
-      secretName   = module.secrets.secret_ids["auth_db_password"]
+      secretName   = "dev-auth-db-password"
       variableName = "DATABASE_PASSWORD"
       key          = "latest"
     },
@@ -132,12 +120,12 @@ module "cloud_run_events" {
 
   secrets = [
     {
-      secretName   = module.secrets.secret_ids["events_db_user"]
+      secretName   = "dev-events-db-user"
       variableName = "DATABASE_USER"
       key          = "latest"
     },
     {
-      secretName   = module.secrets.secret_ids["events_db_password"]
+      secretName   = "dev-events-db-password"
       variableName = "DATABASE_PASSWORD"
       key          = "latest"
     }

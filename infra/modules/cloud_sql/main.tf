@@ -83,11 +83,13 @@ resource "google_sql_database" "databases" {
 data "google_secret_manager_secret_version" "db_usernames" {
   for_each = var.databases
   secret   = each.value.user_secret_id
+  project  = var.project_id
 }
 
 data "google_secret_manager_secret_version" "db_passwords" {
   for_each = var.databases
   secret   = each.value.password_secret_id
+  project  = var.project_id
 }
 
 resource "google_sql_user" "database_users" {
