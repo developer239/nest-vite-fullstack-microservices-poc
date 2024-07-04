@@ -20,6 +20,11 @@ variable "vpc_network" {
   type        = string
 }
 
+variable "vpc_subnet" {
+  description = "The name of the VPC subnet"
+  type        = string
+}
+
 variable "machine_type" {
   description = "The machine type for the RabbitMQ instance"
   type        = string
@@ -54,8 +59,8 @@ resource "google_compute_instance" "rabbitmq" {
   }
 
   network_interface {
-    network = var.vpc_network
-    // The subnetwork will be automatically chosen based on the network and zone
+    network    = var.vpc_network
+    subnetwork = var.vpc_subnet
   }
 
   metadata_startup_script = <<-EOF

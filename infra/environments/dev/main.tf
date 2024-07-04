@@ -54,6 +54,7 @@ module "rabbitmq" {
   region      = var.region
   environment = var.environment
   vpc_network = module.vpc.vpc_name
+  vpc_subnet  = module.vpc.subnet_name
 }
 
 module "cloud_run_auth" {

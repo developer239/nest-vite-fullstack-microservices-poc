@@ -33,16 +33,30 @@ resource "google_compute_subnetwork" "subnet" {
   project       = var.project_id
   name          = "${var.project_id}-vpc-subnet"
   region        = var.region
-  network       = google_compute_network.vpc.name
+  network       = google_compute_network.vpc.id
   ip_cidr_range = var.subnet_cidr
 }
 
 resource "google_vpc_access_connector" "connector" {
   project       = var.project_id
-  region        = var.region
   name          = "${var.project_id}-vpc-connector"
-  network       = google_compute_network.vpc.name
+  region        = var.region
   ip_cidr_range = var.connector_cidr
+  network       = google_compute_network.vpc.name
+}
+
+resource "google_compute_global_address" "private_ip_address" {
+  name          = "${var.project_id}-private-ip"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = google_compute_network.vpc.id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
 
 resource "google_compute_firewall" "allow_internal" {
@@ -81,13 +95,11 @@ output "vpc_name" {
 }
 
 output "subnet_id" {
-  description = "The ID of the subnet"
-  value       = google_compute_subnetwork.subnet.id
+  value = google_compute_subnetwork.subnet.id
 }
 
 output "subnet_name" {
-  description = "The name of the subnet"
-  value       = google_compute_subnetwork.subnet.name
+  value = google_compute_subnetwork.subnet.name
 }
 
 output "vpc_connector_id" {
