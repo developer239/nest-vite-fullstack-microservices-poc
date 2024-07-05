@@ -39,7 +39,7 @@ resource "google_compute_subnetwork" "subnet" {
 
 resource "google_vpc_access_connector" "connector" {
   project       = var.project_id
-  name          = "${var.project_id}-vpc-connector"
+  name          = "${substr(var.project_id, 0, 10)}-vpc-connector"
   region        = var.region
   ip_cidr_range = var.connector_cidr
   network       = google_compute_network.vpc.name

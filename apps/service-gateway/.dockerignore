@@ -1,0 +1,28 @@
+# Ignore node_modules as we'll install dependencies in the Docker image
+node_modules
+
+# Ignore build outputs
+dist
+.turbo
+
+# Ignore environment files to prevent accidentally including sensitive data
+.env
+.env.*
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore test files
+*.test.ts
+*.spec.ts
+
+# Ignore any logs
+*.log
+
+# Ignore TypeScript source maps
+*.map
+
+# Ignore any temporary files
+*.tmp
+*.temp

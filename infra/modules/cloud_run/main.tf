@@ -59,6 +59,38 @@ variable "secrets" {
 
 // Main
 
+# Secret Name Workaround START
+# Cloud Run has strict requirements for secret names, disallowing certain characters like hyphens.
+# This section creates a mapping between the original secret names and Cloud Run-compatible names.
+
+# Generate a unique suffix for each secret to avoid naming conflicts
+resource "random_id" "secret_suffix" {
+  for_each    = { for idx, secret in var.secrets : idx => secret }
+  byte_length = 4
+}
+
+# Create a new secret in Secret Manager with a Cloud Run-compatible name
+# This secret will act as a reference to the original secret
+resource "google_secret_manager_secret" "service_secrets" {
+  for_each  = { for idx, secret in var.secrets : idx => secret }
+  secret_id = "${var.service_name}_${each.value.variableName}_${random_id.secret_suffix[each.key].hex}"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+}
+
+# Store the original secret name as the value in the new secret
+# This allows us to maintain a reference to the original secret while using a compatible name
+resource "google_secret_manager_secret_version" "service_secret_versions" {
+  for_each    = { for idx, secret in var.secrets : idx => secret }
+  secret      = google_secret_manager_secret.service_secrets[each.key].id
+  secret_data = each.value.secretName
+}
+# Secret Name Workaround START
+
+# Cloud Run Service Configuration
 resource "google_cloud_run_service" "service" {
   name     = "${var.project_id}-${var.environment}-${var.service_name}"
   location = var.region
@@ -69,6 +101,7 @@ resource "google_cloud_run_service" "service" {
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.environment}-${var.docker_image_name}:latest"
 
+        # Set up regular environment variables
         dynamic "env" {
           for_each = var.env_vars
           content {
@@ -77,14 +110,16 @@ resource "google_cloud_run_service" "service" {
           }
         }
 
+        # Set up secret environment variables
+        # Use the Cloud Run-compatible secret names created earlier
         dynamic "env" {
           for_each = var.secrets
           content {
             name = env.value.variableName
             value_from {
               secret_key_ref {
-                name = env.value.secretName
-                key  = env.value.key
+                name = google_secret_manager_secret.service_secrets[env.key].secret_id
+                key  = "latest"
               }
             }
           }
