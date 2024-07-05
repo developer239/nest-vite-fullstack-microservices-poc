@@ -23,6 +23,7 @@ yarn-error.log*
 # dist
 /apps/*/dist
 /apps/*/.env
+/apps/*/.env.production
 /packages/*/dist
 
 # prevent accidental commit

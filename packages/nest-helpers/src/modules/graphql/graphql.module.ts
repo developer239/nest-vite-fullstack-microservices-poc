@@ -17,6 +17,8 @@ export class GraphQLModule {
           autoSchemaFile: true,
           introspection: true,
           plugins: [ApolloServerPluginInlineTrace()],
+          csrfPrevention: false,
+          playground: true,
         }),
       ],
     }

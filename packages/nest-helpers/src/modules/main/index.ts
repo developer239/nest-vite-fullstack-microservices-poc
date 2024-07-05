@@ -5,11 +5,21 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { appConfig, AppConfigType } from '../../config/app.config'
 
 export const bootstrap = async (appModule: any) => {
-  console.log('-- bootstrap --')
-  console.log('process.env', process.env)
-
   const app = await NestFactory.create(appModule, { cors: true })
   app.enableShutdownHooks()
+  app.enableCors({
+    // TODO: optimize and only keep what is necessary
+    origin: '*',
+    credentials: true,
+    allowedHeaders: [
+      'Accept',
+      'Authorization',
+      'Content-Type',
+      'X-Requested-With',
+      'apollo-require-preflight',
+    ],
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  })
 
   const appConfigValues = app.get<AppConfigType>(appConfig.KEY)
 

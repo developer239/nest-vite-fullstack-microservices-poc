@@ -1,25 +1,23 @@
-FROM --platform=linux/amd64 node:18-alpine3.16
+FROM --platform=linux/amd64 node:18.20.3-alpine3.19
+
+RUN apk add --no-cache patch
 
 WORKDIR /app
 
-# Patch
-RUN apk add --no-cache patch
-COPY _patch ./_patch
-
 COPY package.json yarn.lock turbo.json ./
 
-COPY apps/service-gateway/package.json ./apps/service-gateway/
-COPY packages/nest-helpers/package.json ./packages/nest-helpers/
+COPY apps /app/apps
+COPY packages /app/packages
+COPY _patch ./_patch
 
 RUN yarn install
 
-COPY apps/service-gateway ./apps/service-gateway
-COPY packages/nest-helpers ./packages/nest-helpers
+COPY apps /app/apps
+COPY packages /app/packages
 
-RUN yarn turbo run build
+RUN yarn build
 
 ENV PORT=8080
-
 EXPOSE 8080
 
 CMD ["node", "apps/service-gateway/dist/main"]

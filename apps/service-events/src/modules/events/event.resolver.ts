@@ -8,14 +8,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
-import {
-  GetUser,
-  GqlAuthGuard,
-  IUserPayload,
-  Roles,
-  RolesGuard,
-  UserRole,
-} from 'nest-helpers'
+import { GetUser, GqlAuthGuard, IUserPayload } from 'nest-helpers'
 import { CreateEventInput } from 'src/modules/events/inputs/create-event.input'
 import { UpdateEventInput } from 'src/modules/events/inputs/update-event.input'
 import { Event } from 'src/modules/events/models/event.model'

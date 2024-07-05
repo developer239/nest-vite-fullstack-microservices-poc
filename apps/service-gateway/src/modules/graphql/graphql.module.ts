@@ -14,6 +14,9 @@ import { ConfigModule } from 'src/modules/config/config.module'
       useFactory: (config: GatewayConfigType) => ({
         server: {
           plugins: [new ApolloComplexityPlugin(50)],
+          csrfPrevention: false,
+          playground: true,
+          introspection: true,
         },
         gateway: {
           buildService({ url }) {

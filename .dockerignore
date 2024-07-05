@@ -1,6 +1,10 @@
 # Ignore node_modules as we'll install dependencies in the Docker image
 node_modules
 
+# database
+.data
+.db
+
 # Ignore build outputs
 dist
 .turbo
@@ -26,3 +30,6 @@ dist
 # Ignore any temporary files
 *.tmp
 *.temp
+
+# Hooks
+.husky
