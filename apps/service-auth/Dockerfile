@@ -1,5 +1,4 @@
-# Stage 1: Build Stage
-FROM --platform=linux/amd64 node:18-alpine3.16 AS builder
+FROM --platform=linux/amd64 node:18-alpine3.16
 
 WORKDIR /app
 
@@ -17,8 +16,7 @@ COPY packages/nest-helpers ./packages/nest-helpers
 
 RUN yarn turbo run build
 
-ENV PORT=8080 \
-    NODE_ENV=production
+ENV PORT=8080
 
 EXPOSE 8080
 

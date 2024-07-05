@@ -2,10 +2,10 @@ import { ConfigType, registerAs } from '@nestjs/config'
 import * as Joi from 'joi'
 
 export const appConfigSchema = {
-  NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
-  APP_NAME: Joi.string().required(),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test'),
+  APP_NAME: Joi.string(),
   API_PREFIX: Joi.string().default('api'),
-  PORT: Joi.number().port().required(),
+  PORT: Joi.number().port(),
   AMQP_HOST: Joi.string(),
   AMQP_PORT: Joi.number().port(),
   AMQP_QUEUE_NAME: Joi.string(),

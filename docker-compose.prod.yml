@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  auth_database:
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: auth_db
+    volumes:
+      - ./.data/auth_database:/var/lib/postgresql/data
+
+  events_database:
+    image: postgres:16-alpine
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: events_db
+    volumes:
+      - ./.data/events_database:/var/lib/postgresql/data
+
+  service-auth:
+    build:
+      context: .
+      dockerfile: apps/service-auth/Dockerfile
+    ports:
+      - 8081:8080
+    env_file:
+      - apps/service-auth/.env
+    depends_on:
+      - rabbitmq
+      - auth_database
+
+  service-events:
+    build:
+      context: .
+      dockerfile: apps/service-events/Dockerfile
+    ports:
+      - 8082:8080
+    env_file:
+      - apps/service-events/.env
+    depends_on:
+      - rabbitmq
+      - events_database
+
+  service-gateway:
+    build:
+      context: .
+      dockerfile: apps/service-gateway/Dockerfile
+    ports:
+      - 8080:8080
+    env_file:
+      - apps/service-gateway/.env
+    depends_on:
+      - service-auth
+      - service-events

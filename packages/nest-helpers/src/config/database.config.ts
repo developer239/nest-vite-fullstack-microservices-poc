@@ -2,10 +2,10 @@ import { ConfigType, registerAs } from '@nestjs/config'
 import * as Joi from 'joi'
 
 export const databaseConfigSchema = {
-  DATABASE_HOST: Joi.string().required(),
-  DATABASE_NAME: Joi.string().required(),
-  DATABASE_USER: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
+  DATABASE_HOST: Joi.string(),
+  DATABASE_NAME: Joi.string(),
+  DATABASE_USER: Joi.string(),
+  DATABASE_PASSWORD: Joi.string(),
   DATABASE_PORT: Joi.string(),
 }
 

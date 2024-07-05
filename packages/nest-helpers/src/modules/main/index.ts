@@ -1,9 +1,13 @@
+/* eslint-disable no-console */
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { appConfig, AppConfigType } from '../../config/app.config'
 
 export const bootstrap = async (appModule: any) => {
+  console.log('-- bootstrap --')
+  console.log('process.env', process.env)
+
   const app = await NestFactory.create(appModule, { cors: true })
   app.enableShutdownHooks()
 

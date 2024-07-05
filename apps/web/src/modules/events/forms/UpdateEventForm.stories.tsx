@@ -9,11 +9,11 @@ const meta: Meta<IUpdateEventFormProps> = {
   },
   args: {
     data: {
-      id: '1',
-      title: 'Annual Tech Conference',
-      description: 'Join us for an engaging tech conference...',
-      startsAt: new Date().toISOString(),
-      capacity: 300,
+      title: 'Event Title',
+      description: 'Event Description',
+      startsAtDay: '2022-01-01',
+      startsAtTime: '12:00',
+      capacity: 100,
     },
     isLoading: false,
   },
