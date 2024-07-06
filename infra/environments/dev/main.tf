@@ -50,12 +50,12 @@ module "cloud_sql" {
 }
 
 module "rabbitmq" {
-  source      = "../../modules/rabbitmq"
-  project_id  = var.project_id
-  region      = var.region
-  environment = var.environment
-  vpc_network = module.vpc.vpc_name
-  vpc_subnet  = module.vpc.subnet_name
+  source             = "../../modules/rabbitmq"
+  project_id         = var.project_id
+  region             = var.region
+  environment        = var.environment
+  vpc_network        = module.vpc.vpc_name
+  vpc_subnet         = module.vpc.subnet_name
   vpc_subnet_cidr    = module.vpc.subnet_cidr
   vpc_connector_cidr = module.vpc.connector_cidr
 }

@@ -1,100 +1,106 @@
 // Variables
 
 variable "project_id" {
-  description = "The GCP project ID"
-  type        = string
+  type = string
 }
 
 variable "region" {
-  description = "The GCP region for resources"
-  type        = string
+  type = string
 }
 
 variable "environment" {
-  description = "Deployment environment"
-  type        = string
+  type = string
 }
 
 variable "vpc_network" {
-  description = "The name of the VPC network"
-  type        = string
+  type = string
 }
 
 variable "vpc_subnet" {
-  description = "The name of the VPC subnet"
-  type        = string
-}
-
-variable "machine_type" {
-  description = "The machine type for the RabbitMQ instance"
-  type        = string
-  default     = "e2-micro"
-}
-
-variable "zone" {
-  description = "The zone for the RabbitMQ instance"
-  type        = string
-  default     = "" // If left empty, will use the first zone of the provided region
+  type = string
 }
 
 variable "vpc_subnet_cidr" {
-  description = "The CIDR range of the VPC subnet"
-  type        = string
+  type = string
 }
 
 variable "vpc_connector_cidr" {
-  description = "The CIDR range of the VPC connector"
-  type        = string
+  type = string
+}
+
+variable "machine_type" {
+  type    = string
+  default = "e2-micro"
 }
 
 // Main
 
-data "google_compute_zones" "available" {
-  region = var.region
+locals {
+  rabbitmq_image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.project_id}-${var.environment}-repo/${var.environment}-rabbitmq:latest"
 }
 
-locals {
-  zone = var.zone != "" ? var.zone : data.google_compute_zones.available.names[0]
+resource "google_service_account" "rabbitmq_sa" {
+  account_id   = "rabbitmq-sa-001"
+  display_name = "RabbitMQ Service Account"
+  project      = var.project_id
 }
+
+resource "google_project_iam_member" "rabbitmq_sa_ar_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.rabbitmq_sa.email}"
+}
+
+resource "google_compute_address" "external_ip" {
+  name    = "${var.environment}-rabbitmq-external-ip"
+  project = var.project_id
+  region  = var.region
+}
+
 
 resource "google_compute_instance" "rabbitmq" {
-  name         = "${var.project_id}-${var.environment}-rabbitmq"
+  name         = "${var.environment}-rabbitmq"
   machine_type = var.machine_type
-  zone         = local.zone
+  zone         = "${var.region}-a"
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "cos-cloud/cos-stable"
     }
   }
 
   network_interface {
     network    = var.vpc_network
     subnetwork = var.vpc_subnet
-  }
-
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y rabbitmq-server
-    cat <<EOT >> /etc/rabbitmq/rabbitmq.conf
-    listeners.tcp.default = 0.0.0.0:5672
-    management.tcp.port = 15672
-    EOT
-    systemctl enable rabbitmq-server
-    systemctl start rabbitmq-server
-    rabbitmq-plugins enable rabbitmq_management
-  EOF
-
-  tags = ["rabbitmq", "allow-ssh"]
-
-  service_account {
-    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+    access_config {
+      nat_ip = google_compute_address.external_ip.address
+    }
   }
 
   metadata = {
-    enable-oslogin = "TRUE"
+    gce-container-declaration = yamlencode({
+      spec = {
+        containers = [{
+          image = local.rabbitmq_image
+          name  = "rabbitmq"
+          ports = [
+            { containerPort = 5672 },
+            { containerPort = 15672 }
+          ]
+        }]
+        restartPolicy = "Always"
+      }
+    })
   }
+
+  service_account {
+    email  = google_service_account.rabbitmq_sa.email
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  tags = ["rabbitmq", "allow-ssh"]
+
+  allow_stopping_for_update = true
 }
 
 resource "google_compute_firewall" "rabbitmq" {
@@ -107,25 +113,18 @@ resource "google_compute_firewall" "rabbitmq" {
   }
 
   source_ranges = [var.vpc_subnet_cidr, var.vpc_connector_cidr]
-  target_tags = ["rabbitmq"]
+  target_tags   = ["rabbitmq"]
 }
 
 data "google_compute_default_service_account" "default" {}
 
-resource "google_project_iam_member" "vm_sa_user" {
+resource "google_project_iam_member" "iap_tunnel_user" {
   project = var.project_id
-  role    = "roles/iam.serviceAccountUser"
+  role    = "roles/iap.tunnelResourceAccessor"
   member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
 }
 
 // Output
-
 output "rabbitmq_internal_ip" {
-  description = "The internal IP address of the RabbitMQ instance"
-  value       = google_compute_instance.rabbitmq.network_interface[0].network_ip
-}
-
-output "rabbitmq_instance_name" {
-  description = "The name of the RabbitMQ instance"
-  value       = google_compute_instance.rabbitmq.name
+  value = google_compute_instance.rabbitmq.network_interface[0].network_ip
 }
