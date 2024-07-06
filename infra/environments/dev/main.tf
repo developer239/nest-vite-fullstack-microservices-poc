@@ -76,6 +76,7 @@ module "cloud_run_auth" {
     AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
     AMQP_PORT       = "5672"
     AMQP_QUEUE_NAME = "auth_queue"
+    GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
   }
 
   secrets = [
@@ -87,11 +88,6 @@ module "cloud_run_auth" {
     {
       secretName   = "dev-auth-db-password"
       variableName = "DATABASE_PASSWORD"
-      key          = "latest"
-    },
-    {
-      secretName   = module.ci_cd_service_account.ci_cd_key_secret_id
-      variableName = "GCP_AUTH_SA_KEY"
       key          = "latest"
     }
   ]
@@ -117,6 +113,8 @@ module "cloud_run_events" {
     AMQP_PORT       = "5672"
     AMQP_QUEUE_NAME = "events_queue"
     AUTH_AMQP_QUEUE = "auth_queue"
+    # This is only necessary because nest-helpers dont export firebase strategy properly
+    GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
   }
 
   secrets = [

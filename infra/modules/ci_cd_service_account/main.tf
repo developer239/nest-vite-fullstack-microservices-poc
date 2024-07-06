@@ -67,3 +67,9 @@ output "ci_cd_key_secret_id" {
   value       = google_secret_manager_secret.ci_cd_key_secret.id
   description = "The ID of the secret containing the service account key"
 }
+
+output "ci_cd_key_content" {
+  value       = base64decode(google_service_account_key.ci_cd_key.private_key)
+  description = "The service account key content"
+  sensitive   = true
+}
