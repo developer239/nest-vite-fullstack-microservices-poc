@@ -173,7 +173,3 @@ output "service_name" {
 output "neg_id" {
   value = google_compute_region_network_endpoint_group.cloudrun_neg.id
 }
-
-output "service_account_email" {
-  value = google_service_account.cloud_run_sa.email
-}

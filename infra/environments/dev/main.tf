@@ -149,19 +149,3 @@ module "cloud_run_gateway" {
     EVENTS_URL = module.cloud_run_events.service_url
   }
 }
-
-resource "google_cloud_run_service_iam_member" "gateway_invoker_auth" {
-  location = var.region
-  project  = var.project_id
-  service  = module.cloud_run_auth.service_name
-  role     = "roles/run.invoker"
-  member   = "serviceAccount:${module.cloud_run_gateway.service_account_email}"
-}
-
-resource "google_cloud_run_service_iam_member" "gateway_invoker_events" {
-  location = var.region
-  project  = var.project_id
-  service  = module.cloud_run_events.service_name
-  role     = "roles/run.invoker"
-  member   = "serviceAccount:${module.cloud_run_gateway.service_account_email}"
-}
