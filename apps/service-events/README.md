@@ -7,7 +7,6 @@ This service is responsible for handling authentication and user management with
 - Ensure that the global repository dependencies are installed by running `yarn install` from the root.
 - Ensure that packages are built by running `yarn build` from the root.
 - Configure environment variables by copying the `.env.template` file to `.env` and updating the values.
-- Configure `AUTH_AMQP_QUEUE` in the `.env` file to match the queue name in the `service-auth` service.
 - Configure `GCP_AUTH_SA_KEY` in the `.env` file to match the path to the Google Cloud Platform service account key file (Firebase)
 
 ## Useful Commands

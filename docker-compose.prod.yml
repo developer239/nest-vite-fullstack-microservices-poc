@@ -18,39 +18,37 @@ services:
     volumes:
       - ./.data/auth_database:/var/lib/postgresql/data
 
-#  events_database:
-#    image: postgres:16-alpine
-#    ports:
-#      - 5433:5432
-#    environment:
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: secret
-#      POSTGRES_DB: events_db
-#    volumes:
-#      - ./.data/events_database:/var/lib/postgresql/data
-
-  service-auth:
-    image: f9150337acdb
+  events_database:
+    image: postgres:16-alpine
     ports:
-      - 8081:8080
-    env_file:
-      - apps/service-auth/.env.production
-    depends_on:
-      - rabbitmq
-      - auth_database
+      - 5433:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: events_db
+    volumes:
+      - ./.data/events_database:/var/lib/postgresql/data
 
-#  service-events:
-#    build:
-#      context: .
-#      dockerfile: apps/service-events/Dockerfile
+#  service-auth:
+#    image: f9150337acdb
 #    ports:
-#      - 8082:8080
+#      - 8081:8080
 #    env_file:
-#      - apps/service-events/.env.production
+#      - apps/service-auth/.env.production
 #    depends_on:
 #      - rabbitmq
-#      - events_database
-#
+#      - auth_database
+
+  service-events:
+    image: dec26d9d3044
+    ports:
+      - 8082:8080
+    env_file:
+      - apps/service-events/.env.production
+    depends_on:
+      - rabbitmq
+      - events_database
+
 #  service-gateway:
 #    build:
 #      context: .
