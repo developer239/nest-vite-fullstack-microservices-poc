@@ -56,6 +56,8 @@ module "rabbitmq" {
   environment = var.environment
   vpc_network = module.vpc.vpc_name
   vpc_subnet  = module.vpc.subnet_name
+  vpc_subnet_cidr    = module.vpc.subnet_cidr
+  vpc_connector_cidr = module.vpc.connector_cidr
 }
 
 module "cloud_run_auth" {
@@ -74,9 +76,9 @@ module "cloud_run_auth" {
     APP_NAME        = "Auth Microservice"
     DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME   = module.cloud_sql.database_names["auth"]
-#     AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-#     AMQP_PORT       = "5672"
-#     AMQP_QUEUE_NAME = "auth_queue"
+    AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
+    AMQP_PORT       = "5672"
+    AMQP_QUEUE_NAME = "auth_queue"
     GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
   }
 
@@ -93,66 +95,3 @@ module "cloud_run_auth" {
     }
   ]
 }
-
-# module "cloud_run_events" {
-#   source            = "../../modules/cloud_run"
-#   project_id        = var.project_id
-#   region            = var.region
-#   environment       = var.environment
-#   service_name      = "events-service"
-#   docker_image_name = "events-service"
-#   repository_id     = module.artifact_registry.repository_id
-#   vpc_connector     = module.vpc.vpc_connector_name
-#   cloudsql_instance = module.cloud_sql.connection_name
-#
-#   env_vars = {
-#     NODE_ENV        = var.environment
-#     APP_NAME        = "Events Microservice"
-#     DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
-#     DATABASE_NAME   = module.cloud_sql.database_names["events"]
-#     AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-#     AMQP_PORT       = "5672"
-#     AMQP_QUEUE_NAME = "events_queue"
-#     AUTH_AMQP_QUEUE = "auth_queue"
-#     # This is only necessary because nest-helpers dont export firebase strategy properly
-#     GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
-#   }
-#
-#   secrets = [
-#     {
-#       secretName   = "dev-events-db-user"
-#       variableName = "DATABASE_USER"
-#       key          = "latest"
-#     },
-#     {
-#       secretName   = "dev-events-db-password"
-#       variableName = "DATABASE_PASSWORD"
-#       key          = "latest"
-#     }
-#   ]
-# }
-#
-# module "cloud_run_gateway" {
-#   source            = "../../modules/cloud_run"
-#   project_id        = var.project_id
-#   region            = var.region
-#   environment       = var.environment
-#   service_name      = "gateway-service"
-#   docker_image_name = "gateway-service"
-#   repository_id     = module.artifact_registry.repository_id
-#   vpc_connector     = module.vpc.vpc_connector_name
-#
-#   env_vars = {
-#     NODE_ENV   = var.environment
-#     APP_NAME   = "Gateway Microservice"
-#     AUTH_URL   = module.cloud_run_auth.service_url
-#     EVENTS_URL = module.cloud_run_events.service_url
-#   }
-# }
-#
-# module "load_balancer" {
-#   source          = "../../modules/load_balancer"
-#   project_id      = var.project_id
-#   environment     = var.environment
-#   cloudrun_neg_id = module.cloud_run_gateway.neg_id
-# }

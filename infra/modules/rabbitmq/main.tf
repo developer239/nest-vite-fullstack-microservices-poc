@@ -37,6 +37,16 @@ variable "zone" {
   default     = "" // If left empty, will use the first zone of the provided region
 }
 
+variable "vpc_subnet_cidr" {
+  description = "The CIDR range of the VPC subnet"
+  type        = string
+}
+
+variable "vpc_connector_cidr" {
+  description = "The CIDR range of the VPC connector"
+  type        = string
+}
+
 // Main
 
 data "google_compute_zones" "available" {
@@ -68,7 +78,7 @@ resource "google_compute_instance" "rabbitmq" {
     apt-get update
     apt-get install -y rabbitmq-server
     cat <<EOT >> /etc/rabbitmq/rabbitmq.conf
-    listeners.tcp.default = 5672
+    listeners.tcp.default = 0.0.0.0:5672
     management.tcp.port = 15672
     EOT
     systemctl enable rabbitmq-server
@@ -76,10 +86,14 @@ resource "google_compute_instance" "rabbitmq" {
     rabbitmq-plugins enable rabbitmq_management
   EOF
 
-  tags = ["rabbitmq"]
+  tags = ["rabbitmq", "allow-ssh"]
 
   service_account {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  metadata = {
+    enable-oslogin = "TRUE"
   }
 }
 
@@ -92,8 +106,16 @@ resource "google_compute_firewall" "rabbitmq" {
     ports    = ["5672", "15672"]
   }
 
-  source_ranges = ["10.8.0.0/28"]
+  source_ranges = [var.vpc_subnet_cidr, var.vpc_connector_cidr]
   target_tags = ["rabbitmq"]
+}
+
+data "google_compute_default_service_account" "default" {}
+
+resource "google_project_iam_member" "vm_sa_user" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
 }
 
 // Output

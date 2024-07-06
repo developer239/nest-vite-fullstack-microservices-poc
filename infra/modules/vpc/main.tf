@@ -77,6 +77,19 @@ resource "google_compute_firewall" "allow_internal" {
   source_ranges = [var.subnet_cidr, var.connector_cidr]
 }
 
+resource "google_compute_firewall" "allow_iap_ssh" {
+  name    = "${var.project_id}-allow-iap-ssh"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["35.235.240.0/20"]
+  target_tags   = ["allow-ssh"]  // Add this tag to your VM instances
+}
+
 // Output
 
 output "vpc_self_link" {
@@ -114,4 +127,8 @@ output "vpc_connector_name" {
 
 output "subnet_cidr" {
   value = google_compute_subnetwork.subnet.ip_cidr_range
+}
+
+output "connector_cidr" {
+  value = google_vpc_access_connector.connector.ip_cidr_range
 }
