@@ -47,6 +47,11 @@ variable "authorized_networks" {
   }))
 }
 
+variable "vpc_subnet_cidr" {
+  description = "The CIDR range of the VPC subnet"
+  type        = string
+}
+
 // Main
 
 resource "google_sql_database_instance" "postgres_instance" {
@@ -58,16 +63,14 @@ resource "google_sql_database_instance" "postgres_instance" {
     tier = var.db_tier
 
     ip_configuration {
-      ipv4_enabled    = true // Enable public IP
+      ipv4_enabled    = false  // Disable public IP
       private_network = var.vpc_network
 
-      dynamic "authorized_networks" {
-        for_each = var.authorized_networks
-        content {
-          name  = authorized_networks.value.name
-          value = authorized_networks.value.value
-        }
-      }
+    }
+
+    // Add this line to apply the tag
+    user_labels = {
+      tag = "sql"
     }
   }
 
@@ -96,6 +99,21 @@ resource "google_sql_user" "database_users" {
   instance = google_sql_database_instance.postgres_instance.name
   name     = data.google_secret_manager_secret_version.db_usernames[each.key].secret_data
   password = data.google_secret_manager_secret_version.db_passwords[each.key].secret_data
+}
+
+resource "google_compute_firewall" "allow_sql" {
+  name    = "${var.project_id}-${var.environment}-allow-sql"
+  network = var.vpc_network
+
+  allow {
+    protocol = "tcp"
+    ports    = ["5432"]
+  }
+
+  // Use a variable for the CIDR range
+  source_ranges = [var.vpc_subnet_cidr]
+
+  target_tags = ["sql"]
 }
 
 // IAM

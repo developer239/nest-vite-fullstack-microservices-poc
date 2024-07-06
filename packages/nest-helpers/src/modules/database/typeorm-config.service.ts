@@ -26,6 +26,26 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       this.appConfigValues.nodeEnv === 'test' ||
       this.appConfigValues.nodeEnv === 'ci'
 
+    console.log('-- createTypeOrmOptions --')
+    console.log('-- createTypeOrmOptions --')
+    console.log('-- createTypeOrmOptions --')
+    console.log(
+      'this.databaseConfigValues.name',
+      this.databaseConfigValues.name
+    )
+    console.log(
+      'this.databaseConfigValues.host',
+      this.databaseConfigValues.host
+    )
+    console.log(
+      'this.databaseConfigValues.user',
+      this.databaseConfigValues.user
+    )
+    console.log(
+      'this.databaseConfigValues.password',
+      this.databaseConfigValues.password
+    )
+
     return {
       type: 'postgres',
       database: this.databaseConfigValues.name,
@@ -33,6 +53,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.databaseConfigValues.user,
       password: this.databaseConfigValues.password,
       port: this.databaseConfigValues.port,
+      extra: {
+        socketPath: this.databaseConfigValues.host,
+      },
       autoLoadEntities: true,
       logging: ['error'],
       migrationsRun: !isLocalDevelopment,

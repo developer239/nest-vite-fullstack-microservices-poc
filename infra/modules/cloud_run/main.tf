@@ -65,6 +65,7 @@ resource "google_cloud_run_service" "service" {
 
   template {
     spec {
+      service_account_name = google_service_account.cloud_run_sa.email
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.environment}-${var.docker_image_name}:latest"
 
@@ -122,14 +123,22 @@ resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
 
 // IAM
 
-data "google_compute_default_service_account" "default" {
-  project = var.project_id
+resource "google_service_account" "cloud_run_sa" {
+  account_id   = "${var.environment}-${var.service_name}-sa"
+  display_name = "Service Account for ${var.service_name} Cloud Run Service"
+  project      = var.project_id
 }
 
-resource "google_project_iam_member" "secret_manager_access" {
+resource "google_project_iam_member" "cloud_run_sa_permissions" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+}
+
+resource "google_project_iam_member" "cloud_run_sa_sql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }
 
 resource "google_cloud_run_service_iam_policy" "app_service_iam" {
@@ -142,6 +151,10 @@ resource "google_cloud_run_service_iam_policy" "app_service_iam" {
       {
         role    = "roles/run.invoker"
         members = ["allUsers"]
+      },
+      {
+        role    = "roles/run.admin"
+        members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
       }
     ]
   })

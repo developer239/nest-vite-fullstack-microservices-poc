@@ -111,3 +111,7 @@ output "vpc_connector_name" {
   description = "The name of the VPC access connector"
   value       = google_vpc_access_connector.connector.name
 }
+
+output "subnet_cidr" {
+  value = google_compute_subnetwork.subnet.ip_cidr_range
+}
