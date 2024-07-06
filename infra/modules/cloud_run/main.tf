@@ -95,6 +95,7 @@ resource "google_cloud_run_service" "service" {
       annotations = merge(
         {
           "run.googleapis.com/vpc-access-connector" = var.vpc_connector
+          "run.googleapis.com/vpc-access-egress"    = "all-traffic"
         },
           var.cloudsql_instance != "" ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance

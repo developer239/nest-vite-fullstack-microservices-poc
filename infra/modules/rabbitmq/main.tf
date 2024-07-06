@@ -67,10 +67,14 @@ resource "google_compute_instance" "rabbitmq" {
     #!/bin/bash
     apt-get update
     apt-get install -y rabbitmq-server
+    cat <<EOT >> /etc/rabbitmq/rabbitmq.conf
+    listeners.tcp.default = 5672
+    management.tcp.port = 15672
+    EOT
     systemctl enable rabbitmq-server
     systemctl start rabbitmq-server
     rabbitmq-plugins enable rabbitmq_management
-    EOF
+  EOF
 
   tags = ["rabbitmq"]
 
@@ -88,7 +92,7 @@ resource "google_compute_firewall" "rabbitmq" {
     ports    = ["5672", "15672"]
   }
 
-  source_tags = ["rabbitmq-client"]
+  source_ranges = ["10.8.0.0/28"]
   target_tags = ["rabbitmq"]
 }
 
