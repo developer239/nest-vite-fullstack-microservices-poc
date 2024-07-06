@@ -36,11 +36,11 @@ import { ConfigModule } from 'src/modules/config/config.module'
             subgraphs: [
               {
                 name: 'auth',
-                url: config.authUrl,
+                url: `${config.authUrl}/graphql`,
               },
               {
                 name: 'events',
-                url: config.eventsUrl,
+                url: `${config.eventsUrl}/graphql`,
               },
             ],
           }),

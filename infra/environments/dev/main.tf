@@ -131,3 +131,37 @@ module "cloud_run_events" {
     }
   ]
 }
+
+module "cloud_run_gateway" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = "gateway-service"
+  docker_image_name = "gateway-service"
+  repository_id     = module.artifact_registry.repository_id
+  vpc_connector     = module.vpc.vpc_connector_name
+
+  env_vars = {
+    NODE_ENV   = var.environment
+    APP_NAME   = "Gateway Microservice"
+    AUTH_URL   = module.cloud_run_auth.service_url
+    EVENTS_URL = module.cloud_run_events.service_url
+  }
+}
+
+resource "google_cloud_run_service_iam_member" "gateway_invoker_auth" {
+  location = var.region
+  project  = var.project_id
+  service  = module.cloud_run_auth.service_name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${module.cloud_run_gateway.service_account_email}"
+}
+
+resource "google_cloud_run_service_iam_member" "gateway_invoker_events" {
+  location = var.region
+  project  = var.project_id
+  service  = module.cloud_run_events.service_name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${module.cloud_run_gateway.service_account_email}"
+}
