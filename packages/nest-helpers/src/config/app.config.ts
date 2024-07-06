@@ -2,7 +2,8 @@ import { ConfigType, registerAs } from '@nestjs/config'
 import * as Joi from 'joi'
 
 export const appConfigSchema = {
-  NODE_ENV: Joi.string().valid('development', 'production', 'test'),
+  // NODE_ENV: Joi.string().valid('development', 'production', 'test'),
+  NODE_ENV: Joi.string(), // development needs to be changed to dev and production to prod because of Terraform
   APP_NAME: Joi.string(),
   API_PREFIX: Joi.string().default('api'),
   PORT: Joi.number().port(),
