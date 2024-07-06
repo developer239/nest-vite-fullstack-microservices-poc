@@ -30,9 +30,7 @@ services:
       - ./.data/events_database:/var/lib/postgresql/data
 
   service-auth:
-    build:
-      context: .
-      dockerfile: apps/service-auth/Dockerfile
+    image: f9150337acdb
     ports:
       - 8081:8080
     env_file:
@@ -41,26 +39,26 @@ services:
       - rabbitmq
       - auth_database
 
-  service-events:
-    build:
-      context: .
-      dockerfile: apps/service-events/Dockerfile
-    ports:
-      - 8082:8080
-    env_file:
-      - apps/service-events/.env.production
-    depends_on:
-      - rabbitmq
-      - events_database
-
-  service-gateway:
-    build:
-      context: .
-      dockerfile: apps/service-gateway/Dockerfile
-    ports:
-      - 8080:8080
-    env_file:
-      - apps/service-gateway/.env.production
-    depends_on:
-      - service-auth
-      - service-events
+#  service-events:
+#    build:
+#      context: .
+#      dockerfile: apps/service-events/Dockerfile
+#    ports:
+#      - 8082:8080
+#    env_file:
+#      - apps/service-events/.env.production
+#    depends_on:
+#      - rabbitmq
+#      - events_database
+#
+#  service-gateway:
+#    build:
+#      context: .
+#      dockerfile: apps/service-gateway/Dockerfile
+#    ports:
+#      - 8080:8080
+#    env_file:
+#      - apps/service-gateway/.env.production
+#    depends_on:
+#      - service-auth
+#      - service-events

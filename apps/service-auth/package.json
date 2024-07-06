@@ -40,7 +40,8 @@
     "pg-connection-string": "^2.6.1",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
-    "typeorm": "0.3.17"
+    "typeorm": "0.3.17",
+    "nest-helpers": "*"
   },
   "devDependencies": {
     "@nestjs/cli": "10.3.2",
