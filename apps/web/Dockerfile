@@ -27,6 +27,13 @@ RUN chmod +x /startup.sh
 
 RUN echo 'server { \
     listen 8080; \
+    \
+    gzip on; \
+    gzip_vary on; \
+    gzip_proxied any; \
+    gzip_comp_level 6; \
+    gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml; \
+    \
     location / { \
         root /usr/share/nginx/html; \
         index index.html index.htm; \
