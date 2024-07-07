@@ -21,6 +21,10 @@ FROM --platform=linux/amd64 nginx:alpine
 
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 
+# Copy startup script
+COPY apps/web/startup.sh /startup.sh
+RUN chmod +x /startup.sh
+
 RUN echo 'server { \
     listen 8080; \
     location / { \
@@ -32,4 +36,4 @@ RUN echo 'server { \
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/startup.sh"]

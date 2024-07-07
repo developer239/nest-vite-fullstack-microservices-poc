@@ -2,11 +2,12 @@
 import { HttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
+import { config } from 'src/config'
 import { getAccessToken } from 'src/modules/auth/services/localStorage'
 import { refreshAccessToken } from 'src/modules/core/clients/firebaseClient'
 
 export const httpLink = new HttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_URI,
+  uri: config.uri,
 })
 
 export const authLink = setContext((_, { headers }) => {

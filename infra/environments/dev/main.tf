@@ -175,7 +175,7 @@ module "cloud_run_web" {
   repository_id     = module.artifact_registry.repository_id
 
   env_vars = {
-    VITE_GRAPHQL_URI               = "https://${module.cloud_run_gateway.service_url}/graphql"
+    VITE_GRAPHQL_URI               = "${module.cloud_run_gateway.service_url}/graphql"
     VITE_PORT                      = "8080"
     VITE_GRAPHQL_API_KEY           = module.firebase.api_key
     VITE_GRAPHQL_AUTH_DOMAIN       = module.firebase.auth_domain
