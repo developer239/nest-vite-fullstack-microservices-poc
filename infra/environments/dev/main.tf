@@ -159,3 +159,31 @@ module "cloud_run_storybook" {
   docker_image_name = "storybook-service"
   repository_id     = module.artifact_registry.repository_id
 }
+
+module "firebase" {
+  source     = "../../modules/firebase"
+  project_id = var.project_id
+}
+
+module "cloud_run_web" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = "web-service"
+  docker_image_name = "web-service"
+  repository_id     = module.artifact_registry.repository_id
+
+  env_vars = {
+    VITE_GRAPHQL_URI               = "https://${module.cloud_run_gateway.service_url}/graphql"
+    VITE_PORT                      = "8080"
+    VITE_GRAPHQL_API_KEY           = module.firebase.api_key
+    VITE_GRAPHQL_AUTH_DOMAIN       = module.firebase.auth_domain
+    VITE_GRAPHQL_PROJECT_ID        = module.firebase.project_id
+    VITE_GRAPHQL_STORAGE_BUCKET    = module.firebase.storage_bucket
+    VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
+    VITE_GRAPHQL_APP_ID            = module.firebase.app_id
+  }
+
+  depends_on = [module.firebase]
+}
