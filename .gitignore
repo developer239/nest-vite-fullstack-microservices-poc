@@ -25,6 +25,7 @@ yarn-error.log*
 /apps/*/.env
 /apps/*/.env.production
 /packages/*/dist
+/packages/*/storybook-static
 
 # prevent accidental commit
 **/*service-account-key.json

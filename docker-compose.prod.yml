@@ -39,15 +39,15 @@ services:
 #      - rabbitmq
 #      - auth_database
 
-  service-events:
-    image: dec26d9d3044
-    ports:
-      - 8082:8080
-    env_file:
-      - apps/service-events/.env.production
-    depends_on:
-      - rabbitmq
-      - events_database
+#  service-events:
+#    image: adc7954b515c
+#    ports:
+#      - 8082:8080
+#    env_file:
+#      - apps/service-events/.env.production
+#    depends_on:
+#      - rabbitmq
+#      - events_database
 
 #  service-gateway:
 #    build:
@@ -60,3 +60,8 @@ services:
 #    depends_on:
 #      - service-auth
 #      - service-events
+
+  service-storybook:
+    image: 94c03bd087bf
+    ports:
+      - 8083:8080

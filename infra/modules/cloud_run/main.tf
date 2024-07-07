@@ -33,6 +33,7 @@ variable "docker_image_name" {
 variable "vpc_connector" {
   description = "The VPC connector for the Cloud Run service"
   type        = string
+  default     = ""
 }
 
 variable "cloudsql_instance" {
@@ -94,10 +95,10 @@ resource "google_cloud_run_service" "service" {
 
     metadata {
       annotations = merge(
-        {
+          var.vpc_connector != "" ? {
           "run.googleapis.com/vpc-access-connector" = var.vpc_connector
           "run.googleapis.com/vpc-access-egress"    = "all-traffic"
-        },
+        } : {},
           var.cloudsql_instance != "" ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance
         } : {}
@@ -135,6 +136,7 @@ resource "google_project_iam_member" "cloud_run_sa_permissions" {
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }
 
+// TODO: only if cloudsql_instance is set
 resource "google_project_iam_member" "cloud_run_sa_sql_client" {
   project = var.project_id
   role    = "roles/cloudsql.client"

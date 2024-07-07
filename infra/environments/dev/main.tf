@@ -149,3 +149,13 @@ module "cloud_run_gateway" {
     EVENTS_URL = module.cloud_run_events.service_url
   }
 }
+
+module "cloud_run_storybook" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = "storybook-service"
+  docker_image_name = "storybook-service"
+  repository_id     = module.artifact_registry.repository_id
+}
