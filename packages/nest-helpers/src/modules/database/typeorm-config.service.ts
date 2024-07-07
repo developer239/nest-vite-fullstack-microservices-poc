@@ -1,3 +1,4 @@
+import * as path from 'node:path'
 import { Inject, Injectable } from '@nestjs/common'
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm'
 import { appConfig, AppConfigType } from '../../config/app.config'
@@ -17,34 +18,10 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   ) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    const isLocalDevelopment = ['0.0.0.0', 'database'].includes(
-      this.databaseConfigValues.host!
-    )
-
     // For some reason, Vitest doesn't like the js file extension even though it shouldn't load migrations
     const isVitest =
       this.appConfigValues.nodeEnv === 'test' ||
       this.appConfigValues.nodeEnv === 'ci'
-
-    console.log('-- createTypeOrmOptions --')
-    console.log('-- createTypeOrmOptions --')
-    console.log('-- createTypeOrmOptions --')
-    console.log(
-      'this.databaseConfigValues.name',
-      this.databaseConfigValues.name
-    )
-    console.log(
-      'this.databaseConfigValues.host',
-      this.databaseConfigValues.host
-    )
-    console.log(
-      'this.databaseConfigValues.user',
-      this.databaseConfigValues.user
-    )
-    console.log(
-      'this.databaseConfigValues.password',
-      this.databaseConfigValues.password
-    )
 
     return {
       type: 'postgres',
@@ -57,11 +34,28 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         socketPath: this.databaseConfigValues.host,
       },
       autoLoadEntities: true,
-      logging: ['error'],
-      migrationsRun: !isLocalDevelopment,
+      logging: ['query', 'error', 'warn', 'info', 'log', 'migration'],
+      migrationsRun: this.databaseConfigValues.runMigrations,
       migrations: isVitest
         ? []
-        : [`${this.workingDir}/migrations/**/*{.ts,.js}`],
+        : [
+            // Note: this is a hack because this file lives in the nest-helpers package
+            // and there is a difference when working in CLI vs in APP
+            // you can safely ignore this as long as migrationsRun is false "NONE" value doesn't matter as no migrations will be found
+            this.databaseConfigValues.runMigrations &&
+            this.workingDir === 'NONE'
+              ? path.join(
+                  path.resolve(__dirname, '../../../../../../'),
+                  'apps',
+                  '**',
+                  'dist',
+                  'modules',
+                  'database',
+                  'migrations',
+                  '*{.ts,.js}'
+                )
+              : path.join(this.workingDir, 'migrations', '**', '*{.ts,.js}'),
+          ],
       cli: {
         entitiesDir: `${this.workingDir}/../../../src/modules/database/entities`,
         migrationsDir: `${this.workingDir}/../../../src/modules/database/migrations`,

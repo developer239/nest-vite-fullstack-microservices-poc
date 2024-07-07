@@ -10,13 +10,6 @@ export class FirebaseService {
     @Inject(gpcConfig.KEY)
     private readonly authConfigValues: GpcConfigType
   ) {
-    console.log('FirebaseService')
-    console.log('FirebaseService')
-    console.log(
-      'this.authConfigValues.gcpGpcSaKey',
-      this.authConfigValues.gcpGpcSaKey
-    )
-
     if (this.authConfigValues.gcpGpcSaKey) {
       this.app = admin.initializeApp({
         credential: admin.credential.cert(
