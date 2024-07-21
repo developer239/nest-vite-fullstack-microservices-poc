@@ -1,4 +1,5 @@
 - automatically enable firebase auth for email/password (unstash)
 - unstash load balancer
+- tunnel to DB
 - gh actions
 - (optional) deploy web to vercel
