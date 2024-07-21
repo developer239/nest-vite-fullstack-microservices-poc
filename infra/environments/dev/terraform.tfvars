@@ -6,13 +6,13 @@ region = "us-central1"
 
 # VPC
 
-vpc_subnet_cidr = "10.0.0.0/24"
-vpc_connector_cidr = "10.0.1.0/28"
+vpc_subnet_cidr = "10.0.0.0/24" // provides 256 IP addresses (10.0.0.0 to 10.0.0.255)
+vpc_connector_cidr = "10.0.1.0/28" // provides 16 IP addresses (10.0.1.0 to 10.0.1.15)
 
 # SQL
 
 db_version = "POSTGRES_14"
-db_tier = "db-f1-micro"
+db_tier    = "db-f1-micro"
 authorized_networks = [
   {
     name  = "home-network-1"

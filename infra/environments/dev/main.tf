@@ -3,6 +3,12 @@ provider "google" {
   region  = var.region
 }
 
+module "firebase" {
+  source      = "../../modules/firebase"
+  project_id  = var.project_id
+  environment = var.environment
+}
+
 module "artifact_registry" {
   source      = "../../modules/artifact_registry"
   project_id  = var.project_id
@@ -17,10 +23,10 @@ module "ci_cd_service_account" {
 }
 
 module "vpc" {
-  source = "../../modules/vpc"
-
+  source         = "../../modules/vpc"
   project_id     = var.project_id
   region         = var.region
+  environment    = var.environment
   subnet_cidr    = var.vpc_subnet_cidr
   connector_cidr = var.vpc_connector_cidr
 }
@@ -49,12 +55,6 @@ module "rabbitmq" {
   vpc_connector_cidr = module.vpc.connector_cidr
   amqp_port          = var.rabbitmq_amqp_port
   management_port    = var.rabbitmq_management_port
-}
-
-module "firebase" {
-  source     = "../../modules/firebase"
-  project_id = var.project_id
-  environment = var.environment
 }
 
 module "cloud_run_services" {
