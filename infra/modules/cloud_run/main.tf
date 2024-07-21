@@ -13,6 +13,10 @@ variable "region" {
 variable "environment" {
   description = "Deployment environment"
   type        = string
+  validation {
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, prod."
+  }
 }
 
 variable "service_name" {
@@ -33,13 +37,7 @@ variable "docker_image_name" {
 variable "vpc_connector" {
   description = "The VPC connector for the Cloud Run service"
   type        = string
-  default     = ""
-}
-
-variable "cloudsql_instance" {
-  description = "The Cloud SQL instance connection name"
-  type        = string
-  default     = ""
+  default     = null
 }
 
 variable "env_vars" {
@@ -58,9 +56,21 @@ variable "secrets" {
   default = []
 }
 
+variable "use_sql" {
+  description = "Whether the service uses Cloud SQL"
+  type        = bool
+  default     = false
+}
+
+variable "cloudsql_instance" {
+  description = "The Cloud SQL instance connection name"
+  type        = string
+  default     = null
+}
+
 // Main
 resource "google_cloud_run_service" "service" {
-  name     = "${var.project_id}-${var.environment}-${var.service_name}"
+  name     = "${var.environment}-${var.service_name}"
   location = var.region
   project  = var.project_id
 
@@ -95,11 +105,11 @@ resource "google_cloud_run_service" "service" {
 
     metadata {
       annotations = merge(
-          var.vpc_connector != "" ? {
+          var.vpc_connector != null ? {
           "run.googleapis.com/vpc-access-connector" = var.vpc_connector
           "run.googleapis.com/vpc-access-egress"    = "all-traffic"
         } : {},
-          var.cloudsql_instance != "" ? {
+          var.cloudsql_instance != null ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance
         } : {}
       )
@@ -110,12 +120,15 @@ resource "google_cloud_run_service" "service" {
     percent         = 100
     latest_revision = true
   }
+
+  depends_on = [google_project_iam_member.cloud_run_sa_secret_manager_permissions]
 }
 
 resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
-  name                  = "${var.project_id}-${var.environment}-${var.service_name}-neg"
+  name                  = "${var.environment}-${var.service_name}-neg"
   network_endpoint_type = "SERVERLESS"
   region                = var.region
+  project               = var.project_id
 
   cloud_run {
     service = google_cloud_run_service.service.name
@@ -130,36 +143,36 @@ resource "google_service_account" "cloud_run_sa" {
   project      = var.project_id
 }
 
-resource "google_project_iam_member" "cloud_run_sa_permissions" {
+resource "google_project_iam_member" "cloud_run_sa_secret_manager_permissions" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }
 
-// TODO: only if cloudsql_instance is set
-resource "google_project_iam_member" "cloud_run_sa_sql_client" {
+resource "google_project_iam_member" "cloud_run_sa_sql_client_permissions" {
+  count   = var.use_sql ? 1 : 0
   project = var.project_id
   role    = "roles/cloudsql.client"
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }
 
 resource "google_cloud_run_service_iam_policy" "app_service_iam" {
-  location = google_cloud_run_service.service.location
-  project  = var.project_id
-  service  = google_cloud_run_service.service.name
+  location    = google_cloud_run_service.service.location
+  project     = var.project_id
+  service     = google_cloud_run_service.service.name
+  policy_data = data.google_iam_policy.cloud_run_policy.policy_data
+}
 
-  policy_data = jsonencode({
-    bindings = [
-      {
-        role    = "roles/run.invoker"
-        members = ["allUsers"]
-      },
-      {
-        role    = "roles/run.admin"
-        members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
-      }
-    ]
-  })
+data "google_iam_policy" "cloud_run_policy" {
+  binding {
+    role = "roles/run.invoker"
+    members = ["allUsers"]
+  }
+
+  binding {
+    role = "roles/run.admin"
+    members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
+  }
 }
 
 // Output

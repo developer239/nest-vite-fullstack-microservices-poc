@@ -68,6 +68,7 @@ module "cloud_run_services" {
   repository_id     = module.artifact_registry.repository_id
   vpc_connector     = module.vpc.vpc_connector_name
   cloudsql_instance = each.value.use_sql ? module.cloud_sql.connection_name : null
+  use_sql           = each.value.use_sql
 
   env_vars = merge(
     each.value.env_vars,
@@ -98,5 +99,5 @@ module "cloud_run_services" {
 
   secrets = each.value.secrets
 
-  depends_on = [module.firebase]
+  depends_on = [module.firebase, module.vpc]
 }
