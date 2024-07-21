@@ -13,25 +13,36 @@ variable "region" {
 variable "environment" {
   description = "Deployment environment"
   type        = string
+  validation {
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, prod."
+  }
 }
 
 variable "db_version" {
   description = "The version of PostgreSQL"
   type        = string
+  default     = "POSTGRES_14"
 }
 
 variable "db_tier" {
   description = "The tier of the database"
   type        = string
+  default     = "db-f1-micro"
 }
 
 variable "databases" {
-  description = "Map of database names and their configurations"
+  description = "Configuration for databases"
   type = map(object({
     name               = string
     user_secret_id     = string
     password_secret_id = string
   }))
+
+  validation {
+    condition     = length(var.databases) > 0
+    error_message = "At least one database configuration must be provided."
+  }
 }
 
 variable "vpc_network" {
@@ -45,6 +56,7 @@ variable "authorized_networks" {
     name  = string
     value = string
   }))
+  default = []
 }
 
 variable "vpc_subnet_cidr" {
@@ -54,23 +66,44 @@ variable "vpc_subnet_cidr" {
 
 // Main
 
+resource "google_compute_global_address" "private_ip_address" {
+  name          = "${var.environment}-db-private-ip"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = var.vpc_network
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = var.vpc_network
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+}
+
 resource "google_sql_database_instance" "postgres_instance" {
-  name             = "${var.project_id}-${var.environment}-db-instance"
+  name             = "${var.environment}-db-instance"
   database_version = var.db_version
   region           = var.region
+
+  depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
     tier = var.db_tier
 
     ip_configuration {
-      ipv4_enabled    = false  // Disable public IP
+      ipv4_enabled    = false
       private_network = var.vpc_network
-
+      dynamic "authorized_networks" {
+        for_each = var.authorized_networks
+        content {
+          name  = authorized_networks.value.name
+          value = authorized_networks.value.value
+        }
+      }
     }
 
-    // Add this line to apply the tag
     user_labels = {
-      tag = "sql"
+      environment = var.environment
     }
   }
 
@@ -92,6 +125,7 @@ data "google_secret_manager_secret_version" "db_usernames" {
 data "google_secret_manager_secret_version" "db_passwords" {
   for_each = var.databases
   secret   = each.value.password_secret_id
+  project  = var.project_id
 }
 
 resource "google_sql_user" "database_users" {
@@ -101,44 +135,25 @@ resource "google_sql_user" "database_users" {
   password = data.google_secret_manager_secret_version.db_passwords[each.key].secret_data
 }
 
-resource "google_compute_firewall" "allow_sql" {
-  name    = "${var.project_id}-${var.environment}-allow-sql"
-  network = var.vpc_network
-
-  allow {
-    protocol = "tcp"
-    ports    = ["5432"]
-  }
-
-  // Use a variable for the CIDR range
-  source_ranges = [var.vpc_subnet_cidr]
-
-  target_tags = ["sql"]
-}
-
 // IAM
 
 data "google_compute_default_service_account" "default" {
   project = var.project_id
 }
 
-resource "google_project_iam_member" "cloudsql_client" {
+resource "google_project_iam_member" "default_sa_cloudsql_client_permissions" {
   project = var.project_id
   role    = "roles/cloudsql.client"
   member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
 }
 
-resource "google_project_iam_member" "secret_manager_access" {
+resource "google_project_iam_member" "default_sa_secret_manager_permissions" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
 }
 
 // Output
-
-output "db_public_ip" {
-  value = google_sql_database_instance.postgres_instance.public_ip_address
-}
 
 output "connection_name" {
   value = google_sql_database_instance.postgres_instance.connection_name
@@ -152,16 +167,6 @@ output "instance_name" {
   value = google_sql_database_instance.postgres_instance.name
 }
 
-output "postgres_connection_strings" {
-  # TODO: set to true when in CI
-  sensitive = false
-  value = {
-    for k, v in google_sql_database.databases : k => format(
-      "postgresql://%s:%s@%s:5432/%s",
-      data.google_secret_manager_secret_version.db_usernames[k].secret_data,
-      data.google_secret_manager_secret_version.db_passwords[k].secret_data,
-      google_sql_database_instance.postgres_instance.public_ip_address,
-      v.name
-    )
-  }
+output "private_ip_address" {
+  value = google_sql_database_instance.postgres_instance.private_ip_address
 }
