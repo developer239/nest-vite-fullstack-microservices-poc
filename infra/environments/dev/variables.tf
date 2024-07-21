@@ -125,3 +125,23 @@ variable "rabbitmq_management_port" {
     error_message = "The RabbitMQ Management port must be a positive number less than 65536."
   }
 }
+
+# Cloud Run
+
+variable "cloud_run_services" {
+  description = "Configuration for Cloud Run services"
+  type = map(object({
+    service_name      = string
+    docker_image_name = string
+    use_sql           = optional(bool, false)
+    use_rabbitmq      = optional(bool, false)
+    use_gcp_auth      = optional(bool, false)
+    use_firebase      = optional(bool, false)
+    env_vars          = optional(map(string), {})
+    secrets           = optional(list(object({
+      secretName   = string
+      variableName = string
+      key          = string
+    })), [])
+  }))
+}

@@ -56,125 +56,47 @@ module "firebase" {
   project_id = var.project_id
 }
 
-module "cloud_run_auth" {
+module "cloud_run_services" {
+  for_each = var.cloud_run_services
+
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
   environment       = var.environment
-  service_name      = "auth-service"
-  docker_image_name = "auth-service"
+  service_name      = each.value.service_name
+  docker_image_name = each.value.docker_image_name
   repository_id     = module.artifact_registry.repository_id
   vpc_connector     = module.vpc.vpc_connector_name
-  cloudsql_instance = module.cloud_sql.connection_name
+  cloudsql_instance = each.value.use_sql ? module.cloud_sql.connection_name : null
 
-  env_vars = {
-    NODE_ENV        = var.environment
-    APP_NAME        = "Auth Microservice"
-    DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
-    DATABASE_NAME   = module.cloud_sql.database_names["auth"]
-    AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-    AMQP_PORT       = var.rabbitmq_amqp_port
-    AMQP_QUEUE_NAME = "auth_queue"
-    GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
-  }
-
-  secrets = [
+  env_vars = merge(
+    each.value.env_vars,
     {
-      secretName   = "dev-auth-db-user"
-      variableName = "DATABASE_USER"
-      key          = "latest"
+      NODE_ENV = var.environment
     },
-    {
-      secretName   = "dev-auth-db-password"
-      variableName = "DATABASE_PASSWORD"
-      key          = "latest"
-    }
-  ]
-}
+      each.value.use_sql ? {
+      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
+      DATABASE_NAME = module.cloud_sql.database_names[each.key]
+    } : {},
+      each.value.use_rabbitmq ? {
+      AMQP_HOST = module.rabbitmq.rabbitmq_internal_ip
+      AMQP_PORT = var.rabbitmq_amqp_port
+    } : {},
+      each.value.use_gcp_auth ? {
+      GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
+    } : {},
+      each.value.use_firebase ? {
+      VITE_GRAPHQL_URI                 = "${module.cloud_run_services["gateway"].service_url}/graphql"
+      VITE_GRAPHQL_API_KEY             = module.firebase.api_key
+      VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
+      VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
+      VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
+      VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
+      VITE_GRAPHQL_APP_ID              = module.firebase.app_id
+    } : {}
+  )
 
-module "cloud_run_events" {
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = "events-service"
-  docker_image_name = "events-service"
-  repository_id     = module.artifact_registry.repository_id
-  vpc_connector     = module.vpc.vpc_connector_name
-  cloudsql_instance = module.cloud_sql.connection_name
-
-  env_vars = {
-    NODE_ENV        = var.environment
-    APP_NAME        = "Events Microservice"
-    DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
-    DATABASE_NAME   = module.cloud_sql.database_names["events"]
-    AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-    AMQP_PORT       = var.rabbitmq_amqp_port
-    AMQP_QUEUE_NAME = "auth_queue"
-    GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
-  }
-
-  secrets = [
-    {
-      secretName   = "dev-events-db-user"
-      variableName = "DATABASE_USER"
-      key          = "latest"
-    },
-    {
-      secretName   = "dev-events-db-password"
-      variableName = "DATABASE_PASSWORD"
-      key          = "latest"
-    }
-  ]
-}
-
-module "cloud_run_gateway" {
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = "gateway-service"
-  docker_image_name = "gateway-service"
-  repository_id     = module.artifact_registry.repository_id
-  vpc_connector     = module.vpc.vpc_connector_name
-
-  env_vars = {
-    NODE_ENV   = var.environment
-    APP_NAME   = "Gateway Microservice"
-    AUTH_URL   = module.cloud_run_auth.service_url
-    EVENTS_URL = module.cloud_run_events.service_url
-  }
-}
-
-module "cloud_run_storybook" {
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = "storybook-service"
-  docker_image_name = "storybook-service"
-  repository_id     = module.artifact_registry.repository_id
-}
-
-module "cloud_run_web" {
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = "web-service"
-  docker_image_name = "web-service"
-  repository_id     = module.artifact_registry.repository_id
-
-  env_vars = {
-    VITE_GRAPHQL_URI                 = "${module.cloud_run_gateway.service_url}/graphql"
-    VITE_PORT                        = "8080"
-    VITE_GRAPHQL_API_KEY             = module.firebase.api_key
-    VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
-    VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
-    VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
-    VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
-    VITE_GRAPHQL_APP_ID              = module.firebase.app_id
-  }
+  secrets = each.value.secrets
 
   depends_on = [module.firebase]
 }

@@ -36,3 +36,73 @@ databases = {
 
 rabbitmq_amqp_port = 5672
 rabbitmq_management_port = 15672
+
+# Cloud Run
+
+cloud_run_services = {
+  auth = {
+    service_name      = "auth-service"
+    docker_image_name = "auth-service"
+    use_sql           = true
+    use_rabbitmq      = true
+    use_gcp_auth      = true
+    env_vars = {
+      APP_NAME        = "Auth Microservice"
+      AMQP_QUEUE_NAME = "auth_queue"
+    }
+    secrets = [
+      {
+        secretName   = "dev-auth-db-user"
+        variableName = "DATABASE_USER"
+        key          = "latest"
+      },
+      {
+        secretName   = "dev-auth-db-password"
+        variableName = "DATABASE_PASSWORD"
+        key          = "latest"
+      }
+    ]
+  },
+  events = {
+    service_name      = "events-service"
+    docker_image_name = "events-service"
+    use_sql           = true
+    use_rabbitmq      = true
+    use_gcp_auth      = true
+    env_vars = {
+      APP_NAME        = "Events Microservice"
+      AMQP_QUEUE_NAME = "auth_queue"
+    }
+    secrets = [
+      {
+        secretName   = "dev-events-db-user"
+        variableName = "DATABASE_USER"
+        key          = "latest"
+      },
+      {
+        secretName   = "dev-events-db-password"
+        variableName = "DATABASE_PASSWORD"
+        key          = "latest"
+      }
+    ]
+  },
+  gateway = {
+    service_name      = "gateway-service"
+    docker_image_name = "gateway-service"
+    env_vars = {
+      APP_NAME = "Gateway Microservice"
+    }
+  },
+  storybook = {
+    service_name      = "storybook-service"
+    docker_image_name = "storybook-service"
+  },
+  web = {
+    service_name      = "web-service"
+    docker_image_name = "web-service"
+    use_firebase      = true
+    env_vars = {
+      VITE_PORT = "8080"
+    }
+  }
+}
