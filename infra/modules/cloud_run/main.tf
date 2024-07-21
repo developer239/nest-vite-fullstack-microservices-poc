@@ -121,7 +121,10 @@ resource "google_cloud_run_service" "service" {
     latest_revision = true
   }
 
-  depends_on = [google_project_iam_member.cloud_run_sa_secret_manager_permissions]
+  depends_on = [
+    google_project_iam_member.cloud_run_sa_secret_manager_permissions,
+    google_project_iam_member.cloud_run_sa_sql_client_permissions,
+  ]
 }
 
 resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
@@ -161,6 +164,11 @@ resource "google_cloud_run_service_iam_policy" "app_service_iam" {
   project     = var.project_id
   service     = google_cloud_run_service.service.name
   policy_data = data.google_iam_policy.cloud_run_policy.policy_data
+
+  depends_on = [
+    google_cloud_run_service.service,
+    google_service_account.cloud_run_sa
+  ]
 }
 
 data "google_iam_policy" "cloud_run_policy" {
