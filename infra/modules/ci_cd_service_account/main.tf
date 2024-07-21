@@ -2,10 +2,16 @@
 
 variable "project_id" {
   description = "The GCP project ID"
+  type        = string
 }
 
 variable "environment" {
   description = "Deployment environment"
+  type        = string
+  validation {
+    condition = contains(["dev", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, prod."
+  }
 }
 
 // Main
@@ -18,21 +24,15 @@ resource "google_service_account" "ci_cd" {
 
 // IAM
 
-resource "google_project_iam_member" "editor" {
-  project = var.project_id
-  role    = "roles/editor"
-  member  = "serviceAccount:${google_service_account.ci_cd.email}"
-}
+resource "google_project_iam_member" "ci_cd_sa_permissions" {
+  for_each = toset([
+    "roles/editor",
+    "roles/secretmanager.secretAccessor",
+    "roles/cloudsql.client"
+  ])
 
-resource "google_project_iam_member" "secret_manager_accessor" {
   project = var.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.ci_cd.email}"
-}
-
-resource "google_project_iam_member" "cloudsql_client" {
-  project = var.project_id
-  role    = "roles/cloudsql.client"
+  role    = each.key
   member  = "serviceAccount:${google_service_account.ci_cd.email}"
 }
 
@@ -52,24 +52,24 @@ resource "google_secret_manager_secret" "ci_cd_key_secret" {
 }
 
 resource "google_secret_manager_secret_version" "ci_cd_key_secret_version" {
-  secret      = google_secret_manager_secret.ci_cd_key_secret.id
+  secret = google_secret_manager_secret.ci_cd_key_secret.id
   secret_data = base64decode(google_service_account_key.ci_cd_key.private_key)
 }
 
 // Output
 
-output "service_account_email" {
+output "ci_cd_account_email" {
   value       = google_service_account.ci_cd.email
   description = "The email address of the service account"
 }
 
 output "ci_cd_key_secret_id" {
-  value       = google_secret_manager_secret.ci_cd_key_secret.id
+  value       = google_secret_manager_secret.ci_cd_key_secret.secret_id
   description = "The ID of the secret containing the service account key"
 }
 
 output "ci_cd_key_content" {
-  value       = base64decode(google_service_account_key.ci_cd_key.private_key)
+  value = base64decode(google_service_account_key.ci_cd_key.private_key)
   description = "The service account key content"
   sensitive   = true
 }
