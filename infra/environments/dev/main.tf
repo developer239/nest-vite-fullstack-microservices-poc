@@ -93,6 +93,7 @@ module "cloud_run_services" {
       each.value.use_gcp_auth ? {
       GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
     } : {},
+    // Add Firebase environment variables if the service uses Firebase (web apps)
       each.value.use_firebase ? {
       VITE_GRAPHQL_URI                 = "${module.cloud_run_services["gateway"].service_url}/graphql"
       VITE_GRAPHQL_API_KEY             = module.firebase.api_key
@@ -101,10 +102,18 @@ module "cloud_run_services" {
       VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
       VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
       VITE_GRAPHQL_APP_ID              = module.firebase.app_id
+    } : {},
+    // Add auth and events URLs to the gateway service
+      each.key == "gateway" ? {
+      AUTH_URL   = module.cloud_run_services["auth"].service_url
+      EVENTS_URL = module.cloud_run_services["events"].service_url
     } : {}
   )
 
   secrets = each.value.secrets
 
-  depends_on = [module.firebase, module.vpc, module.cloud_sql, module.rabbitmq]
+  depends_on = concat(
+    [module.firebase, module.vpc, module.cloud_sql, module.rabbitmq],
+    [for dep in each.value.depends_on : module.cloud_run_services[dep]]
+  )
 }

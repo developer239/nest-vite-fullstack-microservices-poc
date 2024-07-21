@@ -92,6 +92,7 @@ cloud_run_services = {
     env_vars = {
       APP_NAME = "Gateway Microservice"
     }
+    depends_on = ["auth", "events"]
   },
   storybook = {
     service_name      = "storybook-service"

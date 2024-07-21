@@ -133,17 +133,18 @@ variable "cloud_run_services" {
   type = map(object({
     service_name      = string
     docker_image_name = string
-    use_sql           = optional(bool, false)
-    use_rabbitmq      = optional(bool, false)
-    use_gcp_auth      = optional(bool, false)
-    use_firebase      = optional(bool, false)
-    env_vars          = optional(map(string), {})
-    secrets           = optional(list(object({
+    use_sql = optional(bool, false)
+    use_rabbitmq = optional(bool, false)
+    use_gcp_auth = optional(bool, false) // Use GCP auth for service account (for example Firebase admin SDK)
+    use_firebase = optional(bool, false) // Adds Firebase environment variables (for example web apps)
+    env_vars = optional(map(string), {})
+    secrets = optional(list(object({
       secretName   = string
       variableName = string
       key          = string
     })), [])
-    min_instances     = optional(number, 0)
-    max_instances     = optional(number, 10)
+    min_instances = optional(number, 0)
+    max_instances = optional(number, 10)
+    depends_on = optional(list(string), [])
   }))
 }
