@@ -36,8 +36,6 @@ project_variables = {
     # RabbitMQ
     "rabbitmq_amqp_port": 5672,
     "rabbitmq_management_port": 15672,
-    "rabbitmq_docker_image_name": "rabbitmq",
-    "rabbitmq_docker_image_tag": "latest",
 
     # Cloud Run
     "cloud_run_services": {

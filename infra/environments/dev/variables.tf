@@ -126,18 +126,6 @@ variable "rabbitmq_management_port" {
   }
 }
 
-variable "rabbitmq_docker_image_name" {
-  description = "The name of the Docker image for RabbitMQ"
-  type        = string
-  default     = "rabbitmq"
-}
-
-variable "rabbitmq_docker_image_tag" {
-  description = "The tag of the Docker image for RabbitMQ"
-  type        = string
-  default     = "latest"
-}
-
 # Cloud Run
 
 variable "cloud_run_services" {
