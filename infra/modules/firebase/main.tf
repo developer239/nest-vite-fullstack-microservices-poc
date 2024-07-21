@@ -28,13 +28,6 @@ resource "google_project_service" "firebase_api" {
   disable_on_destroy = false
 }
 
-resource "google_project_service" "identity_platform_api" {
-  project = var.project_id
-  service = "identitytoolkit.googleapis.com"
-
-  disable_on_destroy = false
-}
-
 resource "google_firebase_project" "default" {
   provider = google-beta
   project  = var.project_id
@@ -54,16 +47,6 @@ data "google_firebase_web_app_config" "env_specific" {
   provider   = google-beta
   web_app_id = google_firebase_web_app.env_specific.app_id
   project    = var.project_id
-}
-
-resource "google_identity_platform_default_supported_idp_config" "email_password" {
-  provider = google
-  project  = var.project_id
-  idp_id   = "password"
-
-  enabled = true
-
-  depends_on = [google_project_service.identity_platform_api]
 }
 
 // Output
