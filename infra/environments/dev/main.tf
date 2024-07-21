@@ -21,31 +21,20 @@ module "vpc" {
 
   project_id     = var.project_id
   region         = var.region
-  subnet_cidr    = "10.0.0.0/24"
-  connector_cidr = "10.0.1.0/28"
+  subnet_cidr    = var.vpc_subnet_cidr
+  connector_cidr = var.vpc_connector_cidr
 }
 
 module "cloud_sql" {
-  source     = "../../modules/cloud_sql"
-  project_id = var.project_id
-  region     = var.region
-  db_version = var.db_version
-  db_tier    = var.db_tier
-  databases = {
-    auth = {
-      name               = "auth_db"
-      user_secret_id     = "dev-auth-db-user"
-      password_secret_id = "dev-auth-db-password"
-    },
-    events = {
-      name               = "events_db"
-      user_secret_id     = "dev-events-db-user"
-      password_secret_id = "dev-events-db-password"
-    }
-  }
+  source              = "../../modules/cloud_sql"
+  project_id          = var.project_id
+  region              = var.region
+  db_version          = var.db_version
+  db_tier             = var.db_tier
+  databases           = var.databases
   environment         = var.environment
   vpc_network         = module.vpc.vpc_self_link
-  vpc_subnet_cidr = module.vpc.subnet_cidr
+  vpc_subnet_cidr     = module.vpc.subnet_cidr
   authorized_networks = var.authorized_networks
 }
 
@@ -58,6 +47,13 @@ module "rabbitmq" {
   vpc_subnet         = module.vpc.subnet_name
   vpc_subnet_cidr    = module.vpc.subnet_cidr
   vpc_connector_cidr = module.vpc.connector_cidr
+  amqp_port          = var.rabbitmq_amqp_port
+  management_port    = var.rabbitmq_management_port
+}
+
+module "firebase" {
+  source     = "../../modules/firebase"
+  project_id = var.project_id
 }
 
 module "cloud_run_auth" {
@@ -77,7 +73,7 @@ module "cloud_run_auth" {
     DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME   = module.cloud_sql.database_names["auth"]
     AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-    AMQP_PORT       = "5672"
+    AMQP_PORT       = var.rabbitmq_amqp_port
     AMQP_QUEUE_NAME = "auth_queue"
     GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
   }
@@ -113,7 +109,7 @@ module "cloud_run_events" {
     DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
     DATABASE_NAME   = module.cloud_sql.database_names["events"]
     AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
-    AMQP_PORT       = "5672"
+    AMQP_PORT       = var.rabbitmq_amqp_port
     AMQP_QUEUE_NAME = "auth_queue"
     GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
   }
@@ -160,11 +156,6 @@ module "cloud_run_storybook" {
   repository_id     = module.artifact_registry.repository_id
 }
 
-module "firebase" {
-  source     = "../../modules/firebase"
-  project_id = var.project_id
-}
-
 module "cloud_run_web" {
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
@@ -175,14 +166,14 @@ module "cloud_run_web" {
   repository_id     = module.artifact_registry.repository_id
 
   env_vars = {
-    VITE_GRAPHQL_URI               = "${module.cloud_run_gateway.service_url}/graphql"
-    VITE_PORT                      = "8080"
-    VITE_GRAPHQL_API_KEY           = module.firebase.api_key
-    VITE_GRAPHQL_AUTH_DOMAIN       = module.firebase.auth_domain
-    VITE_GRAPHQL_PROJECT_ID        = module.firebase.project_id
-    VITE_GRAPHQL_STORAGE_BUCKET    = module.firebase.storage_bucket
+    VITE_GRAPHQL_URI                 = "${module.cloud_run_gateway.service_url}/graphql"
+    VITE_PORT                        = "8080"
+    VITE_GRAPHQL_API_KEY             = module.firebase.api_key
+    VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
+    VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
+    VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
     VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
-    VITE_GRAPHQL_APP_ID            = module.firebase.app_id
+    VITE_GRAPHQL_APP_ID              = module.firebase.app_id
   }
 
   depends_on = [module.firebase]

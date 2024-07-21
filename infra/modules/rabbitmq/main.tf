@@ -33,6 +33,15 @@ variable "machine_type" {
   default = "e2-micro"
 }
 
+variable "amqp_port" {
+  type = number
+}
+
+variable "management_port" {
+  type = number
+}
+
+
 // Main
 
 locals {
@@ -80,21 +89,23 @@ resource "google_compute_instance" "rabbitmq" {
   metadata = {
     gce-container-declaration = yamlencode({
       spec = {
-        containers = [{
-          image = local.rabbitmq_image
-          name  = "rabbitmq"
-          ports = [
-            { containerPort = 5672 },
-            { containerPort = 15672 }
-          ]
-        }]
+        containers = [
+          {
+            image = local.rabbitmq_image
+            name  = "rabbitmq"
+            ports = [
+              { containerPort = var.amqp_port },
+              { containerPort = var.management_port }
+            ]
+          }
+        ]
         restartPolicy = "Always"
       }
     })
   }
 
   service_account {
-    email  = google_service_account.rabbitmq_sa.email
+    email = google_service_account.rabbitmq_sa.email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
@@ -109,11 +120,11 @@ resource "google_compute_firewall" "rabbitmq" {
 
   allow {
     protocol = "tcp"
-    ports    = ["5672", "15672"]
+    ports = [var.amqp_port, var.management_port]
   }
 
   source_ranges = [var.vpc_subnet_cidr, var.vpc_connector_cidr]
-  target_tags   = ["rabbitmq"]
+  target_tags = ["rabbitmq"]
 }
 
 data "google_compute_default_service_account" "default" {}
