@@ -69,6 +69,8 @@ module "cloud_run_services" {
   vpc_connector     = module.vpc.vpc_connector_name
   cloudsql_instance = each.value.use_sql ? module.cloud_sql.connection_name : null
   use_sql           = each.value.use_sql
+  min_instances     = each.value.min_instances
+  max_instances     = each.value.max_instances
 
   env_vars = merge(
     each.value.env_vars,

@@ -143,5 +143,7 @@ variable "cloud_run_services" {
       variableName = string
       key          = string
     })), [])
+    min_instances     = optional(number, 0)
+    max_instances     = optional(number, 10)
   }))
 }

@@ -19,11 +19,6 @@ variable "environment" {
   }
 }
 
-variable "service_name" {
-  description = "The name of the Cloud Run service"
-  type        = string
-}
-
 variable "repository_id" {
   description = "Repository ID for the Docker image in Artifact Registry"
   type        = string
@@ -34,10 +29,33 @@ variable "docker_image_name" {
   type        = string
 }
 
+variable "docker_image_tag" {
+  description = "The tag of the Docker image to deploy"
+  type        = string
+  default     = "latest"
+}
+
 variable "vpc_connector" {
   description = "The VPC connector for the Cloud Run service"
   type        = string
   default     = null
+}
+
+variable "service_name" {
+  description = "The name of the Cloud Run service"
+  type        = string
+}
+
+variable "min_instances" {
+  description = "Minimum number of instances to run"
+  type        = number
+  default     = 0
+}
+
+variable "max_instances" {
+  description = "Maximum number of instances to run"
+  type        = number
+  default     = 100
 }
 
 variable "env_vars" {
@@ -56,6 +74,7 @@ variable "secrets" {
   default = []
 }
 
+// Database Configuration
 variable "use_sql" {
   description = "Whether the service uses Cloud SQL"
   type        = bool
@@ -78,7 +97,7 @@ resource "google_cloud_run_service" "service" {
     spec {
       service_account_name = google_service_account.cloud_run_sa.email
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.environment}-${var.docker_image_name}:latest"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.environment}-${var.docker_image_name}:${var.docker_image_tag}"
 
         dynamic "env" {
           for_each = var.env_vars
@@ -111,7 +130,11 @@ resource "google_cloud_run_service" "service" {
         } : {},
           var.cloudsql_instance != null ? {
           "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance
-        } : {}
+        } : {},
+        {
+          "autoscaling.knative.dev/minScale" = var.min_instances
+          "autoscaling.knative.dev/maxScale" = var.max_instances
+        }
       )
     }
   }
@@ -187,12 +210,4 @@ data "google_iam_policy" "cloud_run_policy" {
 
 output "service_url" {
   value = google_cloud_run_service.service.status[0].url
-}
-
-output "service_name" {
-  value = google_cloud_run_service.service.name
-}
-
-output "neg_id" {
-  value = google_compute_region_network_endpoint_group.cloudrun_neg.id
 }
