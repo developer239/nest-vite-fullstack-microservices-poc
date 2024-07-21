@@ -5,6 +5,15 @@ variable "project_id" {
   type        = string
 }
 
+variable "environment" {
+  description = "The environment (e.g., dev, prod)"
+  type        = string
+  validation {
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, prod."
+  }
+}
+
 // Main
 
 resource "google_project_service" "firebase_api" {
@@ -24,7 +33,7 @@ resource "google_firebase_project" "default" {
 resource "google_firebase_web_app" "default" {
   provider     = google-beta
   project      = var.project_id
-  display_name = "${var.project_id}-web-app"
+  display_name = "${var.project_id}-${var.environment}-web-app"
 
   depends_on = [google_firebase_project.default]
 }
