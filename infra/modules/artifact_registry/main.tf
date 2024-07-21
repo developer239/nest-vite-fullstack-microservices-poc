@@ -24,7 +24,7 @@ variable "environment" {
 resource "google_artifact_registry_repository" "docker_repository" {
   project       = var.project_id
   location      = var.region
-  repository_id = "${var.project_id}-${var.environment}-repo"
+  repository_id = "${var.environment}-repo"
   description   = "Docker repository for ${var.environment} environment"
   format        = "DOCKER"
 
