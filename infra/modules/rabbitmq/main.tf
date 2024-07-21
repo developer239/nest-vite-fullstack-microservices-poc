@@ -65,18 +65,6 @@ variable "management_port" {
   }
 }
 
-variable "docker_image_name" {
-  description = "The name of the Docker image for RabbitMQ"
-  type        = string
-  default     = "rabbitmq"
-}
-
-variable "docker_image_tag" {
-  description = "The tag of the Docker image for RabbitMQ"
-  type        = string
-  default     = "latest"
-}
-
 // TODO: possibly remove this option I am not sure why was it added in the first place
 variable "enable_public_ip" {
   description = "Whether to enable a public IP for the RabbitMQ instance"
@@ -85,24 +73,6 @@ variable "enable_public_ip" {
 }
 
 // Main
-
-resource "google_service_account" "rabbitmq_sa" {
-  account_id   = "${var.environment}-rabbitmq-sa"
-  display_name = "Service Account for RabbitMQ Instance"
-  project      = var.project_id
-}
-
-resource "google_project_iam_member" "rabbitmq_sa_permissions" {
-  for_each = toset([
-    "roles/artifactregistry.reader",
-    "roles/logging.logWriter",
-    "roles/monitoring.metricWriter"
-  ])
-
-  project = var.project_id
-  role    = each.key
-  member  = "serviceAccount:${google_service_account.rabbitmq_sa.email}"
-}
 
 resource "google_compute_address" "external_ip" {
   count   = var.enable_public_ip ? 1 : 0
@@ -176,6 +146,26 @@ resource "google_compute_firewall" "rabbitmq" {
   target_tags   = ["rabbitmq"]
 
   depends_on = [google_compute_instance.rabbitmq]
+}
+
+// IAM
+
+resource "google_service_account" "rabbitmq_sa" {
+  account_id   = "${var.environment}-rabbitmq-sa"
+  display_name = "Service Account for RabbitMQ Instance"
+  project      = var.project_id
+}
+
+resource "google_project_iam_member" "rabbitmq_sa_permissions" {
+  for_each = toset([
+    "roles/artifactregistry.reader",
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter"
+  ])
+
+  project = var.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.rabbitmq_sa.email}"
 }
 
 data "google_compute_default_service_account" "default" {}
