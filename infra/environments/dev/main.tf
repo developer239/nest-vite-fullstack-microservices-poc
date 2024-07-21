@@ -42,6 +42,8 @@ module "cloud_sql" {
   vpc_network         = module.vpc.vpc_self_link
   vpc_subnet_cidr     = module.vpc.subnet_cidr
   authorized_networks = var.authorized_networks
+
+  depends_on = [module.vpc]
 }
 
 module "rabbitmq" {
@@ -55,6 +57,8 @@ module "rabbitmq" {
   vpc_connector_cidr = module.vpc.connector_cidr
   amqp_port          = var.rabbitmq_amqp_port
   management_port    = var.rabbitmq_management_port
+
+  depends_on = [module.vpc]
 }
 
 module "cloud_run_services" {
@@ -102,5 +106,5 @@ module "cloud_run_services" {
 
   secrets = each.value.secrets
 
-  depends_on = [module.firebase, module.vpc]
+  depends_on = [module.firebase, module.vpc, module.cloud_sql, module.rabbitmq]
 }
