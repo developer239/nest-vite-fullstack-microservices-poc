@@ -80,11 +80,11 @@ module "cloud_run_auth" {
   env_vars = merge(
     var.cloud_run_services.auth.env_vars,
     {
-      NODE_ENV      = var.environment
-      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
-      DATABASE_NAME = module.cloud_sql.database_names["auth"]
-      AMQP_HOST     = module.rabbitmq.rabbitmq_internal_ip
-      AMQP_PORT     = var.rabbitmq_amqp_port
+      NODE_ENV        = var.environment
+      DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
+      DATABASE_NAME   = module.cloud_sql.database_names["auth"]
+      AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
+      AMQP_PORT       = var.rabbitmq_amqp_port
       GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
     }
   )
@@ -111,11 +111,11 @@ module "cloud_run_events" {
   env_vars = merge(
     var.cloud_run_services.events.env_vars,
     {
-      NODE_ENV      = var.environment
-      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
-      DATABASE_NAME = module.cloud_sql.database_names["events"]
-      AMQP_HOST     = module.rabbitmq.rabbitmq_internal_ip
-      AMQP_PORT     = var.rabbitmq_amqp_port
+      NODE_ENV        = var.environment
+      DATABASE_HOST   = "/cloudsql/${module.cloud_sql.connection_name}"
+      DATABASE_NAME   = module.cloud_sql.database_names["events"]
+      AMQP_HOST       = module.rabbitmq.rabbitmq_internal_ip
+      AMQP_PORT       = var.rabbitmq_amqp_port
       GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
     }
   )
@@ -140,8 +140,8 @@ module "cloud_run_gateway" {
   env_vars = merge(
     var.cloud_run_services.gateway.env_vars,
     {
-      NODE_ENV  = var.environment
-      AUTH_URL  = module.cloud_run_auth.service_url
+      NODE_ENV   = var.environment
+      AUTH_URL   = module.cloud_run_auth.service_url
       EVENTS_URL = module.cloud_run_events.service_url
     }
   )

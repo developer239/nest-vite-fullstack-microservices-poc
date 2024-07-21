@@ -137,16 +137,14 @@ resource "google_compute_instance" "rabbitmq" {
   metadata = {
     gce-container-declaration = yamlencode({
       spec = {
-        containers = [
-          {
-            image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.project_id}-${var.environment}-repo/${var.environment}-${var.docker_image_name}:${var.docker_image_tag}"
-            name  = "rabbitmq"
-            ports = [
-              { containerPort = var.amqp_port },
-              { containerPort = var.management_port }
-            ]
-          }
-        ]
+        containers = [{
+          image = "rabbitmq:3-management"
+          name  = "rabbitmq"
+          ports = [
+            { containerPort = 5672 },
+            { containerPort = 15672 }
+          ]
+        }]
         restartPolicy = "Always"
       }
     })
