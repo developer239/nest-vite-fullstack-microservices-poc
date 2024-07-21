@@ -43,14 +43,6 @@ resource "google_firebase_web_app" "env_specific" {
   depends_on = [google_firebase_project.default]
 }
 
-resource "google_firebase_project_location" "default" {
-  provider    = google-beta
-  project     = var.project_id
-  location_id = var.region
-
-  depends_on = [google_firebase_project.default]
-}
-
 data "google_firebase_web_app_config" "env_specific" {
   provider   = google-beta
   web_app_id = google_firebase_web_app.env_specific.app_id
@@ -60,18 +52,18 @@ data "google_firebase_web_app_config" "env_specific" {
 // Output
 
 output "app_id" {
-  description = "Firebase App ID for ${var.environment}"
+  description = "Firebase App ID"
   value       = google_firebase_web_app.env_specific.app_id
 }
 
 output "api_key" {
-  description = "Firebase API Key for ${var.environment}"
+  description = "Firebase API Key"
   value       = data.google_firebase_web_app_config.env_specific.api_key
   sensitive   = true
 }
 
 output "auth_domain" {
-  description = "Firebase Auth Domain for ${var.environment}"
+  description = "Firebase Auth Domain for"
   value       = data.google_firebase_web_app_config.env_specific.auth_domain
 }
 
@@ -81,11 +73,11 @@ output "project_id" {
 }
 
 output "storage_bucket" {
-  description = "Firebase Storage Bucket for ${var.environment}"
+  description = "Firebase Storage Bucket"
   value       = data.google_firebase_web_app_config.env_specific.storage_bucket
 }
 
 output "messaging_sender_id" {
-  description = "Firebase Messaging Sender ID for ${var.environment}"
+  description = "Firebase Messaging Sender ID"
   value       = data.google_firebase_web_app_config.env_specific.messaging_sender_id
 }
