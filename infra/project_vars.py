@@ -1,4 +1,7 @@
 project_variables = {
+    "project_name": "FS Microservices",
+    "bucket_name": "fs-microservices-bucket",
+
     # Project
     "project_id": "fs-microservices",
     "environment": "dev",
@@ -33,6 +36,8 @@ project_variables = {
     # RabbitMQ
     "rabbitmq_amqp_port": 5672,
     "rabbitmq_management_port": 15672,
+    "rabbitmq_docker_image_name": "rabbitmq",
+    "rabbitmq_docker_image_tag": "latest",
 
     # Cloud Run
     "cloud_run_services": {

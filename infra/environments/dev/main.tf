@@ -57,6 +57,8 @@ module "rabbitmq" {
   vpc_connector_cidr = module.vpc.connector_cidr
   amqp_port          = var.rabbitmq_amqp_port
   management_port    = var.rabbitmq_management_port
+  docker_image_name  = var.rabbitmq_docker_image_name
+  docker_image_tag   = var.rabbitmq_docker_image_tag
 
   depends_on = [module.vpc]
 }
