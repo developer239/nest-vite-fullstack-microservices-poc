@@ -50,6 +50,11 @@ variable "vpc_network" {
   type        = string
 }
 
+variable "vpc_connection" {
+  description = "The VPC connection resource (for dependency only)"
+  type        = any
+}
+
 variable "authorized_networks" {
   description = "List of authorized networks with their names and IP ranges"
   type = list(object({
@@ -57,11 +62,6 @@ variable "authorized_networks" {
     value = string
   }))
   default = []
-}
-
-variable "vpc_subnet_cidr" {
-  description = "The CIDR range of the VPC subnet"
-  type        = string
 }
 
 // Main
@@ -74,18 +74,12 @@ resource "google_compute_global_address" "private_ip_address" {
   network       = var.vpc_network
 }
 
-resource "google_service_networking_connection" "private_vpc_connection" {
-  network                 = var.vpc_network
-  service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
-}
-
 resource "google_sql_database_instance" "postgres_instance" {
   name             = "${var.environment}-db-instance"
   database_version = var.db_version
   region           = var.region
 
-  depends_on = [google_service_networking_connection.private_vpc_connection]
+  depends_on = [var.vpc_connection]
 
   settings {
     tier = var.db_tier

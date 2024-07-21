@@ -40,8 +40,8 @@ module "cloud_sql" {
   databases           = var.databases
   environment         = var.environment
   vpc_network         = module.vpc.vpc_self_link
-  vpc_subnet_cidr     = module.vpc.subnet_cidr
   authorized_networks = var.authorized_networks
+  vpc_connection      = module.vpc.private_vpc_connection
 
   depends_on = [module.vpc]
 }
@@ -63,59 +63,139 @@ module "rabbitmq" {
   depends_on = [module.vpc]
 }
 
-module "cloud_run_services" {
-  for_each = var.cloud_run_services
-
+module "cloud_run_auth" {
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
   environment       = var.environment
-  service_name      = each.value.service_name
-  docker_image_name = each.value.docker_image_name
+  service_name      = var.cloud_run_services.auth.service_name
+  docker_image_name = var.cloud_run_services.auth.docker_image_name
   repository_id     = module.artifact_registry.repository_id
   vpc_connector     = module.vpc.vpc_connector_name
-  cloudsql_instance = each.value.use_sql ? module.cloud_sql.connection_name : null
-  use_sql           = each.value.use_sql
-  min_instances     = each.value.min_instances
-  max_instances     = each.value.max_instances
+  cloudsql_instance = module.cloud_sql.connection_name
+  use_sql           = true
+  min_instances     = var.cloud_run_services.auth.min_instances
+  max_instances     = var.cloud_run_services.auth.max_instances
 
   env_vars = merge(
-    each.value.env_vars,
+    var.cloud_run_services.auth.env_vars,
+    {
+      NODE_ENV      = var.environment
+      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
+      DATABASE_NAME = module.cloud_sql.database_names["auth"]
+      AMQP_HOST     = module.rabbitmq.rabbitmq_internal_ip
+      AMQP_PORT     = var.rabbitmq_amqp_port
+      GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
+    }
+  )
+
+  secrets = var.cloud_run_services.auth.secrets
+
+  depends_on = [module.vpc, module.cloud_sql, module.rabbitmq]
+}
+
+module "cloud_run_events" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = var.cloud_run_services.events.service_name
+  docker_image_name = var.cloud_run_services.events.docker_image_name
+  repository_id     = module.artifact_registry.repository_id
+  vpc_connector     = module.vpc.vpc_connector_name
+  cloudsql_instance = module.cloud_sql.connection_name
+  use_sql           = true
+  min_instances     = var.cloud_run_services.events.min_instances
+  max_instances     = var.cloud_run_services.events.max_instances
+
+  env_vars = merge(
+    var.cloud_run_services.events.env_vars,
+    {
+      NODE_ENV      = var.environment
+      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
+      DATABASE_NAME = module.cloud_sql.database_names["events"]
+      AMQP_HOST     = module.rabbitmq.rabbitmq_internal_ip
+      AMQP_PORT     = var.rabbitmq_amqp_port
+      GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
+    }
+  )
+
+  secrets = var.cloud_run_services.events.secrets
+
+  depends_on = [module.vpc, module.cloud_sql, module.rabbitmq]
+}
+
+module "cloud_run_gateway" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = var.cloud_run_services.gateway.service_name
+  docker_image_name = var.cloud_run_services.gateway.docker_image_name
+  repository_id     = module.artifact_registry.repository_id
+  vpc_connector     = module.vpc.vpc_connector_name
+  min_instances     = var.cloud_run_services.gateway.min_instances
+  max_instances     = var.cloud_run_services.gateway.max_instances
+
+  env_vars = merge(
+    var.cloud_run_services.gateway.env_vars,
+    {
+      NODE_ENV  = var.environment
+      AUTH_URL  = module.cloud_run_auth.service_url
+      EVENTS_URL = module.cloud_run_events.service_url
+    }
+  )
+
+  depends_on = [module.vpc, module.cloud_run_auth, module.cloud_run_events]
+}
+
+module "cloud_run_storybook" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = var.cloud_run_services.storybook.service_name
+  docker_image_name = var.cloud_run_services.storybook.docker_image_name
+  repository_id     = module.artifact_registry.repository_id
+  vpc_connector     = module.vpc.vpc_connector_name
+  min_instances     = var.cloud_run_services.storybook.min_instances
+  max_instances     = var.cloud_run_services.storybook.max_instances
+
+  env_vars = merge(
+    var.cloud_run_services.storybook.env_vars,
     {
       NODE_ENV = var.environment
-    },
-      each.value.use_sql ? {
-      DATABASE_HOST = "/cloudsql/${module.cloud_sql.connection_name}"
-      DATABASE_NAME = module.cloud_sql.database_names[each.key]
-    } : {},
-      each.value.use_rabbitmq ? {
-      AMQP_HOST = module.rabbitmq.rabbitmq_internal_ip
-      AMQP_PORT = var.rabbitmq_amqp_port
-    } : {},
-      each.value.use_gcp_auth ? {
-      GCP_AUTH_SA_KEY = module.ci_cd_service_account.ci_cd_key_content
-    } : {},
-    // Add Firebase environment variables if the service uses Firebase (web apps)
-      each.value.use_firebase ? {
-      VITE_GRAPHQL_URI                 = "${module.cloud_run_services["gateway"].service_url}/graphql"
+    }
+  )
+
+  depends_on = [module.vpc]
+}
+
+module "cloud_run_web" {
+  source            = "../../modules/cloud_run"
+  project_id        = var.project_id
+  region            = var.region
+  environment       = var.environment
+  service_name      = var.cloud_run_services.web.service_name
+  docker_image_name = var.cloud_run_services.web.docker_image_name
+  repository_id     = module.artifact_registry.repository_id
+  vpc_connector     = module.vpc.vpc_connector_name
+  min_instances     = var.cloud_run_services.web.min_instances
+  max_instances     = var.cloud_run_services.web.max_instances
+
+  env_vars = merge(
+    var.cloud_run_services.web.env_vars,
+    {
+      NODE_ENV                         = var.environment
+      VITE_GRAPHQL_URI                 = "${module.cloud_run_gateway.service_url}/graphql"
       VITE_GRAPHQL_API_KEY             = module.firebase.api_key
       VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
       VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
       VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
       VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
       VITE_GRAPHQL_APP_ID              = module.firebase.app_id
-    } : {},
-    // Add auth and events URLs to the gateway service
-      each.key == "gateway" ? {
-      AUTH_URL   = module.cloud_run_services["auth"].service_url
-      EVENTS_URL = module.cloud_run_services["events"].service_url
-    } : {}
+    }
   )
 
-  secrets = each.value.secrets
-
-  depends_on = concat(
-    [module.firebase, module.vpc, module.cloud_sql, module.rabbitmq],
-    [for dep in each.value.depends_on : module.cloud_run_services[dep]]
-  )
+  depends_on = [module.vpc, module.firebase, module.cloud_run_gateway]
 }

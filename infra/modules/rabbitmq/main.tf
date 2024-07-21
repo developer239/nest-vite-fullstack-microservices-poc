@@ -77,7 +77,39 @@ variable "docker_image_tag" {
   default     = "latest"
 }
 
+// TODO: possibly remove this option I am not sure why was it added in the first place
+variable "enable_public_ip" {
+  description = "Whether to enable a public IP for the RabbitMQ instance"
+  type        = bool
+  default     = false
+}
+
 // Main
+
+resource "google_service_account" "rabbitmq_sa" {
+  account_id   = "${var.environment}-rabbitmq-sa"
+  display_name = "Service Account for RabbitMQ Instance"
+  project      = var.project_id
+}
+
+resource "google_project_iam_member" "rabbitmq_sa_permissions" {
+  for_each = toset([
+    "roles/artifactregistry.reader",
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter"
+  ])
+
+  project = var.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.rabbitmq_sa.email}"
+}
+
+resource "google_compute_address" "external_ip" {
+  count   = var.enable_public_ip ? 1 : 0
+  name    = "${var.environment}-rabbitmq-external-ip"
+  project = var.project_id
+  region  = var.region
+}
 
 resource "google_compute_instance" "rabbitmq" {
   name         = "${var.environment}-rabbitmq"
@@ -94,8 +126,11 @@ resource "google_compute_instance" "rabbitmq" {
   network_interface {
     network    = var.vpc_network
     subnetwork = var.vpc_subnet
-    access_config {
-      nat_ip = google_compute_address.external_ip.address
+    dynamic "access_config" {
+      for_each = var.enable_public_ip ? [1] : []
+      content {
+        nat_ip = google_compute_address.external_ip[0].address
+      }
     }
   }
 
@@ -126,17 +161,11 @@ resource "google_compute_instance" "rabbitmq" {
 
   allow_stopping_for_update = true
 
-  depends_on = [google_project_iam_member.rabbitmq_sa_ar_reader_permissions]
-}
-
-resource "google_compute_address" "external_ip" {
-  name    = "${var.environment}-rabbitmq-external-ip"
-  project = var.project_id
-  region  = var.region
+  depends_on = [google_project_iam_member.rabbitmq_sa_permissions]
 }
 
 resource "google_compute_firewall" "rabbitmq" {
-  name    = "${google_compute_instance.rabbitmq.name}-allow"
+  name    = "${var.environment}-rabbitmq-allow"
   network = var.vpc_network
   project = var.project_id
 
@@ -151,50 +180,22 @@ resource "google_compute_firewall" "rabbitmq" {
   depends_on = [google_compute_instance.rabbitmq]
 }
 
-// IAM
-
-resource "google_service_account" "rabbitmq_sa" {
-  account_id   = "${google_compute_instance.rabbitmq.name}-sa"
-  display_name = "Service Account for RabbitMQ Instance"
-  project      = var.project_id
-}
-
-resource "google_project_iam_member" "rabbitmq_sa_ar_reader_permissions" {
-  project = var.project_id
-  role    = "roles/artifactregistry.reader"
-  member  = "serviceAccount:${google_service_account.rabbitmq_sa.email}"
-}
-
 data "google_compute_default_service_account" "default" {}
 
-resource "google_project_iam_member" "default_sa_iap_permissions" {
+resource "google_project_iam_member" "iap_tunnel_user" {
   project = var.project_id
   role    = "roles/iap.tunnelResourceAccessor"
   member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
 }
 
-resource "google_compute_instance_iam_policy" "rabbitmq_instance_iam" {
-  project     = var.project_id
-  zone        = google_compute_instance.rabbitmq.zone
-  instance_name = google_compute_instance.rabbitmq.name
-  policy_data = data.google_iam_policy.rabbitmq_policy.policy_data
-
-  depends_on = [
-    google_compute_instance.rabbitmq,
-    google_service_account.rabbitmq_sa
-  ]
-}
-
-data "google_iam_policy" "rabbitmq_policy" {
-  binding {
-    role = "roles/compute.instanceAdmin.v1"
-    members = ["serviceAccount:${google_service_account.rabbitmq_sa.email}"]
-  }
-}
-
-// Output
+// Outputs
 
 output "rabbitmq_internal_ip" {
   value       = google_compute_instance.rabbitmq.network_interface[0].network_ip
   description = "The internal IP address of the RabbitMQ instance"
+}
+
+output "rabbitmq_external_ip" {
+  value       = var.enable_public_ip ? google_compute_address.external_ip[0].address : null
+  description = "The external IP address of the RabbitMQ instance (if enabled)"
 }

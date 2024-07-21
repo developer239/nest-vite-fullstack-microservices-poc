@@ -113,8 +113,10 @@ resource "google_compute_global_address" "private_ip_address" {
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  network = google_compute_network.vpc.id
-  service = "servicenetworking.googleapis.com"
+  for_each = toset([google_compute_network.vpc.id])
+
+  network                 = each.key
+  service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
 
@@ -214,4 +216,8 @@ output "vpc_connector_name" {
 output "connector_cidr" {
   description = "The CIDR range of the VPC connector"
   value       = google_vpc_access_connector.connector.ip_cidr_range
+}
+
+output "private_vpc_connection" {
+  value = google_service_networking_connection.private_vpc_connection[google_compute_network.vpc.id]
 }
