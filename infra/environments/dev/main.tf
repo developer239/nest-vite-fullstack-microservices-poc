@@ -175,32 +175,32 @@ module "cloud_run_storybook" {
   depends_on = [module.vpc]
 }
 
-module "cloud_run_web" {
-  count             = var.skip_cloud_run ? 0 : 1
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = var.cloud_run_services.web.service_name
-  docker_image_name = var.cloud_run_services.web.docker_image_name
-  repository_id     = module.artifact_registry.repository_id
-  vpc_connector     = module.vpc.vpc_connector_name
-  min_instances     = var.cloud_run_services.web.min_instances
-  max_instances     = var.cloud_run_services.web.max_instances
-
-  env_vars = merge(
-    var.cloud_run_services.web.env_vars,
-    {
-      NODE_ENV                         = var.environment
-      VITE_GRAPHQL_URI                 = var.skip_cloud_run ? "" : "${module.cloud_run_gateway[0].service_url}/graphql"
-      VITE_GRAPHQL_API_KEY             = module.firebase.api_key
-      VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
-      VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
-      VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
-      VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
-      VITE_GRAPHQL_APP_ID              = module.firebase.app_id
-    }
-  )
-
-  depends_on = [module.vpc, module.firebase, module.cloud_run_gateway]
-}
+# module "cloud_run_web" {
+#   count             = var.skip_cloud_run ? 0 : 1
+#   source            = "../../modules/cloud_run"
+#   project_id        = var.project_id
+#   region            = var.region
+#   environment       = var.environment
+#   service_name      = var.cloud_run_services.web.service_name
+#   docker_image_name = var.cloud_run_services.web.docker_image_name
+#   repository_id     = module.artifact_registry.repository_id
+#   vpc_connector     = module.vpc.vpc_connector_name
+#   min_instances     = var.cloud_run_services.web.min_instances
+#   max_instances     = var.cloud_run_services.web.max_instances
+#
+#   env_vars = merge(
+#     var.cloud_run_services.web.env_vars,
+#     {
+#       NODE_ENV                         = var.environment
+#       VITE_GRAPHQL_URI                 = var.skip_cloud_run ? "" : "${module.cloud_run_gateway[0].service_url}/graphql"
+#       VITE_GRAPHQL_API_KEY             = module.firebase.api_key
+#       VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
+#       VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id
+#       VITE_GRAPHQL_STORAGE_BUCKET      = module.firebase.storage_bucket
+#       VITE_GRAPHQL_MESSAGING_SENDER_ID = module.firebase.messaging_sender_id
+#       VITE_GRAPHQL_APP_ID              = module.firebase.app_id
+#     }
+#   )
+#
+#   depends_on = [module.vpc, module.firebase, module.cloud_run_gateway]
+# }

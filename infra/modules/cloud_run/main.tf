@@ -145,6 +145,7 @@ resource "google_cloud_run_service" "service" {
   }
 
   depends_on = [
+    google_service_account.cloud_run_sa,
     google_project_iam_member.cloud_run_sa_secret_manager_permissions,
     google_project_iam_member.cloud_run_sa_sql_client_permissions,
   ]
@@ -159,6 +160,8 @@ resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
   cloud_run {
     service = google_cloud_run_service.service.name
   }
+
+  depends_on = [google_cloud_run_service.service]
 }
 
 // IAM
@@ -173,6 +176,8 @@ resource "google_project_iam_member" "cloud_run_sa_secret_manager_permissions" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+
+  depends_on = [google_service_account.cloud_run_sa]
 }
 
 resource "google_project_iam_member" "cloud_run_sa_sql_client_permissions" {
@@ -180,6 +185,8 @@ resource "google_project_iam_member" "cloud_run_sa_sql_client_permissions" {
   project = var.project_id
   role    = "roles/cloudsql.client"
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+
+  depends_on = [google_service_account.cloud_run_sa]
 }
 
 resource "google_cloud_run_service_iam_policy" "app_service_iam" {
@@ -190,7 +197,9 @@ resource "google_cloud_run_service_iam_policy" "app_service_iam" {
 
   depends_on = [
     google_cloud_run_service.service,
-    google_service_account.cloud_run_sa
+    google_service_account.cloud_run_sa,
+    google_project_iam_member.cloud_run_sa_secret_manager_permissions,
+    google_project_iam_member.cloud_run_sa_sql_client_permissions,
   ]
 }
 

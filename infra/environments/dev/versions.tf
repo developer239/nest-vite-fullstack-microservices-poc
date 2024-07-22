@@ -9,6 +9,6 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "bucket-for-some-app-infra-2"
+    bucket = "bucket-for-some-app-infra-3"
   }
 }

@@ -3,11 +3,11 @@
 # Refer to the responsible Jupyter notebook if you want to make changes.
 #
 
-project_name = "Some App To Deploy 2"
+project_name = "Some App To Deploy 3"
 
-bucket_name = "bucket-for-some-app-infra-2"
+bucket_name = "bucket-for-some-app-infra-3"
 
-project_id = "some-app-to-deploy-2"
+project_id = "some-app-to-deploy-3"
 
 environment = "dev"
 
