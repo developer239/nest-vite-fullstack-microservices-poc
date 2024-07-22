@@ -126,30 +126,31 @@ module "cloud_run_events" {
   depends_on = [module.vpc, module.cloud_sql, module.rabbitmq]
 }
 
-module "cloud_run_gateway" {
-  count             = var.skip_cloud_run ? 0 : 1
-  source            = "../../modules/cloud_run"
-  project_id        = var.project_id
-  region            = var.region
-  environment       = var.environment
-  service_name      = var.cloud_run_services.gateway.service_name
-  docker_image_name = var.cloud_run_services.gateway.docker_image_name
-  repository_id     = module.artifact_registry.repository_id
-  vpc_connector     = module.vpc.vpc_connector_name
-  min_instances     = var.cloud_run_services.gateway.min_instances
-  max_instances     = var.cloud_run_services.gateway.max_instances
-
-  env_vars = merge(
-    var.cloud_run_services.gateway.env_vars,
-    {
-      NODE_ENV   = var.environment
-      AUTH_URL   = var.skip_cloud_run ? "" : module.cloud_run_auth[0].service_url
-      EVENTS_URL = var.skip_cloud_run ? "" : module.cloud_run_events[0].service_url
-    }
-  )
-
-  depends_on = [module.vpc, module.cloud_run_auth, module.cloud_run_events]
-}
+# # TODO: auth and events don't have health check yet
+# module "cloud_run_gateway" {
+#   count             = var.skip_cloud_run ? 0 : 1
+#   source            = "../../modules/cloud_run"
+#   project_id        = var.project_id
+#   region            = var.region
+#   environment       = var.environment
+#   service_name      = var.cloud_run_services.gateway.service_name
+#   docker_image_name = var.cloud_run_services.gateway.docker_image_name
+#   repository_id     = module.artifact_registry.repository_id
+#   vpc_connector     = module.vpc.vpc_connector_name
+#   min_instances     = var.cloud_run_services.gateway.min_instances
+#   max_instances     = var.cloud_run_services.gateway.max_instances
+#
+#   env_vars = merge(
+#     var.cloud_run_services.gateway.env_vars,
+#     {
+#       NODE_ENV   = var.environment
+#       AUTH_URL   = var.skip_cloud_run ? "" : module.cloud_run_auth[0].service_url
+#       EVENTS_URL = var.skip_cloud_run ? "" : module.cloud_run_events[0].service_url
+#     }
+#   )
+#
+#   depends_on = [module.vpc, module.cloud_run_auth, module.cloud_run_events]
+# }
 
 module "cloud_run_storybook" {
   count             = var.skip_cloud_run ? 0 : 1

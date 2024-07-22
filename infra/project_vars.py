@@ -1,5 +1,6 @@
 project_variables = {
     "project_name": "Some App To Deploy 2",
+    # TODO: implement python override for versions.tf bucket config
     "bucket_name": "bucket-for-some-app-infra-2",
 
     # Project
