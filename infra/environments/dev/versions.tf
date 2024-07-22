@@ -9,6 +9,6 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "fs-microservices-bucket"
+    bucket = "bucket-for-some-app-infra-2"
   }
 }

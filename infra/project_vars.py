@@ -1,9 +1,9 @@
 project_variables = {
-    "project_name": "FS Microservices",
-    "bucket_name": "fs-microservices-bucket",
+    "project_name": "Some App To Deploy 2",
+    "bucket_name": "bucket-for-some-app-infra-2",
 
     # Project
-    "project_id": "fs-microservices",
+    "project_id": "some-app-to-deploy-2",
     "environment": "dev",
     "region": "us-central1",
 

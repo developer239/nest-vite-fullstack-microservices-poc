@@ -113,9 +113,7 @@ resource "google_compute_global_address" "private_ip_address" {
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  for_each = toset([google_compute_network.vpc.id])
-
-  network                 = each.key
+  network                 = google_compute_network.vpc.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
@@ -219,5 +217,5 @@ output "connector_cidr" {
 }
 
 output "private_vpc_connection" {
-  value = google_service_networking_connection.private_vpc_connection[google_compute_network.vpc.id]
+  value = google_service_networking_connection.private_vpc_connection
 }

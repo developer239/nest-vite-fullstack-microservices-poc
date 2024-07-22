@@ -191,7 +191,7 @@ module "cloud_run_web" {
     var.cloud_run_services.web.env_vars,
     {
       NODE_ENV                         = var.environment
-      VITE_GRAPHQL_URI                 = "${module.cloud_run_gateway.service_url}/graphql"
+      VITE_GRAPHQL_URI                 = var.skip_cloud_run ? "" : "${module.cloud_run_gateway[0].service_url}/graphql"
       VITE_GRAPHQL_API_KEY             = module.firebase.api_key
       VITE_GRAPHQL_AUTH_DOMAIN         = module.firebase.auth_domain
       VITE_GRAPHQL_PROJECT_ID          = module.firebase.project_id

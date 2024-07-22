@@ -3,11 +3,11 @@
 # Refer to the responsible Jupyter notebook if you want to make changes.
 #
 
-project_name = "FS Microservices"
+project_name = "Some App To Deploy 2"
 
-bucket_name = "fs-microservices-bucket"
+bucket_name = "bucket-for-some-app-infra-2"
 
-project_id = "fs-microservices"
+project_id = "some-app-to-deploy-2"
 
 environment = "dev"
 
