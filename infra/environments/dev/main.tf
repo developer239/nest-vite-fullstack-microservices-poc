@@ -63,6 +63,7 @@ module "rabbitmq" {
 }
 
 module "cloud_run_auth" {
+  count             = var.skip_cloud_run ? 0 : 1
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
@@ -94,6 +95,7 @@ module "cloud_run_auth" {
 }
 
 module "cloud_run_events" {
+  count             = var.skip_cloud_run ? 0 : 1
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
@@ -125,6 +127,7 @@ module "cloud_run_events" {
 }
 
 module "cloud_run_gateway" {
+  count             = var.skip_cloud_run ? 0 : 1
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
@@ -140,8 +143,8 @@ module "cloud_run_gateway" {
     var.cloud_run_services.gateway.env_vars,
     {
       NODE_ENV   = var.environment
-      AUTH_URL   = module.cloud_run_auth.service_url
-      EVENTS_URL = module.cloud_run_events.service_url
+      AUTH_URL   = var.skip_cloud_run ? "" : module.cloud_run_auth[0].service_url
+      EVENTS_URL = var.skip_cloud_run ? "" : module.cloud_run_events[0].service_url
     }
   )
 
@@ -149,6 +152,7 @@ module "cloud_run_gateway" {
 }
 
 module "cloud_run_storybook" {
+  count             = var.skip_cloud_run ? 0 : 1
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region
@@ -171,6 +175,7 @@ module "cloud_run_storybook" {
 }
 
 module "cloud_run_web" {
+  count             = var.skip_cloud_run ? 0 : 1
   source            = "../../modules/cloud_run"
   project_id        = var.project_id
   region            = var.region

@@ -128,6 +128,12 @@ variable "rabbitmq_management_port" {
 
 # Cloud Run
 
+variable "skip_cloud_run" {
+  description = "Whether to skip creating Cloud Run services"
+  type        = bool
+  default     = false
+}
+
 variable "cloud_run_services" {
   description = "Configuration for Cloud Run services"
   type = map(object({
